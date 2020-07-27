@@ -1,21 +1,39 @@
 "use strict";
 
-const { createPool } = require("mysql");
-// const { permittedCrossDomainPolicies } = require("helmet");
 const db = require("../db");
 
+// GET all Posts Controller
+
 // exports.getAllPosts = (req, res, next) => {
-//   console.log("postman test", req.body);
-//   pool
-//     .query("SELECT * FROM posts")
-//     .then((posts) => res.status(200).json(posts))
-//     .catch((error) => res.status(400).json({ error }));
+//   db.getSession()
+//     .then((session) => {
+//       return Promise.all([
+//         session.sql("CREATE TABLE groupomania.bar (_id SERIAL)").execute(),
+//         session.sql("CREATE TABLE groupomania.baz (_id SERIAL)").execute(),
+//       ]).then(() => session.getSchema("groupomania"));
+//     })
+//     .then((schema) => {
+//       return schema.getTables();
+//     })
+//     .then((tables) => {
+//       console.log(tables[0].getName()); // 'bar'
+//       console.log(tables[1].getName()); // 'baz'
+//     })
+//     .catch((error) => {
+//       res.status(400).json({ error });
+//     });
 // };
 
-exports.getAllPosts = async (req, res, next) => {
-  let results = await db.all();
-  console
-    .log("results", results)
-    .then((posts) => res.status(200).json(posts))
-    .catch((error) => res.status(400).json({ error }));
+exports.getAllPosts = (req, res, next) => {
+  db.getSession()
+    .then((session) => {
+      session.sql("SELECT * FROM groupomania.posts LIMIT 0, 1000").execute();
+      then((table) => {
+        res.status(200).json(table);
+      });
+      // return session.close();
+    })
+    .catch((error) => {
+      res.status(400).json({ error });
+    });
 };

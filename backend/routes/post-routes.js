@@ -2,6 +2,7 @@
 
 // Middleware Imports
 
+const mysqlx = require("@mysql/xdevapi");
 const express = require("express");
 const router = express.Router();
 

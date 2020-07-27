@@ -1,42 +1,23 @@
-const mysql = require("mysql");
-let db = {};
+const mysqlx = require("@mysql/xdevapi");
 
-// const pool = mysql.createPool({
-//   host: "localhost",
-//   port: "3306",
-//   user: "root",
-//   password: "123456",
-//   database: "groupomania",
-//   connectionLimit: 10,
-// });
+const db = mysqlx.getClient("root:@localhost:33060/groupomania");
 
-var connection = mysql.createConnection({
-  host: "localhost",
-  localAddress: "127.0.0.1",
-  port: "3306",
-  user: "root",
-  password: "",
-  database: "groupomania",
+db.getSession().then((session) => {
+  console.log("Connected successfully to MySQL DB !");
+  // console.log(session.inspect());
+  // { user: 'root', host: 'localhost', port: 33060, pooling: true, ... }
 });
-
-connection.connect(function (err) {
-  if (err) {
-    console.error("error connecting: " + err.stack);
-    return;
-  }
-
-  console.log("connected as id " + connection.threadId);
-});
-
-// db.all = () => {
-//   return new Promise((resolve, reject) => {
-//     pool.query("SELECT * FROM posts", (err, results) => {
-//       if (err) {
-//         return reject(err);
-//       }
-//       return resolve(results);
-//     });
-//   });
-// };
 
 module.exports = db;
+
+// const config = {
+//   password: "",
+//   user: "root",
+//   host: "localhost",
+//   port: 33060,
+//   schema: "groupomania",
+// };
+
+// const db = mysqlx.getSession(config).then((session) => {
+//   console.log(session.inspect()); // { user: 'root', socket: '/path/to/socket' }
+// });

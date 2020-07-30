@@ -10,16 +10,15 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@mysql/xdevapi": "8.0.21",
     "bcrypt": "^5.0.0",
-    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-bouncer": "^0.2.0",
     "helmet": "^3.23.3",
     "jsonwebtoken": "^8.5.1",
-    "mysql2": "^2.1.0",
+    "mysql": "^2.18.1",
+    "sanitize-middleware": "^2.0.14",
     "secure-password-validator": "^1.0.2",
-    "sequelize": "^6.3.3",
     "toobusy-js": "^0.5.1",
     "validator": "^13.1.1"
   }

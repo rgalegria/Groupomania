@@ -62,6 +62,7 @@ exports.login = (req, res, next) => {
 
 // POST Create User Controller
 
+
 exports.signup = (req, res, next) => {
   if (
     validator.isEmail(req.body.email) &&
@@ -70,20 +71,17 @@ exports.signup = (req, res, next) => {
     bcrypt
       .hash(req.body.password, 10)
       .then((hash) => {
-        const user = new User({
+        const newUser = {
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
           email: req.body.email,
           password: hash,
-        });
-        user
-          .save()
-          .then(() =>
-            res.status(201).json({
-              message: "User created successfully!",
-            })
-          )
-          .catch((error) => res.status(400).json({ error }));
-      })
-      .catch((error) => res.status(500).json({ error }));
+        }
+        const sql = "INSERT INTO users SET ?";
+        const query = db.query(sql, newUser, (error, post) => {
+          if (error) throw error;
+          res.status(201).json({ message: "User created successfully!" });
+            });   
   } else if (
     !validator.isEmail(req.body.email) ||
     !passValid.validate(req.body.password, options).valid

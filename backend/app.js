@@ -6,17 +6,16 @@ const express = require("express");
 require("dotenv").config();
 const sanitizeMiddleware = require("sanitize-middleware");
 
-// Validators
-// const validator = require("validator");
-
 // App security
 const helmet = require("helmet");
 const toobusy = require("toobusy-js");
 const bouncer = require("express-bouncer")(10000, 600000, 5);
 
 // App Routes
-// const userRoutes = require("./routes/user-routes");
-const postRoutes = require("./routes/post-routes");
+const signinRoutes = require("./routes/signin-route");
+const loginRoutes = require("./routes/login-route");
+const userRoutes = require("./routes/user-routes");
+const postRoutes = require("./routes/posts-routes");
 
 // Initialize express App
 
@@ -67,7 +66,7 @@ app.use(function (req, res, next) {
 // Express Parser Middleware
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: false }));
 
 // Sanitize Middleware
 
@@ -76,7 +75,9 @@ app.use(sanitizeMiddleware());
 // Access Routes
 
 // app.use("/images", express.static(path.join(__dirname, "images")));
-// app.use("/auth", userRoutes);
+app.use("/signin", signinRoutes);
+app.use("/login", loginRoutes);
+app.use("/user", userRoutes);
 app.use("/posts", postRoutes);
 
 // App Execution

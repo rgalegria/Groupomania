@@ -35,12 +35,13 @@ router.get("/:id", postCtrl.getOnePost);
 // router.put("/:id", auth, multer, postCtrl.modifyPost);
 router.put("/:id", postCtrl.modifyPost);
 
-// router.put("/:id/comments/:id", auth, multer, postCtrl.modifyCommentPost);
-
 // Routes Delete
 
 // router.delete("/:id", auth, postCtrl.deletePost);
 router.delete("/:id", postCtrl.deletePost);
+
+// router.delete("/:id/comments/:id", auth, postCtrl.deleteComment);
+// router.delete("/:id/comments/:id", postCtrl.deleteComment);
 
 // Execution
 

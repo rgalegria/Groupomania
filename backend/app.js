@@ -5,6 +5,8 @@
 const express = require("express");
 require("dotenv").config();
 const sanitizeMiddleware = require("sanitize-middleware");
+// const passport = require("passport");
+const session = require("express-session");
 
 // App security
 const helmet = require("helmet");
@@ -63,10 +65,37 @@ app.use(function (req, res, next) {
   }
 });
 
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    // store: sessionStore,
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24, // Equals 1 day (1 day * 24 hr/1 day * 60 min/1 hr * 60 sec/1 min * 1000 ms / 1 sec)
+    },
+  })
+);
+
 // Express Parser Middleware
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
+
+// Passport Init. Middleware
+
+// require("./config/passport");
+
+// app.use(passport.initialize());
+// app.use(passport.session());
+
+// Test Session Middleware
+
+// app.use((req, res, next) => {
+//   console.log(req.session);
+//   console.log(req.user);
+//   next();
+// });
 
 // Sanitize Middleware
 
@@ -74,11 +103,11 @@ app.use(sanitizeMiddleware());
 
 // Access Routes
 
-// app.use("/images", express.static(path.join(__dirname, "images")));
 app.use("/signin", signinRoutes);
 app.use("/login", loginRoutes);
 app.use("/user", userRoutes);
 app.use("/posts", postRoutes);
+// app.use("/images", express.static(path.join(__dirname, "images")));
 
 // App Execution
 

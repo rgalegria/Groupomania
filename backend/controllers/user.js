@@ -2,13 +2,14 @@
 
 // Middleware Imports
 
+const mysql = require("mysql");
 const bcrypt = require("bcrypt");
 const validator = require("validator");
 const passValid = require("secure-password-validator");
 // const passBlackList = require("secure-password-validator/build/main/blacklists/first10_000");
 
 // Database Route
-const db = require("../db");
+const db = require("../config/db");
 
 // Password Validator Options
 
@@ -38,8 +39,13 @@ const regExText = /^[A-ZÀÂÆÇÉÈÊËÏÎÔŒÙÛÜŸ \'\- ]+$/i;
 
 exports.getUserProfile = (req, res, next) => {
   const { id } = req.body;
-  const sql = "SELECT * FROM users WHERE id = ?";
-  const query = db.query(sql, [id], (error, profile) => {
+
+  const string = "SELECT * FROM users WHERE id = ?";
+  const inserts = [id];
+  const sql = mysql.format(string, inserts);
+
+  // const sql = "SELECT * FROM users WHERE id = ?";
+  const query = db.query(sql, (error, profile) => {
     if (!error) {
       res.status(200).json(profile);
     } else {
@@ -50,7 +56,7 @@ exports.getUserProfile = (req, res, next) => {
 
 // PUT User Profile Update Controller
 
-// CASO DONDE EL USUARIO SOLO ACTUALIZA CIERTOS CASOS
+// CASO DONDE EL USUARIO SOLO ACTUALIZA CIERTOS DATOS
 
 exports.updateUserProfile = (req, res, next) => {
   const {
@@ -80,8 +86,7 @@ exports.updateUserProfile = (req, res, next) => {
     isRole &&
     isLinkedinUrl
   ) {
-    // Hash du mot de pass de l'utilisateur
-    const values = [
+    const inserts = [
       firstName,
       lastName,
       email,
@@ -91,10 +96,11 @@ exports.updateUserProfile = (req, res, next) => {
       linkedin_url,
       id,
     ];
-    // let values = [firstName, lastName, email, photo_url, department, role, linkedin_url, id,];
-    const sql =
+    const string =
       "UPDATE users SET firstName = ?, lastName = ?, email = ?, photo_url = ?, department = ?, role = ?, linkedin_url = ? WHERE id = ?";
-    const query = db.query(sql, values, (error, profile) => {
+    const sql = mysql.format(string, inserts);
+
+    const query = db.query(sql, (error, profile) => {
       if (!error) {
         res.status(200).json({ message: "User Updated successfully!" });
       } else {
@@ -132,11 +138,15 @@ exports.updateUserProfile = (req, res, next) => {
 
 exports.updatePassword = (req, res, next) => {
   const { id, password } = req.body;
+
   if (passValid.validate(password, options).valid) {
     bcrypt.hash(req.body.password, 10).then((hash) => {
-      const sql = "UPDATE users SET password = ? WHERE id = ? ";
+      const string = "UPDATE users SET password = ? WHERE id = ? ";
+      const inserts = [hash, id];
+      const sql = mysql.format(string, inserts);
+
       const query = db
-        .query(sql, [hash, id], (error, password) => {
+        .query(sql, (error, password) => {
           if (!error) {
             res.status(201).json({ message: "Password Updated successfully!" });
           } else {
@@ -154,7 +164,11 @@ exports.updatePassword = (req, res, next) => {
 
 exports.deleteProfile = (req, res, next) => {
   const { id } = req.body;
-  const sql = "DELETE FROM users WHERE id = ? ";
+
+  const string = "DELETE FROM users WHERE id = ? ";
+  const inserts = [id];
+  const sql = mysql.format(string, inserts);
+
   const query = db.query(sql, [id], (error, result) => {
     if (error) throw error;
     res.status(200).json({ message: "User deleted successfully!" });

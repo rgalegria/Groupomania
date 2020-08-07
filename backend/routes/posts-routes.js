@@ -33,7 +33,7 @@ router.get("/:id", postCtrl.getOnePost);
 // Routes Update
 
 // router.put("/:id", auth, multer, postCtrl.modifyPost);
-router.put("/:id", postCtrl.modifyPost);
+// router.put("/:id", postCtrl.modifyPost);
 
 // Routes Delete
 

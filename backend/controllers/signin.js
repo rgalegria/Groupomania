@@ -8,7 +8,7 @@ const passValid = require("secure-password-validator");
 // const passBlackList = require("secure-password-validator/build/main/blacklists/first10_000");
 
 // Database Route
-const db = require("../db");
+const db = require("../config/db");
 
 // Password Validator Options
 

@@ -6,7 +6,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 // Database Route
-const db = require("../db");
+const db = require("../config/db");
 
 // GET Login User Controller
 

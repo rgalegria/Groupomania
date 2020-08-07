@@ -1,0 +1,14 @@
+.block {
+    max-width: 400px;
+    border-bottom: 1px solid #bdbdbd;
+    margin-bottom: 16px;
+    text-align: left;
+}
+
+.text {
+    font-size: 16px;
+    line-height: 20px;
+    color: #000000;
+    margin: auto 0;
+    margin-bottom: 16px;
+}

@@ -1,0 +1,38 @@
+.block {
+    display: flex;
+    flex-direction: row;
+    max-width: 500px;
+    margin: 0 auto 10px auto;
+}
+
+.photo {
+    width: 24px;
+    height: 100%;
+    border-radius: 5px;
+    margin-right: 8px;
+}
+
+.text {
+    font-weight: 500;
+    font-size: 12px;
+    color: #828282;
+    margin: auto 0;
+}
+
+.text_division {
+    margin: 0 4px;
+}
+
+._text_dot {
+    margin: 0 4px;
+}
+
+a {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 15px;
+    display: flex;
+    align-items: center;
+    color: #828282;
+}

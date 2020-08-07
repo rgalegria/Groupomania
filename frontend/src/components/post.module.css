@@ -1,0 +1,64 @@
+.block {
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+    border-bottom: 1px solid #bdbdbd;
+    margin-bottom: 16px;
+}
+
+.title {
+    text-align: left;
+    margin: 0 0 16px 0;
+}
+
+.photo {
+    width: 100%;
+    height: auto;
+}
+.reactions {
+    display: flex;
+    flex-direction: row;
+    margin: 16px 8px;
+}
+
+.reaction_btn {
+    background-color: white;
+    display: flex;
+    flex-direction: row;
+    font-weight: bold;
+    font-size: 1.2rem;
+    border: 0;
+    margin: auto 16px auto 0;
+    padding: 0;
+}
+
+.comments_btn {
+    background-color: white;
+    display: flex;
+    flex-direction: row;
+    font-weight: bold;
+    font-size: 1.2rem;
+    border: 0;
+    margin: auto 16px auto 0;
+    padding: 0;
+    margin-left: auto;
+    margin-right: 0;
+}
+
+.comment_btn {
+    background-color: white;
+    color: #c30000;
+    display: flex;
+    flex-direction: row;
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin: auto 0 auto auto;
+    border: 0;
+    padding: 0;
+}
+
+.icon {
+    width: auto;
+    height: 16px;
+    margin-right: 8px;
+}

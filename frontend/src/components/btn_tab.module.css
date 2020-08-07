@@ -1,0 +1,35 @@
+.btn {
+    width: 50%;
+    border: 0;
+    background-color: transparent;
+    padding: 0;
+}
+
+.container {
+    display: flex;
+    height: 5em;
+    margin: auto 1.6rem;
+    border-bottom: 2px solid #c30000;
+}
+
+.icon {
+    height: 2em;
+    width: auto;
+    margin: auto auto 1.6rem 1rem;
+    color: #c30000;
+}
+
+.text_active {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #c30000;
+    margin: auto 0 auto auto;
+}
+
+.text {
+    font-weight: 500;
+    font-size: 1.4rem;
+    color: #c30000;
+    margin: auto 0 auto auto;
+    color: #828282;
+}

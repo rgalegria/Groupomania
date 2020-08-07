@@ -1,0 +1,24 @@
+html {
+    /* set base font-size to equiv "10px", which is adapted to rem unit */
+    font-size: 62.5%;
+    /* IE9-IE11 math fixing. See http://bit.ly/1g4X0bX */
+    /* thanks to @guardian, @victorbritopro and @eQRoeil */
+    font-size: calc(1em * 0.625);
+}
+
+body {
+    font-size: 1.6em;
+    margin: 0;
+    font-family: "Montserrat", "Roboto", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+button {
+    font-family: "Montserrat", "Roboto", sans-serif;
+    font-size: 9px;
+}

@@ -1,0 +1,12 @@
+.input_list {
+    margin-top: 20%;
+    z-index: 15;
+}
+
+.error_message {
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: white;
+    margin: auto;
+    z-index: 15;
+}

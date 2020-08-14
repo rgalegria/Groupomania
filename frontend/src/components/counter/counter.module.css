@@ -1,0 +1,26 @@
+.block {
+    display: flex;
+    margin: 7vh auto 0 auto;
+}
+.counter {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+.title {
+    margin: 0.7rem auto;
+}
+.count {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #c30000;
+}
+.text {
+    font-size: 1.2rem;
+    margin: 0.5rem 0;
+}
+.logotype {
+    width: 15vw;
+    display: flex;
+    margin: auto 1vw;
+}

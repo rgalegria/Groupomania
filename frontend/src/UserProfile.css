@@ -1,0 +1,99 @@
+.Login {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: #c30000;
+    /* overflow-y: scroll; */
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    /* height: 88vh; */
+    /* padding: 0 4rem; */
+    border-radius: 0 0 5rem 5rem;
+}
+
+.background {
+    height: 20vh;
+    background: rgba(0, 0, 0) url(./images/background.jpg) center no-repeat;
+    background-size: cover;
+    resize: both;
+    border-radius: 0 0 5rem 5rem;
+}
+
+.background_dim {
+    position: absolute;
+    top: 0;
+    width: 100vw;
+    height: 20vh;
+    border-radius: 0 0 5rem 5rem;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    padding: 0 4rem;
+}
+
+.profile_photo {
+    margin: -15vh auto 0 auto;
+    width: 39vw;
+    border-radius: 3.5rem;
+    filter: drop-shadow(0px 4px 15px rgba(0, 0, 0, 0.25));
+    z-index: 10;
+}
+
+.title {
+    text-align: center;
+    margin: 6vh 0 0 0;
+    line-height: 160%;
+}
+
+.department {
+    text-align: center;
+    font-weight: 500;
+    font-size: 1.4rem;
+    line-height: 160%;
+    color: #828282;
+    margin: 1vh 0 0 0;
+}
+
+.role {
+    text-align: center;
+    font-weight: 500;
+    font-size: 1.4rem;
+    line-height: 160%;
+    margin: 6vh 0 0 0;
+}
+
+.email {
+    text-align: center;
+    font-size: 1.35rem;
+    line-height: 160%;
+    margin: 3vh 0 0 0;
+}
+
+.update-list {
+    margin: 6vh 0 6vh 0;
+    z-index: 10;
+}
+
+.test {
+    width: 40%;
+}
+
+.btn-list {
+    display: flex;
+    justify-content: space-evenly;
+    z-index: 10;
+    margin: auto 0;
+}
+
+.btn-block {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}

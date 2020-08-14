@@ -1,12 +1,14 @@
 import React from "react";
+import { Link } from "react-router-dom";
+
 import styles from "./btn_nav.module.css";
 
 const navBtn = (props) => {
     return (
-        <button id={props.id} className={styles.btn} type={props.type}>
+        <Link to={props.link} className={styles.btn}>
             <img className={styles.icon} src={props.icon} alt="A REVISAR" />
             <span className={styles.text}>{props.name}</span>
-        </button>
+        </Link>
     );
 };
 

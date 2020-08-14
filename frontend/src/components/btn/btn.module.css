@@ -1,0 +1,37 @@
+.btn {
+    display: flex;
+    min-width: 36vw;
+    border: 0;
+    border-radius: 1.6rem;
+    color: #ffffff;
+    padding: 1.2rem;
+}
+
+.text {
+    font-weight: 500;
+    font-size: 1.6rem;
+    margin: auto 0 auto auto;
+}
+
+.icon {
+    height: 2rem;
+    margin: auto auto auto 0.8rem;
+}
+
+.justify {
+    justify-content: space-between;
+    display: flex;
+    margin: auto;
+}
+
+.warning {
+    background-color: #c30000;
+}
+
+.valid {
+    background-color: green;
+}
+
+.cancel {
+    background-color: #bdbdbd;
+}

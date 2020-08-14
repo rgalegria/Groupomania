@@ -1,0 +1,18 @@
+.btn {
+    display: flex;
+    flex-direction: column;
+    font-weight: 500;
+    font-size: 1.3rem;
+    text-decoration: none;
+    color: #ffffff;
+    margin: auto 0;
+    cursor: pointer;
+    background-color: transparent;
+    border: 0;
+}
+
+.icon {
+    height: 2.4rem;
+    width: auto;
+    margin: 0 auto 0.8rem auto;
+}

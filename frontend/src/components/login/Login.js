@@ -9,10 +9,10 @@ import password from "../../images/password-icon.svg";
 import person from "../../images/person-icon.svg";
 
 // Components
-import InputField from "../Form components/inputField/InputField";
+import InputField from "../InputField/InputField";
 
 // Styles
-import "../../containers/home/Home.css";
+import "../../containers/Home/Home.css";
 
 const Login = (props) => {
     const loginHandler = (event) => {
@@ -97,8 +97,6 @@ const Login = (props) => {
                     type={inputFieldState[1].type}
                     onChange={handleChange}
                     placeholder={inputFieldState[1].placeholder}
-                    minLength={inputFieldState[1].minLength}
-                    maxLength={inputFieldState[1].maxLength}
                     autocomplete={inputFieldState[1].autocomplete}
                     icon={inputFieldState[1].icon}
                     element={inputFieldState[1].element}

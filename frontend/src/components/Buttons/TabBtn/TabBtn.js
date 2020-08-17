@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./btn_tab.module.css";
+import styles from "./TabBtn.module.css";
 
 const tabBtn = (props) => {
     return (

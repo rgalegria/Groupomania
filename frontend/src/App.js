@@ -2,10 +2,10 @@ import React from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 
 // Containers
-import Layout from "./containers/layout/Layout";
-import Home from "./containers/home/Home";
-import Login from "./components/login/Login";
-import Signup from "./components/signup/SignUp";
+import Layout from "./containers/Layout/Layout";
+import Home from "./containers/Home/Home";
+import Login from "./components/Login/Login";
+import Signup from "./components/SignUp/SignUp";
 
 const App = (props) => {
     let routes = (
@@ -20,12 +20,12 @@ const App = (props) => {
     // if (this.props.isAuthenticated) {
     //     routes = (
     //         <Switch>
-    //             <Route path="/checkout" component={asyncCheckout} />
-    //             <Route path="/orders" component={asyncOrders} />
-    //             <Route path="/logout" component={Logout} />
-    //             <Route path="/auth" component={asyncAuth} />
-    //             <Route path="/" exact component={BurgerBuilder} />
-    //             <Redirect to="/post" />
+    //             <Route path="/logout" />
+    //             <Redirect to="/posts" />
+    //             <Redirect to="/posts/id:" />
+    //             <Redirect to="/posts/id:/comments" />
+    //             <Redirect to="/user/id:" />
+    //             <Redirect to="/user/id:/modify" />
     //         </Switch>
     //     );
     // }

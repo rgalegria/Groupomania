@@ -1,7 +1,8 @@
-import React from "react";
-import styles from "./comment.module.css";
+import React from "./node_modules/react";
 
-const comment = (props) => {
+import styles from "./Comment.module.css";
+
+const Comment = (props) => {
     return (
         <div className={styles.block}>
             <p className={styles.text}>Trop marrant !</p>
@@ -9,4 +10,4 @@ const comment = (props) => {
     );
 };
 
-export default comment;
+export default Comment;

@@ -1,5 +1,5 @@
-import React from "react";
-import styles from "./userHeader.module.css";
+import React from "./node_modules/react";
+import styles from "./UserHeader.module.css";
 
 const userHeader = (props) => {
     return (

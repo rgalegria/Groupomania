@@ -1,7 +1,7 @@
 import React from "react";
 
 // Components
-import Nav from "../nav/Nav";
+import Nav from "../../components/Nav/Nav";
 
 // Styles
 import "./Layout.css";

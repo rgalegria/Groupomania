@@ -1,9 +1,9 @@
-import React from "react";
+import React from "./node_modules/react";
 import like from "../images/like-icon.svg";
 import dislike from "../images/dislike-icon.svg";
 import comments from "../images/comments-icon.svg";
 import comment from "../images/comment-icon.svg";
-import styles from "./post.module.css";
+import styles from "./Post.module.css";
 
 const post = (props) => {
     return (

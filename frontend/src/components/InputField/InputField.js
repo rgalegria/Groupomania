@@ -1,4 +1,6 @@
 import React, { forwardRef, useImperativeHandle } from "react";
+
+// Styles
 import styles from "./InputField.module.css";
 
 const InputField = forwardRef((props, ref) => {

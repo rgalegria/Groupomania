@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./btn.module.css";
+import styles from "./UIBtn.module.css";
 
 const Btn = (props) => {
     let icon;

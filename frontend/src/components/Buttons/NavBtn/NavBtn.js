@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import styles from "./btn_nav.module.css";
+import styles from "./NavBtn.module.css";
 
 const navBtn = (props) => {
     return (

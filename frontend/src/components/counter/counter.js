@@ -1,6 +1,6 @@
-import React from "react";
+import React from "./node_modules/react";
 import logotype from "../images/logotype.svg";
-import styles from "./counter.module.css";
+import styles from "./Counter.module.css";
 
 const Counter = (props) => {
     return (

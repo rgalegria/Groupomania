@@ -7,12 +7,10 @@
     color: #ffffff;
     margin: auto 0;
     cursor: pointer;
-    background-color: transparent;
-    border: 0;
 }
 
 .icon {
-    height: 2.4rem;
+    height: 2rem;
     width: auto;
     margin: 0 auto 0.8rem auto;
 }

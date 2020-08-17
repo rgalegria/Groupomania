@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import logo from "../../images/logo.png";
 
 // Components
-import InputField from "../inputField/inputField";
+import InputField from "../Form components/inputField/InputField";
 
 // Icons
 import lastname from "../../images/lastname-icon.svg";
@@ -64,12 +64,10 @@ const SignUp = (props) => {
         },
     ]);
 
-    console.log(props);
-
     return (
         <div className="background_image">
             <img src={logo} className="logo" alt="Logo de Groupomania, entreprise de grand distribution européen" />
-            <form className={styles.input_list}>
+            <form id="signup-form" className={styles.input_list}>
                 <InputField
                     id={inputFieldState[0].id}
                     name={inputFieldState[0].name}

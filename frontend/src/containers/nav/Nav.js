@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { withRouter } from "react-router-dom";
 
 // Components
-import NavBtn from "../../components/btn_nav/btn_nav";
-import SubmitBtn from "../../components/btn_submit/btn_submit";
+import NavBtn from "../../components/Nav components/btn_nav/btn_nav";
+import SubmitBtn from "../../components/Form components/btn_submit/btn_submit";
 import Aux from "../../hoc/Aux";
 
 // Icons
@@ -21,34 +21,41 @@ import modify from "../../images/modify-icon.svg";
 import styles from "./Nav.module.css";
 
 const Nav = (props) => {
-    const onBackHandle = (e) => {
+    const backHandle = (e) => {
         e.preventDefault();
-        // props.location.goBack();
-        console.log("button clicked");
+        props.history.goBack();
     };
 
     const [btnsState /*, setBtnsState*/] = useState([
         {
+            id: "login-btn",
+            form: "login-form",
             name: "connexion",
+            type: "submit",
             icon: login,
             link: "/login",
         },
         {
+            id: "signup-btn",
+            form: "signup-form",
             name: "s'inscrire",
+            type: "submit",
             icon: signup,
             link: "/signup",
         },
         {
             id: "menu",
             name: "menu",
+            onClick: "menuHandle",
             icon: menu,
             type: "submit",
         },
         {
             id: "post",
             name: "poste",
-            icon: post,
             type: "submit",
+            onClick: backHandle,
+            icon: post,
         },
         {
             id: "categories",
@@ -58,10 +65,8 @@ const Nav = (props) => {
             link: "/feed/categories",
         },
         {
-            id: "back",
             name: "retourner",
-            // type: "submit",
-            onClick: onBackHandle,
+            onClick: backHandle,
             icon: back,
         },
         {
@@ -109,14 +114,14 @@ const Nav = (props) => {
             btns = (
                 <nav className={styles.btn_list}>
                     <SubmitBtn
-                        // id={btnsState[5].id}
                         type={btnsState[5].type}
                         onClick={btnsState[5].onClick}
                         icon={btnsState[5].icon}
                         name={btnsState[5].name}
                     />
                     <SubmitBtn
-                        // id={btnsState[0].id}
+                        id={btnsState[0].id}
+                        form={btnsState[0].form}
                         type={btnsState[0].type}
                         icon={btnsState[0].icon}
                         name={btnsState[0].name}
@@ -124,26 +129,25 @@ const Nav = (props) => {
                 </nav>
             );
             break;
-        // case "/signup":
-        //     btns = (
-        //         <nav className={styles.btn_list}>
-        //             <SubmitBtn
-        //                 // id={btnsState[5].id}
-        //                 // type={btnsState[5].type}
-        //                 onClick={this.onBackHandle}
-        //                 icon={btnsState[5].icon}
-        //                 name={btnsState[5].name}
-        //             />
-        //             <SubmitBtn
-        //                 // id={btnsState[1].id}
-        //                 type={btnsState[1].type}
-        //                 onClick={this.onBackHandle}
-        //                 icon={btnsState[1].icon}
-        //                 name={btnsState[1].name}
-        //             />
-        //         </nav>
-        //     );
-        //     break;
+        case "/signup":
+            btns = (
+                <nav className={styles.btn_list}>
+                    <SubmitBtn
+                        type={btnsState[5].type}
+                        onClick={btnsState[5].onClick}
+                        icon={btnsState[5].icon}
+                        name={btnsState[5].name}
+                    />
+                    <SubmitBtn
+                        id={btnsState[1].id}
+                        form={btnsState[1].form}
+                        type={btnsState[1].type}
+                        icon={btnsState[1].icon}
+                        name={btnsState[1].name}
+                    />
+                </nav>
+            );
+            break;
         // case "/feed":
         //     btns = (
         //         <nav className={styles.btn_list}>

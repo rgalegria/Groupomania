@@ -25,7 +25,7 @@ const App = (props) => {
     //             <Route path="/logout" component={Logout} />
     //             <Route path="/auth" component={asyncAuth} />
     //             <Route path="/" exact component={BurgerBuilder} />
-    //             <Redirect to="/" />
+    //             <Redirect to="/post" />
     //         </Switch>
     //     );
     // }

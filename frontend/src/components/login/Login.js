@@ -1,5 +1,8 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import { useForm } from "../../hooks/form-hook";
+import { AuthContext } from "../../context/auth-context";
+import { isEmail, MinLength } from "../../utils/validators";
 
 // Static Images
 import logo from "../../images/logo.png";
@@ -14,12 +17,34 @@ import InputField from "../InputField/InputField";
 // Styles
 import "../../containers/Home/Home.css";
 
-const Login = (props) => {
-    const loginHandler = (event) => {
+const Login = () => {
+    const auth = useContext(AuthContext);
+
+    const [formState, inputHandler] = useForm(
+        {
+            email: {
+                value: "",
+                isValid: false,
+            },
+            password: {
+                value: "",
+                isValid: false,
+            },
+        },
+        false
+    );
+
+    const loginHandler = async (event) => {
         event.preventDefault();
-        console.log("input:", data);
-        // const postData = (data) => {
-        fetch("http://localhost:4200/login", {
+
+        console.log(formState.inputs);
+
+        const data = {
+            email: formState.inputs.email.value,
+            password: formState.inputs.password.value,
+        };
+
+        await fetch("http://localhost:4200/login", {
             method: "POST", // or 'PUT'
             headers: {
                 "Content-Type": "application/json",
@@ -27,81 +52,51 @@ const Login = (props) => {
             body: JSON.stringify(data),
         })
             .then((response) => response.json())
-            .then((token) => {
-                console.log("token:", token);
+            .then((responseData) => {
+                auth.login(responseData.userId, responseData.token);
             })
             .catch((error) => {
                 console.error("Error:", error);
             });
-        // };
     };
-
-    const inputRefs = React.useRef([React.createRef(), React.createRef()]);
-
-    const [data, setData] = useState({});
-
-    // console.log("typed data :", data);
-
-    const handleChange = (name, value) => {
-        setData((prev) => ({ ...prev, [name]: value }));
-    };
-
-    const [inputFieldState /*, setInputFieldState*/] = useState([
-        {
-            id: "email",
-            name: "email",
-            type: "email",
-            value: "",
-            placeholder: "email",
-            autocomplete: "email",
-            icon: person,
-            element: "input",
-            hasLabel: "no",
-            textIsWhite: "yes",
-        },
-        {
-            id: "password",
-            name: "password",
-            type: "text",
-            value: "",
-            placeholder: "password",
-            icon: password,
-            autocomplete: "current-password",
-            element: "input",
-            hasLabel: "no",
-            textIsWhite: "yes",
-        },
-    ]);
 
     return (
         <div className="background_image">
             <img src={logo} className="logo" alt="Logo de Groupomania, entreprise de grand distribution européen" />
             <form id="login-form" className="input_list" onSubmit={loginHandler}>
                 <InputField
-                    id={inputFieldState[0].id}
-                    ref={inputRefs.current[0]}
-                    name={inputFieldState[0].name}
-                    type={inputFieldState[0].type}
-                    onChange={handleChange}
-                    placeholder={inputFieldState[0].placeholder}
-                    autocomplete={inputFieldState[0].autocomplete}
-                    icon={inputFieldState[0].icon}
-                    element={inputFieldState[0].element}
-                    hasLabel={inputFieldState[0].hasLabel}
-                    textIsWhite={inputFieldState[0].textIsWhite}
+                    id="email"
+                    name="email"
+                    type="email"
+                    onInput={inputHandler}
+                    placeholder="email"
+                    autocomplete="email"
+                    icon={person}
+                    alt="email icon"
+                    element="input"
+                    hasLabel="no"
+                    textIsWhite="yes"
+                    validators={[isEmail(), MinLength(6)]}
+                    errorText="Votre email n'est pas correct"
+                    initialValue={formState.inputs.email.value}
+                    initialValid={formState.inputs.email.isValid}
                 />
                 <InputField
-                    id={inputFieldState[1].id}
-                    ref={inputRefs.current[1]}
-                    name={inputFieldState[1].name}
-                    type={inputFieldState[1].type}
-                    onChange={handleChange}
-                    placeholder={inputFieldState[1].placeholder}
-                    autocomplete={inputFieldState[1].autocomplete}
-                    icon={inputFieldState[1].icon}
-                    element={inputFieldState[1].element}
-                    hasLabel={inputFieldState[1].hasLabel}
-                    textIsWhite={inputFieldState[1].textIsWhite}
+                    id="password"
+                    name="password"
+                    type="text"
+                    onInput={inputHandler}
+                    placeholder="password"
+                    autocomplete="current-password"
+                    icon={password}
+                    alt="password icon"
+                    element="input"
+                    hasLabel="no"
+                    textIsWhite="yes"
+                    validators={[MinLength(8)]}
+                    errorText="Votre mot de passe n'est pas correct"
+                    initialValue={formState.inputs.password.value}
+                    initialValid={formState.inputs.password.isValid}
                 />
             </form>
             <p></p>

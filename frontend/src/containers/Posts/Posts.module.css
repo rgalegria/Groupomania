@@ -1,9 +1,3 @@
-.App {
-    display: flex;
-    flex-direction: column;
-    background-color: #c30000;
-}
-
 .header {
     display: flex;
     flex-direction: row;
@@ -12,13 +6,11 @@
 }
 
 .container {
-    background-color: white;
-    padding: 0 1.6rem 1.6rem 1.6rem;
-    border-radius: 0 0 5rem 5rem;
-}
-
-.btn-list {
     display: flex;
-    flex-direction: row;
-    padding: 1.5em;
+    flex-direction: column;
+    height: 77.4vh;
+    overflow-y: scroll;
+    background-color: white;
+    border-radius: 0 0 5rem 5rem;
+    padding: 0 2rem;
 }

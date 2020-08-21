@@ -1,35 +1,47 @@
+.btn_active {
+    width: 50%;
+    text-decoration: none;
+}
+
+.container_active {
+    display: flex;
+    height: 4.7rem;
+    width: 100%;
+    border-bottom: 2px solid #c30000;
+    margin: auto 1.6rem;
+}
+
+.icon_active {
+    filter: invert(8%) sepia(96%) saturate(5030%) hue-rotate(358deg) brightness(124%) contrast(113%);
+    height: 2rem;
+    margin: auto auto auto 1rem;
+}
+
+.text_active {
+    color: #c30000;
+    margin: 1.7rem 0 auto auto;
+}
+
 .btn {
     width: 50%;
-    border: 0;
-    background-color: transparent;
-    padding: 0;
+    text-decoration: none;
+    background-color: #f4f4f8;
 }
 
 .container {
     display: flex;
-    height: 5em;
+    height: 4.7rem;
+    width: 100%;
     margin: auto 1.6rem;
-    border-bottom: 2px solid #c30000;
 }
 
 .icon {
-    height: 2em;
-    width: auto;
-    margin: auto auto 1.6rem 1rem;
-    color: #c30000;
-}
-
-.text_active {
-    font-size: 1.2rem;
-    font-weight: 500;
-    color: #c30000;
-    margin: auto 0 auto auto;
+    filter: invert(55%) sepia(13%) saturate(0%) hue-rotate(286deg) brightness(90%) contrast(94%);
+    height: 2rem;
+    margin: auto auto auto 1rem;
 }
 
 .text {
-    font-weight: 500;
-    font-size: 1.4rem;
-    color: #c30000;
-    margin: auto 0 auto auto;
     color: #828282;
+    margin: 1.7rem 0 auto auto;
 }

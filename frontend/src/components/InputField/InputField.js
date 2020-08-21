@@ -1,25 +1,56 @@
-import React, { forwardRef, useImperativeHandle } from "react";
+import React, { useReducer, useEffect } from "react";
+import { validate } from "../../utils/validators";
 
 // Styles
 import styles from "./InputField.module.css";
 
-const InputField = forwardRef((props, ref) => {
-    const [value, setValue] = React.useState("");
+const inputReducer = (state, action) => {
+    switch (action.type) {
+        case "CHANGE":
+            return {
+                ...state,
+                value: action.val,
+                isValid: validate(action.val, action.validators),
+            };
+        case "TOUCH": {
+            return {
+                ...state,
+                isTouched: true,
+            };
+        }
+        default:
+            return state;
+    }
+};
 
-    const handleChange = (event) => {
-        setValue(event.target.value);
-        props.onChange(event.target.name, event.target.value);
-    };
-
-    const validate = () => {
-        return true;
-    };
-
-    useImperativeHandle(ref, () => {
-        return {
-            validate: () => validate(),
-        };
+// Component
+const InputField = (props) => {
+    const [inputState, dispatch] = useReducer(inputReducer, {
+        value: props.initialValue || "",
+        isTouched: false,
+        isValid: props.initialValid || false,
     });
+
+    const { id, onInput } = props;
+    const { value, isValid } = inputState;
+
+    useEffect(() => {
+        onInput(id, value, isValid);
+    }, [id, value, isValid, onInput]);
+
+    const changeHandler = (event) => {
+        dispatch({
+            type: "CHANGE",
+            val: event.target.value,
+            validators: props.validators,
+        });
+    };
+
+    const touchHandler = () => {
+        dispatch({
+            type: "TOUCH",
+        });
+    };
 
     let textColor;
     if (props.textIsWhite === "yes") {
@@ -28,12 +59,11 @@ const InputField = forwardRef((props, ref) => {
         textColor = "";
     }
 
-    const label =
-        props.hasLabel === "yes" ? (
-            <label className={styles.label} htmlFor={props.id}>
-                {props.name}
-            </label>
-        ) : null;
+    const label = props.label ? (
+        <label className={styles.label} htmlFor={props.id}>
+            {props.label}
+        </label>
+    ) : null;
 
     const element =
         props.element === "input" ? (
@@ -41,30 +71,40 @@ const InputField = forwardRef((props, ref) => {
                 id={props.id}
                 className={`${styles.box} ${textColor}`}
                 name={props.name}
-                onChange={(event) => handleChange(event)}
                 type={props.type}
-                value={props.value ? props.value : value}
                 placeholder={props.placeholder}
+                // minLength="1"
+                // maxLength="45"
                 autoComplete={props.autocomplete}
+                value={inputState.value}
+                onChange={changeHandler}
+                onBlur={touchHandler}
+                // value={props.value ? props.value : value}
+                // onChange={(event) => changeHandler(event)}
             ></input>
         ) : (
             <textarea
-                className={styles.box}
                 id={props.id}
+                className={styles.box}
                 name={props.name}
                 type={props.type}
                 rows={props.rows || 3}
                 placeholder={props.placeholder}
+                // minLength="1"
+                // maxLength="60"
                 autoComplete={props.autocomplete}
-                value={props.value ? props.value : value}
-                onChange={(event) => handleChange(event)}
+                value={inputState.value}
+                onChange={changeHandler}
+                onBlur={touchHandler}
+                // value={props.value ? props.value : value}
+                // onChange={(event) => changeHandler(event)}
             ></textarea>
         );
 
     const icon = props.icon ? <img className={styles.icon} src={props.icon} alt={props.alt} /> : null;
 
     return (
-        <div className={styles.block}>
+        <div className={`${styles.block} ${!inputState.isValid && inputState.isTouched && styles.invalid}`}>
             {label}
             <div className={styles.wrapper}>
                 {element}
@@ -72,6 +112,7 @@ const InputField = forwardRef((props, ref) => {
             </div>
         </div>
     );
-});
+    // });
+};
 
 export default InputField;

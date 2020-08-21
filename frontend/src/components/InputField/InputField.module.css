@@ -5,6 +5,10 @@
     margin-bottom: 1.6rem;
 }
 
+.invalid {
+    border-bottom: 1px solid #c30000;
+}
+
 .label {
     font-size: 1.3rem;
     color: #828282;

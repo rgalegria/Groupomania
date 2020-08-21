@@ -7,9 +7,9 @@ const router = express.Router();
 
 // Routes
 
-const userCtrl = require("../controllers/signin");
+const userCtrl = require("../controllers/signup");
 
-router.post("/", userCtrl.signin);
+router.post("/", userCtrl.signup);
 
 // Execution
 

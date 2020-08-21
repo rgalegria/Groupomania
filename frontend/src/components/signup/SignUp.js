@@ -1,10 +1,9 @@
 import React from "react";
+import { useForm } from "../../hooks/form-hook";
+import { isEmail, MinLength } from "../../utils/validators";
 
 // Static Images
 import logo from "../../images/logo.png";
-
-// Components
-import InputField from "../InputField/InputField";
 
 // Icons
 import lastname from "../../images/lastname-icon.svg";
@@ -12,15 +11,70 @@ import password from "../../images/password-icon.svg";
 import person from "../../images/person-icon.svg";
 import email from "../../images/email-icon.svg";
 
+// Components
+import InputField from "../InputField/InputField";
+
 // Styles
 import "../../containers/Home/Home.css";
 import styles from "./Signup.module.css";
 
-const SignUp = (props) => {
+const SignUp = () => {
+    const [formState, inputHandler] = useForm(
+        {
+            firstName: {
+                value: "",
+                isValid: false,
+            },
+            lastName: {
+                value: "",
+                isValid: false,
+            },
+            email: {
+                value: "",
+                isValid: false,
+            },
+            password: {
+                value: "",
+                isValid: false,
+            },
+        },
+        false
+    );
+
+    const signupHandler = (event) => {
+        event.preventDefault();
+
+        console.log(formState.inputs);
+
+        const data = {
+            firstName: formState.inputs.firstName.value,
+            lastName: formState.inputs.lastName.value,
+            email: formState.inputs.email.value,
+            password: formState.inputs.password.value,
+        };
+
+        console.log(data);
+
+        fetch("http://localhost:4200/signup", {
+            method: "POST", // or 'PUT'
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        })
+            .then((response) => response.json())
+            .then((token) => {
+                console.log("token:", token);
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+            });
+    };
+
     return (
         <div className="background_image">
             <img src={logo} className="logo" alt="Logo de Groupomania, entreprise de grand distribution européen" />
-            <form id="signup-form" className={styles.input_list}>
+            <form id="signup-form" className={styles.input_list} onSubmit={signupHandler}>
                 <InputField
                     id="firstName"
                     name="firstName"
@@ -29,6 +83,14 @@ const SignUp = (props) => {
                     autocomplete="given-name"
                     icon={person}
                     alt="first name icon"
+                    element="input"
+                    hasLabel="no"
+                    textIsWhite="yes"
+                    validators={[MinLength(2)]}
+                    errorText="Votre email n'est pas correct"
+                    onInput={inputHandler}
+                    initialValue={formState.inputs.firstName.value}
+                    initialValid={formState.inputs.firstName.isValid}
                 />
                 <InputField
                     id="lastName"
@@ -38,6 +100,14 @@ const SignUp = (props) => {
                     autocomplete="family-name"
                     icon={lastname}
                     alt="last name icon"
+                    element="input"
+                    hasLabel="no"
+                    textIsWhite="yes"
+                    validators={[MinLength(2)]}
+                    errorText="Votre email n'est pas correct"
+                    onInput={inputHandler}
+                    initialValue={formState.inputs.lastName.value}
+                    initialValid={formState.inputs.lastName.isValid}
                 />
                 <InputField
                     id="email"
@@ -47,6 +117,14 @@ const SignUp = (props) => {
                     autocomplete="email"
                     icon={email}
                     alt="email icon"
+                    element="input"
+                    hasLabel="no"
+                    textIsWhite="yes"
+                    validators={[isEmail(), MinLength(6)]}
+                    errorText="Votre email n'est pas correct"
+                    onInput={inputHandler}
+                    initialValue={formState.inputs.email.value}
+                    initialValid={formState.inputs.email.isValid}
                 />
                 <InputField
                     id="password"
@@ -56,6 +134,14 @@ const SignUp = (props) => {
                     autocomplete="current-password"
                     icon={password}
                     alt="password icon"
+                    element="input"
+                    hasLabel="no"
+                    textIsWhite="yes"
+                    validators={[MinLength(8)]}
+                    errorText="Votre email n'est pas correct"
+                    onInput={inputHandler}
+                    initialValue={formState.inputs.password.value}
+                    initialValid={formState.inputs.password.isValid}
                 />
             </form>
             <div className="background_blur"></div>

@@ -8,12 +8,12 @@ const router = express.Router();
 // Middleware Routes
 
 const postCtrl = require("../controllers/posts");
-// const auth = require("../middleware/auth");
+const auth = require("../middleware/auth");
 // const multer = require("../middleware/multer-config");
 
 // Routes Create
 
-// router.post("/", auth, multer, postCtrl.createPost);
+// router.post("/", auth, postCtrl.createPost);
 router.post("/", postCtrl.createPost);
 
 // router.post("/:id/like", auth, postCtrl.reactToPost);
@@ -21,8 +21,8 @@ router.post("/", postCtrl.createPost);
 
 // Routes Read
 
-// router.get("/", auth, postCtrl.getAllPosts);
-router.get("/", postCtrl.getAllPosts);
+router.get("/", auth, postCtrl.getAllPosts);
+// router.get("/", postCtrl.getAllPosts);
 
 // router.get("/", auth, postCtrl.getMostLikedPosts);
 router.get("/mosted-liked", postCtrl.getMostLikedPosts);

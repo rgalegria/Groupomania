@@ -15,8 +15,11 @@ import NavModify from "../../components/Nav/nav_modify";
 const Nav = (props) => {
     const auth = useContext(AuthContext);
 
-    console.log("Auth NAV 1:", auth);
+    console.log("NAV");
     const paramId = useParams().id;
+    console.log("NAV param:", paramId);
+
+    console.log("Auth in NAV:", auth);
 
     const backHandle = (e) => {
         e.preventDefault();
@@ -31,7 +34,6 @@ const Nav = (props) => {
             break;
         case "/login":
             nav = <NavLogin backHandle={backHandle} />;
-
             break;
         case "/signup":
             nav = <NavSignUp backHandle={backHandle} />;
@@ -46,10 +48,10 @@ const Nav = (props) => {
                 nav = <NavComments backHandle={backHandle} commentHandle={backHandle} />;
             }
             break;
-        case `/profile/${paramId}`:
-            // if (auth.isLoggedIn) {
-            nav = <NavProfile />;
-            // }
+        case `/profile/${auth.userId}`:
+            if (auth.isLoggedIn) {
+                nav = <NavProfile backHandle={backHandle} />;
+            }
             break;
         case `/profile/${auth.userId}/modify`:
             if (auth.isLoggedIn) {
@@ -57,8 +59,7 @@ const Nav = (props) => {
             }
             break;
         default:
-            console.log("Something went wrong!");
-            console.log("auth NAV 2:", auth);
+            console.log("NAV: Something went wrong!");
     }
 
     return <>{nav}</>;

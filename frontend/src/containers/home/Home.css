@@ -62,3 +62,8 @@
     margin: 6vh auto auto auto;
     z-index: 10;
 }
+
+.spinner {
+    display: flex;
+    margin: auto;
+}

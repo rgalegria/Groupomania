@@ -6,7 +6,7 @@ const userHeader = (props) => {
     return (
         <header className={styles.block}>
             <Link to={`/profile/${props.user_id}`}>
-                <img className={styles.photo} src={props.photo_url} />
+                <img className={styles.photo} src={props.photo_url} alt={`${props.firstName} ${props.lastName}`} />
                 {props.firstName} {props.lastName}
             </Link>
             <p className={styles.text}>

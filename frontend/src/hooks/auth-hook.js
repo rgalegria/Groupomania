@@ -28,7 +28,7 @@ export const useAuth = () => {
         setUserId(null);
         setTokenExpirationDate(null);
         localStorage.removeItem("userData");
-        console.log("App.js logout funct.:", userId, token);
+        // console.log("App.js logout funct.:", userId, token);
     }, []);
 
     useEffect(() => {
@@ -42,6 +42,7 @@ export const useAuth = () => {
 
     useEffect(() => {
         const storedData = JSON.parse(localStorage.getItem("userData"));
+
         if (storedData && storedData.token && new Date(storedData.expiration) > new Date()) {
             login(storedData.userId, storedData.token, new Date(storedData.expiration));
         }

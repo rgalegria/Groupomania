@@ -1,8 +1,7 @@
 import React from "react";
-import { Route, Switch, Redirect } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import { useAuth } from "./hooks/auth-hook";
 import { AuthContext } from "./context/auth-context";
-import { useParams } from "react-router-dom";
 
 // Containers
 import Layout from "./containers/Layout/Layout";
@@ -13,6 +12,8 @@ import Posts from "./containers/Posts/Posts";
 import UserProfile from "./containers/UserProfile/UserProfile";
 
 const App = () => {
+    console.log("APP");
+
     const { token, login, logout, userId } = useAuth();
 
     let routes;
@@ -22,11 +23,10 @@ const App = () => {
             <Switch>
                 <Route path="/posts" exact component={Posts} />
                 <Route path="/menu" />
-                <Route path="/profile/:id" exact component={UserProfile} />
-                <Route path="/posts/:id" />
+                <Route path="/profile/:id" component={UserProfile} />
+                {/* <Route path="/posts/:id" />
                 <Route path="/posts/:id/comments" />
-                <Route path="/profile/:id/modify" />
-                {/* <Redirect to="/posts" /> */}
+                <Route path="/profile/:id/modify" /> */}
             </Switch>
         );
     } else {
@@ -35,8 +35,6 @@ const App = () => {
                 <Route path="/" exact component={Home} />
                 <Route path="/login" exact component={Login} />
                 <Route path="/signup" exact component={Signup} />
-                {/* <Route path="/profile/:id" component={UserProfile} /> */}
-                {/* <Redirect to="/" /> */}
             </Switch>
         );
     }

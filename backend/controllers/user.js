@@ -38,6 +38,7 @@ const regExText = /^[A-ZÀÂÆÇÉÈÊËÏÎÔŒÙÛÜŸ \'\- ]+$/i;
 // GET User Profile Controller
 
 exports.getUserProfile = (req, res, next) => {
+    console.log("request");
     const { id } = req.params;
 
     const string = "SELECT * FROM users WHERE id = ?";

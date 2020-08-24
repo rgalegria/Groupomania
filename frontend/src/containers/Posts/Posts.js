@@ -16,6 +16,8 @@ import styles from "./Posts.module.css";
 const Posts = () => {
     // Authentication context
     const auth = useContext(AuthContext);
+
+    console.log("Auth POST:", auth);
     const { isLoading, error, sendRequest, clearError } = useHttpRequest();
 
     //Posts Hook
@@ -33,23 +35,6 @@ const Posts = () => {
         };
         fetchPosts();
     }, []);
-
-    //Fetch Data
-    // useEffect(() => {
-    //     fetch("http://localhost:4200/posts", {
-    //         method: "GET",
-    //         headers: {
-    //             Authorization: "Bearer " + auth.token,
-    //         },
-    //     })
-    //         .then((response) => response.json())
-    //         .then((data) => {
-    //             console.log(data);
-    //             setPosts(data);
-    //         });
-    // }, []);
-
-    console.log("Auth de post:", auth);
 
     return (
         <>

@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { withRouter } from "react-router-dom";
 import { AuthContext } from "../../context/auth-context";
+import { useParams } from "react-router-dom";
 
 // Components
 import NavHome from "../../components/Nav/nav_home";
@@ -13,6 +14,9 @@ import NavModify from "../../components/Nav/nav_modify";
 
 const Nav = (props) => {
     const auth = useContext(AuthContext);
+
+    console.log("Auth NAV 1:", auth);
+    const paramId = useParams().id;
 
     const backHandle = (e) => {
         e.preventDefault();
@@ -37,12 +41,12 @@ const Nav = (props) => {
                 nav = <NavPost backHandle={backHandle} />;
             }
             break;
-        case "/posts/id:/comment":
+        case "/posts/:id/comment":
             if (auth.isLoggedIn) {
                 nav = <NavComments backHandle={backHandle} commentHandle={backHandle} />;
             }
             break;
-        case `/profile/${auth.userId}`:
+        case `/profile/${paramId}`:
             // if (auth.isLoggedIn) {
             nav = <NavProfile />;
             // }
@@ -52,9 +56,9 @@ const Nav = (props) => {
                 nav = <NavModify name="annuler" backHandle={backHandle} />;
             }
             break;
-
         default:
             console.log("Something went wrong!");
+            console.log("auth NAV 2:", auth);
     }
 
     return <>{nav}</>;

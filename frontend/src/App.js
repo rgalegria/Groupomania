@@ -6,9 +6,10 @@ import { AuthContext } from "./context/auth-context";
 // Containers
 import Layout from "./containers/Layout/Layout";
 import Home from "./containers/Home/Home";
-import Login from "./components/Login/Login";
-import Signup from "./components/SignUp/SignUp";
+import Login from "./containers/Login/Login";
+import Signup from "./containers/SignUp/SignUp";
 import Posts from "./containers/Posts/Posts";
+import UserProfile from "./containers/UserProfile/UserProfile";
 
 const App = () => {
     const { token, login, logout, userId } = useAuth();
@@ -20,10 +21,10 @@ const App = () => {
             <Switch>
                 <Route path="/posts" exact component={Posts} />
                 <Route path="/menu" />
+                <Route path={`/profile/${userId}`} exact component={UserProfile} />
                 <Route path="/posts/id:" />
                 <Route path="/posts/id:/comments" />
-                <Route path="/user/id:" />
-                <Route path="/user/id:/modify" />
+                <Route path="/profile/id:/modify" />
                 <Redirect to="/posts" />
             </Switch>
         );
@@ -33,7 +34,8 @@ const App = () => {
                 <Route path="/" exact component={Home} />
                 <Route path="/login" exact component={Login} />
                 <Route path="/signup" exact component={Signup} />
-                <Redirect to="/" />
+                <Route path={`/profile/${userId}`} component={UserProfile} />
+                {/* <Redirect to="/" /> */}
             </Switch>
         );
     }

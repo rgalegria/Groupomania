@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useForm } from "../../hooks/form-hook";
+import { AuthContext } from "../../context/auth-context";
 import { isEmail, MinLength } from "../../utils/validators";
 
 // Static Images
@@ -12,13 +13,15 @@ import person from "../../images/person-icon.svg";
 import email from "../../images/email-icon.svg";
 
 // Components
-import InputField from "../InputField/InputField";
+import InputField from "../../components/InputField/InputField";
 
 // Styles
 import "../../containers/Home/Home.css";
 import styles from "./Signup.module.css";
 
 const SignUp = () => {
+    const auth = useContext(AuthContext);
+
     const [formState, inputHandler] = useForm(
         {
             firstName: {
@@ -53,18 +56,16 @@ const SignUp = () => {
             password: formState.inputs.password.value,
         };
 
-        console.log(data);
-
         fetch("http://localhost:4200/signup", {
-            method: "POST", // or 'PUT'
+            method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(data),
         })
             .then((response) => response.json())
-            .then((token) => {
-                console.log("token:", token);
+            .then((responseData) => {
+                auth.login(responseData.userId, responseData.token);
             })
             .catch((error) => {
                 console.error("Error:", error);

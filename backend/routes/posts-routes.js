@@ -13,8 +13,8 @@ const auth = require("../middleware/auth");
 
 // Routes Create
 
-// router.post("/", auth, postCtrl.createPost);
-router.post("/", postCtrl.createPost);
+router.post("/", auth, postCtrl.createPost);
+// router.post("/", postCtrl.createPost);
 
 // router.post("/:id/like", auth, postCtrl.reactToPost);
 // router.post("/:id/comments", auth, postCtrl.commentPost);
@@ -24,11 +24,11 @@ router.post("/", postCtrl.createPost);
 router.get("/", auth, postCtrl.getAllPosts);
 // router.get("/", postCtrl.getAllPosts);
 
-// router.get("/", auth, postCtrl.getMostLikedPosts);
-router.get("/mosted-liked", postCtrl.getMostLikedPosts);
+router.get("/", auth, postCtrl.getMostLikedPosts);
+// router.get("/mosted-liked", postCtrl.getMostLikedPosts);
 
-// router.get("/:id", auth, postCtrl.getOnePost);
-router.get("/:id", postCtrl.getOnePost);
+router.get("/:id", auth, postCtrl.getOnePost);
+// router.get("/:id", postCtrl.getOnePost);
 
 // Routes Update
 
@@ -37,8 +37,8 @@ router.get("/:id", postCtrl.getOnePost);
 
 // Routes Delete
 
-// router.delete("/:id", auth, postCtrl.deletePost);
-router.delete("/:id", postCtrl.deletePost);
+router.delete("/:id", auth, postCtrl.deletePost);
+// router.delete("/:id", postCtrl.deletePost);
 
 // router.delete("/:id/comments/:id", auth, postCtrl.deleteComment);
 // router.delete("/:id/comments/:id", postCtrl.deleteComment);

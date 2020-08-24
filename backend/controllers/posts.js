@@ -5,7 +5,6 @@ const db = require("../config/db");
 const mysql = require("mysql");
 
 // POST Create Posts Controller
-
 exports.createPost = (req, res, next) => {
     const string = "INSERT INTO posts (Users_id, Categories_id, title, image_url) VALUES (?, ?, ?, ? )";
     const inserts = [req.body.Users_id, req.body.Categories_id, req.body.title, req.body.image_url];
@@ -20,7 +19,6 @@ exports.createPost = (req, res, next) => {
 };
 
 // GET All Posts Controller
-
 exports.getAllPosts = (req, res, next) => {
     let user_id = 1;
     const sql =
@@ -61,7 +59,6 @@ exports.getAllPosts = (req, res, next) => {
 };
 
 // GET Most Liked Posts Controller
-
 exports.getMostLikedPosts = (req, res, next) => {
     let user_id = 1; // cambiar con el frontend
     const sql =
@@ -99,7 +96,6 @@ exports.getMostLikedPosts = (req, res, next) => {
 };
 
 // GET One Posts Controller
-
 exports.getOnePost = (req, res, next) => {
     let id = req.params.id;
     let user_id = 2;

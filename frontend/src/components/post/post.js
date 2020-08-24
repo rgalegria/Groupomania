@@ -13,35 +13,38 @@ import UserHeader from "../UserHeader/UserHeader";
 const post = (props) => {
     return (
         <>
-            <UserHeader
-                photo_url={props.photo_url}
-                firstName={props.firstName}
-                lastName={props.lastName}
-                post_date={props.post_date}
-                category={props.category}
-            />
-            <div className={styles.block}>
-                <h3 className={styles.title}>{props.title}</h3>
-                <img className={styles.photo} src={props.image_url} alt="post" />
-                <div className={styles.reactions}>
-                    <button className={styles.reaction_btn}>
-                        <img className={styles.icon} src={like} alt="like icon" />
-                        <span>{props.likes}</span>
-                    </button>
-                    <button className={styles.reaction_btn}>
-                        <img className={styles.icon} src={dislike} alt="dislike icon" />
-                        <span>{props.dislikes}</span>
-                    </button>
-                    <button className={styles.reaction_btn}>
-                        <img className={styles.icon} src={comments} alt="comments icon" />
-                        <span>1</span>
-                    </button>
-                    <button className={styles.comment_btn}>
-                        <img className={styles.icon} src={comment} alt="comment icon" />
-                        <span>commentez</span>
-                    </button>
-                </div>
-            </div>
+            <article>
+                <UserHeader
+                    user_id={props.user_id}
+                    photo_url={props.photo_url}
+                    firstName={props.firstName}
+                    lastName={props.lastName}
+                    post_date={props.post_date}
+                    category={props.category}
+                />
+                <section className={styles.block}>
+                    <h3 className={styles.title}>{props.title}</h3>
+                    <img className={styles.photo} src={props.image_url} alt="post" />
+                    <div className={styles.reactions}>
+                        <button className={styles.reaction_btn}>
+                            <img className={styles.icon} src={like} alt="like icon" />
+                            <span>{props.likes}</span>
+                        </button>
+                        <button className={styles.reaction_btn}>
+                            <img className={styles.icon} src={dislike} alt="dislike icon" />
+                            <span>{props.dislikes}</span>
+                        </button>
+                        <button className={styles.reaction_btn}>
+                            <img className={styles.icon} src={comments} alt="comments icon" />
+                            <span>1</span>
+                        </button>
+                        <button className={styles.comment_btn}>
+                            <img className={styles.icon} src={comment} alt="comment icon" />
+                            <span>commentez</span>
+                        </button>
+                    </div>
+                </section>
+            </article>
         </>
     );
 };

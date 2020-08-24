@@ -1,20 +1,21 @@
 import React from "react";
 import styles from "./UserHeader.module.css";
+import { Link } from "react-router-dom";
 
 const userHeader = (props) => {
     return (
-        <div className={styles.block}>
-            <img className={styles.photo} src={props.photo_url} href="#" alt={props.firstName} />
-            <p className={styles.text}>
+        <header className={styles.block}>
+            <Link to={`/profile/${props.user_id}`}>
+                <img className={styles.photo} src={props.photo_url} />
                 {props.firstName} {props.lastName}
+            </Link>
+            <p className={styles.text}>
                 <span className={styles.text_division}>|</span>
-                <span>
-                    {props.category}
-                    <span className={styles._text_dot}>•</span>
-                    {props.post_date}
-                </span>
+                <span>{props.category}</span>
+                <span className={styles.text_division}>•</span>
+                <span>{props.post_date}</span>
             </p>
-        </div>
+        </header>
     );
 };
 

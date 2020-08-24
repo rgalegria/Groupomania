@@ -14,3 +14,19 @@
     border-radius: 0 0 5rem 5rem;
     padding: 0 2rem;
 }
+
+/*---------------------------------*/
+/*         _scrollbar.scss       */
+/*-------------------------------*/
+
+.container::-webkit-scrollbar {
+    width: 0.8rem;
+}
+
+/* .container::-webkit-scrollbar-track {
+    background: #ededed;
+} */
+
+.container::-webkit-scrollbar-thumb {
+    background: #c30000;
+}

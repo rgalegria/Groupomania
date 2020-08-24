@@ -1,7 +1,6 @@
 "use strict";
 
 // Middleware Imports
-
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -9,7 +8,6 @@ const jwt = require("jsonwebtoken");
 const db = require("../config/db");
 
 // GET Login User Controller
-
 exports.login = (req, res, next) => {
     // Vérifie que les champs ne sont pas vides
     const { email, password } = req.body;

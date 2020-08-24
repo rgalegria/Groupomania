@@ -9,13 +9,16 @@ import categories from "../../images/categories-icon.svg";
 import ActionBtn from "../../components/Buttons/ActionBtn/ActionBtn";
 import NavBtn from "../../components/Buttons/NavBtn/NavBtn";
 
+// Styles
+import styles from "./Nav.module.css";
+
 const NavPost = (props) => {
     return (
-        <>
+        <footer className={styles.btn_list}>
             <ActionBtn id="menu" name="menu" icon={menu} onClick={props.onClick} />
             <NavBtn id="post" name="post" icon={post} link="/posts/new" />
             <NavBtn id="categories" name="catégories" icon={categories} link="/posts" />
-        </>
+        </footer>
     );
 };
 

@@ -12,10 +12,10 @@ import password from "../../images/password-icon.svg";
 import person from "../../images/person-icon.svg";
 
 // Components
-import InputField from "../InputField/InputField";
+import InputField from "../../components/InputField/InputField";
 
 // Styles
-import "../../containers/Home/Home.css";
+import "../Home/Home.css";
 
 const Login = () => {
     const auth = useContext(AuthContext);
@@ -37,15 +37,13 @@ const Login = () => {
     const loginHandler = async (event) => {
         event.preventDefault();
 
-        console.log(formState.inputs);
-
         const data = {
             email: formState.inputs.email.value,
             password: formState.inputs.password.value,
         };
 
         await fetch("http://localhost:4200/login", {
-            method: "POST", // or 'PUT'
+            method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },

@@ -2,9 +2,6 @@ import React, { useState } from "react";
 
 // Static Images
 import dude from "./images/dude.jpg";
-// import girl from "./images/fille.jpg";
-// import background from "./images/background.jpg";
-// import linkedin from "./images/linkedin.jpg";
 
 // Components
 import Btn from "./components/btn/btn";

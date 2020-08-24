@@ -1,5 +1,5 @@
-import React from "./node_modules/react";
-import logotype from "../images/logotype.svg";
+import React from "react";
+import logotype from "../../images/logotype.svg";
 import styles from "./Counter.module.css";
 
 const Counter = (props) => {
@@ -11,7 +11,7 @@ const Counter = (props) => {
                 <p className={styles.text}>pas vous</p>
             </div>
 
-            <img className={styles.logotype} src={logotype} />
+            <img className={styles.logotype} src={logotype} alt="Logo de Groupomania" />
 
             <div className={styles.counter}>
                 <h5 className={styles.title}>Posts publiés</h5>

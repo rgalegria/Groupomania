@@ -24,12 +24,15 @@ export const useHttpRequest = () => {
             activeRequest.current = activeRequest.current.filter((reqCtrl) => reqCtrl !== httpAbortCtrl);
 
             if (!response.ok) {
+                console.log("response Data =>", responseData, "response =>", response);
                 throw new Error(responseData.message);
             }
 
             setIsLoading(false);
             return responseData;
         } catch (err) {
+            // console.log("paso por el catch:", err.message);
+            // console.log(typeof err.message);
             setError(err.message);
             setIsLoading(false);
             throw err;
@@ -45,6 +48,8 @@ export const useHttpRequest = () => {
             activeRequest.current.forEach((abortCtrl) => abortCtrl.abort());
         };
     }, []);
+
+    // console.log("error del hook:", error);
 
     return { isLoading, error, sendRequest, clearError };
 };

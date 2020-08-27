@@ -16,8 +16,8 @@ import Spinner from "../../components/LoadingSpinner/LoadingSpinner";
 // Styles
 import styles from "./UserProfile.module.css";
 
-const UserProfile = () => {
-    // console.log("USER PROFILE");
+const NewPost = () => {
+    console.log("NEW POST");
 
     // Authentication context
     const auth = useContext(AuthContext);
@@ -29,22 +29,6 @@ const UserProfile = () => {
     const [profileData, setProfileData] = useState();
 
     const userId = useParams().id;
-
-    useEffect(() => {
-        console.log("useEFFECT");
-        const fetchUser = async () => {
-            try {
-                console.log("FETCHING");
-                const userData = await sendRequest(`http://localhost:4200/profile/${userId}`, "GET", null, {
-                    Authorization: "Bearer " + auth.token,
-                });
-                console.log("BACKEND Data:", userData);
-                setProfileData(userData);
-                // console.log("REACT Data:", profileData);
-            } catch (err) {}
-        };
-        fetchUser();
-    }, []);
 
     if (isLoading) {
         return (
@@ -100,4 +84,4 @@ const UserProfile = () => {
     );
 };
 
-export default UserProfile;
+export default NewPost;

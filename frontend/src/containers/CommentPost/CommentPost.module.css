@@ -1,0 +1,15 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 87vh;
+    overflow-y: scroll;
+    background-color: white;
+    border-radius: 0 0 5rem 5rem;
+    padding: 0 2rem;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    margin-top: 2rem;
+}

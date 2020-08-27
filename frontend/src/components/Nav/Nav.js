@@ -4,22 +4,19 @@ import { AuthContext } from "../../context/auth-context";
 import { useParams } from "react-router-dom";
 
 // Components
-import NavHome from "../../components/Nav/nav_home";
-import NavLogin from "../../components/Nav/nav_login";
-import NavSignUp from "../../components/Nav/nav_signup";
-import NavPost from "../../components/Nav/nav_posts";
-import NavComments from "../../components/Nav/nav_comments";
-import NavProfile from "../../components/Nav/nav_profile";
-import NavModify from "../../components/Nav/nav_modify";
+import NavHome from "./nav_home";
+import NavLogin from "./nav_login";
+import NavSignUp from "./nav_signup";
+import NavPost from "./nav_posts";
+import NavComments from "./nav_comments";
+import NavProfile from "./nav_profile";
+import NavUpdate from "./nav_update";
 
 const Nav = (props) => {
+    // Authentication context
     const auth = useContext(AuthContext);
 
-    console.log("NAV");
-    const paramId = useParams().id;
-    console.log("NAV param:", paramId);
-
-    console.log("Auth in NAV:", auth);
+    const id = props.location.pathname.split("/")[2];
 
     const backHandle = (e) => {
         e.preventDefault();
@@ -43,19 +40,19 @@ const Nav = (props) => {
                 nav = <NavPost backHandle={backHandle} />;
             }
             break;
-        case "/posts/:id/comment":
+        case `/posts/${id}`:
             if (auth.isLoggedIn) {
                 nav = <NavComments backHandle={backHandle} commentHandle={backHandle} />;
             }
             break;
-        case `/profile/${auth.userId}`:
+        case `/profile/${id}`:
             if (auth.isLoggedIn) {
                 nav = <NavProfile backHandle={backHandle} />;
             }
             break;
-        case `/profile/${auth.userId}/modify`:
+        case `/profile/${auth.userId}/update`:
             if (auth.isLoggedIn) {
-                nav = <NavModify name="annuler" backHandle={backHandle} />;
+                nav = <NavUpdate />;
             }
             break;
         default:

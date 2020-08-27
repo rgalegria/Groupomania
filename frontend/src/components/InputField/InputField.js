@@ -53,10 +53,13 @@ const InputField = (props) => {
     };
 
     let textColor;
+    let borderColor;
     if (props.textIsWhite === "yes") {
         textColor = styles.white;
+        borderColor = styles.white;
     } else {
         textColor = "";
+        borderColor = "";
     }
 
     const label = props.label ? (
@@ -65,46 +68,41 @@ const InputField = (props) => {
         </label>
     ) : null;
 
+    const icon = props.icon ? <img className={styles.icon} src={props.icon} alt={props.alt} /> : null;
+
     const element =
         props.element === "input" ? (
             <input
                 id={props.id}
-                className={`${styles.box} ${textColor}`}
+                className={`${styles.box} ${styles.input} ${textColor}`}
                 name={props.name}
                 type={props.type}
                 placeholder={props.placeholder}
-                // minLength="1"
-                // maxLength="45"
                 autoComplete={props.autocomplete}
                 value={inputState.value}
                 onChange={changeHandler}
                 onBlur={touchHandler}
-                // value={props.value ? props.value : value}
-                // onChange={(event) => changeHandler(event)}
             ></input>
         ) : (
             <textarea
                 id={props.id}
-                className={styles.box}
+                className={`${styles.box} ${styles.textarea}`}
                 name={props.name}
                 type={props.type}
                 rows={props.rows || 3}
                 placeholder={props.placeholder}
-                // minLength="1"
-                // maxLength="60"
                 autoComplete={props.autocomplete}
                 value={inputState.value}
                 onChange={changeHandler}
                 onBlur={touchHandler}
-                // value={props.value ? props.value : value}
-                // onChange={(event) => changeHandler(event)}
             ></textarea>
         );
 
-    const icon = props.icon ? <img className={styles.icon} src={props.icon} alt={props.alt} /> : null;
-
     return (
-        <div className={`${styles.block} ${!inputState.isValid && inputState.isTouched && styles.invalid}`}>
+        <div
+            className={`${styles.block} ${borderColor}
+        ${!inputState.isValid && inputState.isTouched && styles.invalid}`}
+        >
             {label}
             <div className={styles.wrapper}>
                 {element}

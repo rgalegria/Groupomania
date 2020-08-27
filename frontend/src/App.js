@@ -10,6 +10,9 @@ import Login from "./containers/Login/Login";
 import Signup from "./containers/SignUp/SignUp";
 import Posts from "./containers/Posts/Posts";
 import UserProfile from "./containers/UserProfile/UserProfile";
+import UpdateProfile from "./containers/UpdateProfile/UpdateProfile";
+import CommentPost from "./containers/CommentPost/CommentPost";
+// import NewPost from "./containers/NewPost/NewPost";
 
 const App = () => {
     console.log("APP");
@@ -22,11 +25,11 @@ const App = () => {
         routes = (
             <Switch>
                 <Route path="/posts" exact component={Posts} />
+                {/* <Route path="/posts/new" exact component={NewPost} /> */}
                 <Route path="/menu" />
-                <Route path="/profile/:id" component={UserProfile} />
-                {/* <Route path="/posts/:id" />
-                <Route path="/posts/:id/comments" />
-                <Route path="/profile/:id/modify" /> */}
+                <Route path="/profile/:id" exact component={UserProfile} />
+                <Route path="/profile/:id/update" component={UpdateProfile} />
+                <Route path="/posts/:id" exact component={CommentPost} />
             </Switch>
         );
     } else {

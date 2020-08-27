@@ -13,7 +13,13 @@ const Btn = (props) => {
     }
 
     return (
-        <button id={props.id} className={`${styles.btn} ${style}`} type={props.type}>
+        <button
+            id={props.id}
+            className={`${styles.btn} ${style}`}
+            type={props.type}
+            form={props.form}
+            onClick={props.onClick}
+        >
             <div className={styles.justify}>
                 <span className={styles.text}>{props.name}</span>
                 {icon}

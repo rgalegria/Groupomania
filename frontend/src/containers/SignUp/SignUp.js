@@ -88,7 +88,7 @@ const SignUp = () => {
                     hasLabel="no"
                     textIsWhite="yes"
                     validators={[MinLength(2)]}
-                    errorText="Votre email n'est pas correct"
+                    errorText="Veillez rentrer des charactères valides"
                     onInput={inputHandler}
                     initialValue={formState.inputs.firstName.value}
                     initialValid={formState.inputs.firstName.isValid}
@@ -105,7 +105,7 @@ const SignUp = () => {
                     hasLabel="no"
                     textIsWhite="yes"
                     validators={[MinLength(2)]}
-                    errorText="Votre email n'est pas correct"
+                    errorText="Veillez rentrer des charactères valides"
                     onInput={inputHandler}
                     initialValue={formState.inputs.lastName.value}
                     initialValid={formState.inputs.lastName.isValid}
@@ -139,7 +139,7 @@ const SignUp = () => {
                     hasLabel="no"
                     textIsWhite="yes"
                     validators={[MinLength(8)]}
-                    errorText="Votre email n'est pas correct"
+                    errorText="Votre mot de passe n'est pas correct"
                     onInput={inputHandler}
                     initialValue={formState.inputs.password.value}
                     initialValid={formState.inputs.password.isValid}

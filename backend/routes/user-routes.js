@@ -13,10 +13,10 @@ const userCtrl = require("../controllers/user");
 router.get("/:id", userCtrl.getUserProfile);
 
 // router.put("/profile/:id", auth, userCtrl.updateUserProfile);
-router.put("/profile-update", userCtrl.updateUserProfile);
+router.patch("/update", userCtrl.updateUserProfile);
 
 // router.put("/profile/updatepassword", auth, userCtrl.updatePassword);
-router.put("/password-update", userCtrl.updatePassword);
+router.put("/update-password", userCtrl.updatePassword);
 
 // router.delete("/profile/:id", auth, userCtrl.deleteProfile);
 router.delete("/:id", userCtrl.deleteProfile);

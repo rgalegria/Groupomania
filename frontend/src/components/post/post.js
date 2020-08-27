@@ -19,7 +19,7 @@ const post = (props) => {
                     photo_url={props.photo_url}
                     firstName={props.firstName}
                     lastName={props.lastName}
-                    post_date={props.post_date}
+                    date={props.date}
                     category={props.category}
                 />
                 <section className={styles.block}>

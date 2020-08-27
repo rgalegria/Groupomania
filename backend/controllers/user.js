@@ -1,7 +1,6 @@
 "use strict";
 
 // Middleware Imports
-
 const mysql = require("mysql");
 const bcrypt = require("bcrypt");
 const validator = require("validator");
@@ -36,7 +35,6 @@ const options = {
 const regExText = /^[A-ZÀÂÆÇÉÈÊËÏÎÔŒÙÛÜŸ \'\- ]+$/i;
 
 // GET User Profile Controller
-
 exports.getUserProfile = (req, res, next) => {
     const { id } = req.params;
 
@@ -46,7 +44,7 @@ exports.getUserProfile = (req, res, next) => {
 
     const query = db.query(sql, (error, profile) => {
         if (!error) {
-            res.status(200).json(profile);
+            res.status(200).json(profile[0]);
         } else {
             res.status(400).json({ error });
         }
@@ -54,11 +52,8 @@ exports.getUserProfile = (req, res, next) => {
 };
 
 // PUT User Profile Update Controller
-
-// CASO DONDE EL USUARIO SOLO ACTUALIZA CIERTOS DATOS
-
 exports.updateUserProfile = (req, res, next) => {
-    const { firstName, lastName, email, photo_url, department, role, linkedin_url, id } = req.body;
+    const { id, firstName, lastName, email, department, role, linkedin_url } = req.body;
 
     // Validation des donnés
     let isFirstName = validator.matches(firstName, regExText);
@@ -69,9 +64,9 @@ exports.updateUserProfile = (req, res, next) => {
     let isLinkedinUrl = validator.isURL(linkedin_url, [["http", "https"]]);
 
     if (isFirstName && isLastName && isEmail && isDepartment && isRole && isLinkedinUrl) {
-        const inserts = [firstName, lastName, email, photo_url, department, role, linkedin_url, id];
+        const inserts = [firstName, lastName, email, department, role, linkedin_url, id];
         const string =
-            "UPDATE users SET firstName = ?, lastName = ?, email = ?, photo_url = ?, department = ?, role = ?, linkedin_url = ? WHERE id = ?";
+            "UPDATE users SET firstName = ?, lastName = ?, email = ?,  department = ?, role = ?, linkedin_url = ? WHERE id = ?";
         const sql = mysql.format(string, inserts);
 
         const query = db.query(sql, (error, profile) => {
@@ -96,13 +91,12 @@ exports.updateUserProfile = (req, res, next) => {
         errorMessages = errorMessages.join();
 
         return res.status(400).json({
-            error: "Veillez vérifier les champs suivants :" + errorMessages,
+            message: "Veillez vérifier les champs suivants :" + errorMessages,
         });
     }
 };
 
 // PUT Update User Password Controller
-
 exports.updatePassword = (req, res, next) => {
     const { id, password } = req.body;
 
@@ -128,7 +122,6 @@ exports.updatePassword = (req, res, next) => {
 };
 
 // DELETE User Controller
-
 exports.deleteProfile = (req, res, next) => {
     const { id } = req.body;
 

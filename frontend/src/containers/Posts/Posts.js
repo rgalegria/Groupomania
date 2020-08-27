@@ -50,7 +50,7 @@ const Posts = () => {
                         photo_url={post.photo_url}
                         firstName={post.firstName}
                         lastName={post.lastName}
-                        post_date={post.post_date}
+                        date={post.post_date}
                         category={post.category}
                         title={post.title}
                         image_url={post.image_url}

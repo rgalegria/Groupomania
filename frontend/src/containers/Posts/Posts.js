@@ -40,13 +40,15 @@ const Posts = () => {
         fetchPosts();
     }, []);
 
+    console.log("posts =>", posts);
+
     let postsBlock = (
         <>
             {posts.map((post, index) => {
                 return (
                     <Post
                         key={index}
-                        user_id={post.user_id}
+                        user_id={post.users_id}
                         photo_url={post.photo_url}
                         firstName={post.firstName}
                         lastName={post.lastName}
@@ -54,9 +56,9 @@ const Posts = () => {
                         category={post.category}
                         title={post.title}
                         image_url={post.image_url}
-                        likes={post.likes}
-                        dislikes={post.dislikes}
-                        comments={post.comments}
+                        likes={post.likes || 0}
+                        dislikes={post.dislikes || 0}
+                        comments={post.comments || 0}
                     />
                 );
             })}

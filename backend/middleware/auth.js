@@ -1,11 +1,9 @@
 "use strict";
 
 // Middleware Imports
-
 const jwt = require("jsonwebtoken");
 
 // Middleware config.
-
 module.exports = (req, res, next) => {
     try {
         const token = req.headers.authorization.split(" ")[1];
@@ -14,6 +12,7 @@ module.exports = (req, res, next) => {
         if (req.body.userId && req.body.userId !== userId) {
             throw "Invalid user ID";
         } else {
+            //pasar datos?
             next();
         }
     } catch {

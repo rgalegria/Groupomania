@@ -13,7 +13,7 @@ import UserHeader from "../UserHeader/UserHeader";
 const post = (props) => {
     return (
         <>
-            <article>
+            <article id={props.post_id}>
                 <UserHeader
                     user_id={props.user_id}
                     photo_url={props.photo_url}
@@ -36,7 +36,7 @@ const post = (props) => {
                         </button>
                         <button className={styles.reaction_btn}>
                             <img className={styles.icon} src={comments} alt="comments icon" />
-                            <span>1</span>
+                            <span>{props.comments}</span>
                         </button>
                         <button className={styles.comment_btn}>
                             <img className={styles.icon} src={comment} alt="comment icon" />

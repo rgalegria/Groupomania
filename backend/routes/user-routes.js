@@ -4,23 +4,23 @@
 
 const express = require("express");
 const router = express.Router();
+const auth = require("../middleware/auth");
+const multer = require("../middleware/multer-config");
 
-// Routes
-
+// Controller
 const userCtrl = require("../controllers/user");
 
-// router.get("/profile/:id", auth, userCtrl.getUserProfile);
-router.get("/:id", userCtrl.getUserProfile);
+//=================================================================
 
-// router.put("/profile/:id", auth, userCtrl.updateUserProfile);
-router.patch("/update", userCtrl.updateUserProfile);
+// Read User Route
+router.get("/:id", auth, userCtrl.getUserProfile);
 
-// router.put("/profile/updatepassword", auth, userCtrl.updatePassword);
-router.put("/update-password", userCtrl.updatePassword);
+// Update User Route
+router.patch("/update", auth, multer, userCtrl.updateUserProfile);
+router.put("/update", auth, userCtrl.updatePassword);
 
-// router.delete("/profile/:id", auth, userCtrl.deleteProfile);
-router.delete("/:id", userCtrl.deleteProfile);
+// Delete User Route
+router.delete("/:id", auth, userCtrl.deleteProfile);
 
 // Execution
-
 module.exports = router;

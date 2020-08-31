@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, Redirect } from "react-router-dom";
 import { useAuth } from "./hooks/auth-hook";
 import { AuthContext } from "./context/auth-context";
 
@@ -30,6 +30,8 @@ const App = () => {
                 <Route path="/profile/:id" exact component={UserProfile} />
                 <Route path="/profile/:id/update" component={UpdateProfile} />
                 <Route path="/posts/:id" exact component={CommentPost} />
+                <Route path="/posts/:id" exact component={CommentPost} />
+                {/* <Redirect to="/posts" /> */}
             </Switch>
         );
     } else {
@@ -38,6 +40,7 @@ const App = () => {
                 <Route path="/" exact component={Home} />
                 <Route path="/login" exact component={Login} />
                 <Route path="/signup" exact component={Signup} />
+                {/* <Redirect to="/" /> */}
             </Switch>
         );
     }

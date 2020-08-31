@@ -4,6 +4,7 @@
 
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const mysql = require("mysql");
 const validator = require("validator");
 const passValid = require("secure-password-validator");
 // const passBlackList = require("secure-password-validator/build/main/blacklists/first10_000");
@@ -12,7 +13,6 @@ const passValid = require("secure-password-validator");
 const db = require("../config/db");
 
 // Password Validator Options
-
 const options = {
     // min password length, default = 8, cannot be less than 8
     minLength: 8,
@@ -47,21 +47,24 @@ exports.signup = (req, res, next) => {
 
     if (isFirstName && isLastName && isEmail && isPassword) {
         // Hash du mot de pass de l'utilisateur
-
         bcrypt.hash(req.body.password, 10, (error, hash) => {
-            const values = [req.body.firstName, req.body.lastName, req.body.email, hash];
-
             // Enregistrement des donnés de l'utilisateur sur la BD MySQL
-            const sql = "INSERT INTO users (firstName, lastName, email, password) VALUES (?)";
-            const query = db.query(sql, [values], (error, user) => {
+            const string = "INSERT INTO users (firstName, lastName, email, password) VALUES (?, ?, ?, ?)";
+            const inserts = [req.body.firstName, req.body.lastName, req.body.email, hash];
+            console.log("inserts:", inserts);
+            const sql = mysql.format(string, inserts);
+
+            const signupUser = db.query(sql, (error, user) => {
                 if (!error) {
                     // Signe le id de l'utilisateur et retourne un JWT dans l'entete
                     res.status(201).json({
                         message: "User created successfully!",
                         userId: user.insertId,
+                        account: "user",
                         token: jwt.sign(
                             {
                                 userId: user.insertId,
+                                account: "user",
                             },
                             process.env.JWT_SECRET,
                             {

@@ -1,12 +1,15 @@
 .btn_active {
+    background-color: white;
+    font-size: 1.49rem;
+    font-weight: 500;
     width: 50%;
-    text-decoration: none;
+    padding: 0;
+    border: 0;
 }
 
 .container_active {
     display: flex;
     height: 4.7rem;
-    width: 100%;
     border-bottom: 2px solid #c30000;
     margin: auto 1.6rem;
 }
@@ -14,34 +17,36 @@
 .icon_active {
     filter: invert(8%) sepia(96%) saturate(5030%) hue-rotate(358deg) brightness(124%) contrast(113%);
     height: 2rem;
-    margin: auto auto auto 1rem;
+    margin: 1.2rem auto auto 1rem;
 }
 
 .text_active {
     color: #c30000;
-    margin: 1.7rem 0 auto auto;
+    margin: 1.5rem 0 auto auto;
 }
 
 .btn {
-    width: 50%;
-    text-decoration: none;
     background-color: #f4f4f8;
+    font-size: 1.49rem;
+    font-weight: 500;
+    width: 50%;
+    padding: 0;
+    border: 0;
 }
 
 .container {
     display: flex;
     height: 4.7rem;
-    width: 100%;
-    margin: auto 1.6rem;
+    margin: auto;
 }
 
 .icon {
     filter: invert(55%) sepia(13%) saturate(0%) hue-rotate(286deg) brightness(90%) contrast(94%);
     height: 2rem;
-    margin: auto auto auto 1rem;
+    margin: 1.2rem auto auto 1rem;
 }
 
 .text {
     color: #828282;
-    margin: 1.7rem 0 auto auto;
+    margin: 1.5rem 0 auto auto;
 }

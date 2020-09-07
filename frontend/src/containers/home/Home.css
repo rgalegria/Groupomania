@@ -1,7 +1,7 @@
 .background_image {
     display: flex;
     flex-direction: column;
-    height: 87vh;
+    height: 88vh;
     padding: 0 4rem;
     background: rgb(0, 0, 0) url(../../images/home_background_groupomania.jpg) center no-repeat;
     background-size: cover;
@@ -44,7 +44,7 @@
     background: rgba(0, 0, 0, 0.3);
     -webkit-backdrop-filter: blur(3px);
     backdrop-filter: blur(4px);
-    height: 87vh;
+    height: 88vh;
     border-radius: 0 0 5rem 5rem;
     /* Note: backdrop-filter has minimal browser support */
 }

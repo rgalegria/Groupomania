@@ -27,3 +27,11 @@ button {
     font-family: "Montserrat", "Roboto", sans-serif;
     font-size: 9px;
 }
+
+.icon_green {
+    filter: invert(34%) sepia(85%) saturate(5750%) hue-rotate(98deg) brightness(92%) contrast(104%);
+}
+
+.icon_red {
+    filter: invert(15%) sepia(76%) saturate(4057%) hue-rotate(353deg) brightness(87%) contrast(124%);
+}

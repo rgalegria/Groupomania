@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useForm } from "../../hooks/form-hook";
 import { AuthContext } from "../../context/auth-context";
 import { isEmail, MinLength } from "../../utils/validators";
@@ -18,8 +18,13 @@ import InputField from "../../components/InputField/InputField";
 import "../Home/Home.css";
 
 const Login = () => {
+    // Authentication context
     const auth = useContext(AuthContext);
 
+    // History context
+    const history = useHistory();
+
+    // Input Hook
     const [formState, inputHandler] = useForm(
         {
             email: {
@@ -51,11 +56,12 @@ const Login = () => {
         })
             .then((response) => response.json())
             .then((responseData) => {
-                auth.login(responseData.userId, responseData.token);
+                auth.login(responseData.userId, responseData.token, responseData.account);
             })
             .catch((error) => {
                 console.error("Error:", error);
             });
+        history.push("/posts");
     };
 
     return (
@@ -97,7 +103,6 @@ const Login = () => {
                     initialValid={formState.inputs.password.isValid}
                 />
             </form>
-            <p></p>
             <Link className="forgot_pass_link" to={"/login"}>
                 mot de pass oublié ?
             </Link>

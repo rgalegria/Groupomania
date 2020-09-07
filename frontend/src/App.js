@@ -9,15 +9,17 @@ import Home from "./containers/Home/Home";
 import Login from "./containers/Login/Login";
 import Signup from "./containers/SignUp/SignUp";
 import Posts from "./containers/Posts/Posts";
+import Menu from "./containers/Menu/Menu";
 import UserProfile from "./containers/UserProfile/UserProfile";
 import UpdateProfile from "./containers/UpdateProfile/UpdateProfile";
 import CommentPost from "./containers/CommentPost/CommentPost";
-// import NewPost from "./containers/NewPost/NewPost";
+import NewPost from "./containers/NewPost/NewPost";
+
+// Styles
+import "./App.css";
 
 const App = () => {
-    console.log("APP");
-
-    const { token, login, logout, userId } = useAuth();
+    const { userId, token, account, login, logout } = useAuth();
 
     let routes;
 
@@ -25,8 +27,8 @@ const App = () => {
         routes = (
             <Switch>
                 <Route path="/posts" exact component={Posts} />
-                {/* <Route path="/posts/new" exact component={NewPost} /> */}
-                <Route path="/menu" />
+                <Route path="/posts/new" exact component={NewPost} />
+                <Route path="/menu" exact component={Menu} />
                 <Route path="/profile/:id" exact component={UserProfile} />
                 <Route path="/profile/:id/update" component={UpdateProfile} />
                 <Route path="/posts/:id" exact component={CommentPost} />
@@ -51,6 +53,7 @@ const App = () => {
                 isLoggedIn: !!token,
                 token: token,
                 userId: userId,
+                account: account,
                 login: login,
                 logout: logout,
             }}

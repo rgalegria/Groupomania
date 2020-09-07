@@ -1,7 +1,28 @@
-.container {
-    position: relative;
+.wrapper {
     display: flex;
     flex-direction: column;
-    top: 0;
-    z-index: 10;
+    height: 88vh;
+    background-color: white;
+    border-radius: 0 0 5rem 5rem;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 88vh;
+    overflow-y: scroll;
+    border-radius: 0 0 5rem 5rem;
+    padding: 0 2rem;
+}
+
+/*---------------------------------*/
+/*         _scrollbar.scss        */
+/*-------------------------------*/
+
+.container::-webkit-scrollbar {
+    width: 0.5rem;
+}
+
+.container::-webkit-scrollbar-thumb {
+    background: #c30000;
 }

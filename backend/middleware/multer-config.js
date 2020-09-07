@@ -1,15 +1,14 @@
 "use strict";
 
 // Middleware Imports
-
 const multer = require("multer");
 
 // Middleware config.
-
-const MIME_TYPES = {
+const MIME_TYPE_MAP = {
     "image/jpg": "jpg",
-    "image/jpeg": "jpg",
+    "image/jpeg": "jpeg",
     "image/png": "png",
+    "image/gif": "gif",
 };
 
 const storage = multer.diskStorage({
@@ -18,7 +17,7 @@ const storage = multer.diskStorage({
     },
     filename: (req, file, callback) => {
         const name = file.originalname.split(" ").join("_");
-        const extension = MIME_TYPES[file.mimetype];
+        const extension = MIME_TYPE_MAP[file.mimetype];
         callback(null, name + Date.now() + "." + extension);
     },
 });

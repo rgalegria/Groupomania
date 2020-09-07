@@ -27,7 +27,7 @@ CREATE TABLE `categories` (
   `category` varchar(255) COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name_UNIQUE` (`category`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -36,7 +36,7 @@ CREATE TABLE `categories` (
 
 LOCK TABLES `categories` WRITE;
 /*!40000 ALTER TABLE `categories` DISABLE KEYS */;
-INSERT INTO `categories` VALUES (2,'Animaux'),(1,'Drôle'),(3,'IT');
+INSERT INTO `categories` VALUES (2,'Animaux'),(4,'Comic'),(1,'Drôle'),(5,'Gaming'),(3,'Meme'),(6,'Random');
 /*!40000 ALTER TABLE `categories` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -58,7 +58,7 @@ CREATE TABLE `comments` (
   KEY `fk_Comments_Posts1_idx` (`Posts_id`),
   CONSTRAINT `fk_Comments_Posts1` FOREIGN KEY (`Posts_id`) REFERENCES `posts` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fk_Comments_Users1` FOREIGN KEY (`Users_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -67,7 +67,7 @@ CREATE TABLE `comments` (
 
 LOCK TABLES `comments` WRITE;
 /*!40000 ALTER TABLE `comments` DISABLE KEYS */;
-INSERT INTO `comments` VALUES (1,1,2,'2020-07-23 09:40:37','Ceci c\'est un commentaire de test'),(6,1,1,'2020-08-26 09:23:09','Me no entender'),(7,1,3,'2020-08-26 09:24:53','Spongebob Squarepants!');
+INSERT INTO `comments` VALUES (30,3,2,'2020-09-06 16:59:24','sdfsdfsdf'),(35,2,2,'2020-09-06 17:53:07','sfdsfs'),(39,5,55,'2020-09-07 12:26:49','test'),(40,43,55,'2020-09-07 13:39:07',':O');
 /*!40000 ALTER TABLE `comments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -90,7 +90,7 @@ CREATE TABLE `posts` (
   KEY `fk_Posts_Users1_idx` (`Users_id`),
   CONSTRAINT `fk_Posts_Categories` FOREIGN KEY (`Categories_id`) REFERENCES `categories` (`id`),
   CONSTRAINT `fk_Posts_Users1` FOREIGN KEY (`Users_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -99,7 +99,7 @@ CREATE TABLE `posts` (
 
 LOCK TABLES `posts` WRITE;
 /*!40000 ALTER TABLE `posts` DISABLE KEYS */;
-INSERT INTO `posts` VALUES (1,1,2,'2020-07-23 10:35:01','Le meilleur ami de l’homme','https://images-cdn.9gag.com/photo/aAx8pWL_700b.jpg'),(2,2,1,'2020-07-24 09:37:01','Mon chat le ferait !','https://img-9gag-fun.9cache.com/photo/az9pe1b_700bwp.webp'),(3,2,1,'2020-07-23 09:35:01','DELETE TEST','https://img-9gag-fun.9cache.com/photo/aXYoB8d_700bwp.webp'),(4,1,2,'2020-07-26 07:35:01','TITLE TO BE MODIFIED','https://img-9gag-fun.9cache.com/photo/aeMqjmq_700bwp.webp'),(5,3,1,'2020-07-27 06:35:01','TOP LIKED POST','https://img-comment-fun.9cache.com/media/aG1bm35/am0XnRwP_700w_0.jpg');
+INSERT INTO `posts` VALUES (1,1,2,'2020-07-23 10:35:01','Le meilleur ami de l’homme','https://images-cdn.9gag.com/photo/aAx8pWL_700b.jpg'),(2,2,1,'2020-07-24 09:37:01','Mon chat le ferait !','https://img-9gag-fun.9cache.com/photo/az9pe1b_700bwp.webp'),(3,2,1,'2020-07-23 09:35:01','DELETE TEST','https://img-9gag-fun.9cache.com/photo/aXYoB8d_700bwp.webp'),(4,1,2,'2020-07-26 07:35:01','TITLE TO BE MODIFIED','https://img-9gag-fun.9cache.com/photo/aeMqjmq_700bwp.webp'),(5,3,1,'2020-07-27 06:35:01','TOP LIKED POST','https://img-comment-fun.9cache.com/media/aG1bm35/am0XnRwP_700w_0.jpg'),(43,49,1,'2020-09-07 12:28:58','Test','http://localhost:4200/images/wow.gif1599481738477.gif'),(44,55,4,'2020-09-07 13:38:42','Ay ay ay...','http://localhost:4200/images/incredulos_son_asi.jpg1599485922838.jpeg');
 /*!40000 ALTER TABLE `posts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -111,16 +111,15 @@ DROP TABLE IF EXISTS `reactions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `reactions` (
-  `id` int NOT NULL AUTO_INCREMENT,
   `Posts_id` int NOT NULL,
   `Users_id` int NOT NULL,
   `reaction` varchar(45) COLLATE utf8_bin NOT NULL,
-  PRIMARY KEY (`id`,`Posts_id`,`Users_id`),
+  PRIMARY KEY (`Posts_id`,`Users_id`),
   KEY `fk_Likes_Users1_idx` (`Users_id`),
   KEY `fk_Reactions_Posts1_idx` (`Posts_id`),
   CONSTRAINT `fk_Likes_Users1` FOREIGN KEY (`Users_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fk_Reactions_Posts1` FOREIGN KEY (`Posts_id`) REFERENCES `posts` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -129,7 +128,7 @@ CREATE TABLE `reactions` (
 
 LOCK TABLES `reactions` WRITE;
 /*!40000 ALTER TABLE `reactions` DISABLE KEYS */;
-INSERT INTO `reactions` VALUES (1,1,2,'like'),(2,2,1,'dislike'),(5,4,1,'like'),(6,4,2,'like'),(7,5,1,'like'),(8,5,2,'like'),(9,5,3,'like'),(12,3,2,'dislike');
+INSERT INTO `reactions` VALUES (1,1,'like'),(1,2,'like'),(1,3,'like');
 /*!40000 ALTER TABLE `reactions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -142,6 +141,7 @@ DROP TABLE IF EXISTS `users`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `users` (
   `id` int NOT NULL AUTO_INCREMENT,
+  `account` varchar(45) COLLATE utf8_bin NOT NULL DEFAULT 'user',
   `user_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `firstName` varchar(45) COLLATE utf8_bin NOT NULL,
   `lastName` varchar(45) COLLATE utf8_bin NOT NULL,
@@ -153,7 +153,7 @@ CREATE TABLE `users` (
   `linkedin_url` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email_UNIQUE` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -162,7 +162,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'2020-03-05 11:32:07','Angela','GALINDO','a.galindo@groupomania.fr','$2b$10$nkBYDHxZjjWZCi9Tk59d0ujSOIGebPMxJqW4dCRW7P6Id78saPYhq','https://files.virgool.io/upload/users/127995/posts/pbxripaxe0hd/stviq4afzoq6.jpeg','Resources Humaines','Chargée du Comité d\'Entreprise','https://www.linkedin.com/'),(2,'2020-03-07 10:55:15','Jean','DUPONT','j.dupont@groupomania.fr','$2b$10$JwV1iRlA4H9pclDIJvY6O.bZcOX5H46RgkUtgW2HrnPKA7zpFx/kC','https://gbpoultryblog.files.wordpress.com/2017/06/random-guy.jpg','Gestion de la Relation Client','Chargé de l\'implementation de SalesForce','https://www.linkedin.com/jeandupont'),(3,'2020-07-07 05:55:15','Sheshuang','XIE','s.xie@groupomania.fr','123456','https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260','IT','Developpeusse Web','https://www.linkedin.com/'),(4,'2020-07-30 15:40:05','Ricardo','GOMEZ','r.gomez@groupomania.fr','$2b$10$8ws.I0tNTYZklOAMX9Y5l.U4hHfjQf8Ut/EGMiAi69GznmxbUtgmK','https://widgetwhats.com/app/uploads/2019/11/free-profile-photo-whatsapp-4-300x300.png',NULL,NULL,NULL),(5,'2020-07-30 15:57:08','Laure','FESSART','l.fessart@groupomania.fr','$2b$10$Eg.U8OWm9cTcXIrawKhYVO5WGISa5ufAfmGVDue3Y4ZADxy6d3juy','https://gbpoultryblog.files.wordpress.com/2017/06/random-guy.jpg',NULL,NULL,NULL),(14,'2020-07-30 16:42:03','Alejandra','LOPEZ','a.lopez@groupomania.fr','$2b$10$TZNldrWiS3qv3m1q.qjQI.qPG3QdC2pwYKL4B.B72jN.JRD7S9oY2','https://gbpoultryblog.files.wordpress.com/2017/06/random-guy.jpg',NULL,NULL,NULL),(26,'2020-07-31 14:33:54','Jean-Marie','DE GAULE','j.degaule@grouporama.fr','$2b$10$nkBYDHxZjjWZCi9Tk59d0ujSOIGebPMxJqW4dCRW7P6Id78saPYhq','https://gbpoultryblog.files.wordpress.com/2017/06/random-guy.jpg','IT','Developpeur Front End','www.linkedin.com/'),(30,'2020-08-17 13:28:14','Jean-Marie','LA BOUFFE','j.labouffe@groupomania.fr','$2b$10$EloBvU5A5tbc6o7z0BXk.OVTI1EQMWukrGLhZ5TzKIY7j4Qpi3BDG','https://gbpoultryblog.files.wordpress.com/2017/06/random-guy.jpg',NULL,NULL,NULL);
+INSERT INTO `users` VALUES (1,'user','2020-03-05 11:32:07','Angela','GALINDO','a.galindo@groupomania.fr','$2b$10$nkBYDHxZjjWZCi9Tk59d0ujSOIGebPMxJqW4dCRW7P6Id78saPYhq','https://files.virgool.io/upload/users/127995/posts/pbxripaxe0hd/stviq4afzoq6.jpeg','Resources Humaines','Chargée du Comité d\'Entreprise','https://www.linkedin.com/'),(2,'user','2020-03-07 10:55:15','Jean','DUPONT','j.dupont@groupomania.fr','$2b$10$7gUkD19837Ddc/mWrGDyreI06HyPMsljxkkt8ualNrgAn1xyG1aw6','https://gbpoultryblog.files.wordpress.com/2017/06/random-guy.jpg','Gestion de la Relation Client','Chargé de l\'implementation de SalesForce','https://www.linkedin.com/jeandupont'),(3,'user','2020-07-07 05:55:15','Cassandra','LAFAURIE','c.lafaurie@groupomania.fr','123456','https://quizly-s3-sparklette.netdna-ssl.com/wp-content/uploads/2017/10/16144720/30-year-old-woman-e1508256619164-300x300.png','Direction des Systèmes d\'Information','Directrice des Services Informatiques','https://www.linkedin.com/'),(49,'admin','2020-08-30 17:38:56','Sheshuang','XIE','s.xie@groupomania.fr','$2b$10$oqLJqUUubBpiIL2zqMUEX.pjUup8thaBNe5s1x9.pAZzi4GSj.9OG','https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260','Resources Humaines','Chargée de Communication sur les Reseaux Sociaux','https://www.linkedin.com/'),(55,'user','2020-09-07 12:24:19','Ricardo','GOMEZ','r.gomez@groupomania.fr','$2b$10$bwXxtLbWA9BuoD1Msc7N9eemvsQW6b7mSz8LQeCz1Hig3M3P5OmAK','http://localhost:4200/images/Ricardo.jpg1599485881634.jpeg','IT','Developpeur Web','https://www.linkedin.com/ricardoalegria');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -175,4 +175,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-08-30 12:58:59
+-- Dump completed on 2020-09-07 15:43:07

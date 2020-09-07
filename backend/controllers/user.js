@@ -1,8 +1,10 @@
 "use strict";
 
 // Middleware Imports
+const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const mysql = require("mysql");
+const fs = require("fs");
 const validator = require("validator");
 const passValid = require("secure-password-validator");
 // const passBlackList = require("secure-password-validator/build/main/blacklists/first10_000");
@@ -33,12 +35,23 @@ const options = {
 // RegEX Text
 const regExText = /^[A-ZÀÂÆÇÉÈÊËÏÎÔŒÙÛÜŸ \'\- ]+$/i;
 
+// UserID decoder
+const decodeUid = (authorization) => {
+    const token = authorization.split(" ")[1];
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+    return {
+        id: decodedToken.userId,
+        clearance: decodedToken.account,
+    };
+};
+
 // GET User Profile Controller
 //==========================================================================================================
 exports.getUserProfile = (req, res, next) => {
     const { id } = req.params;
 
-    const string = "SELECT * FROM users WHERE id = ?";
+    const string =
+        "SELECT firstName, lastName, email, photo_url, department, role, linkedin_url FROM users WHERE id = ?";
     const inserts = [id];
     const sql = mysql.format(string, inserts);
 
@@ -51,29 +64,25 @@ exports.getUserProfile = (req, res, next) => {
     });
 };
 
-// PUT Update Profile Photo Controller
-//==========================================================================================================
-exports.updateUserPhoto = (req, res, next) => {
-    const user_id = decodeUid(req.headers.authorization);
-    const photoUrl = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
-
-    const string = "UPDATE users SET photo_url = ? WHERE id = ?";
-    const inserts = [photoUrl, user_id];
-    const sql = mysql.format(string, inserts);
-
-    const updatePhoto = db.query(sql, (error, post) => {
-        if (!error) {
-            res.status(201).json({ message: "Post saved successfully!" });
-        } else {
-            res.status(400).json({ error });
-        }
-    });
-};
-
 // PATCH User Profile Update Controller
 //==========================================================================================================
 exports.updateUserProfile = (req, res, next) => {
-    const { id, firstName, lastName, email, department, role, linkedin_url } = req.body;
+    const user = decodeUid(req.headers.authorization);
+    console.log("lo que llega =>", req.body, req.file);
+    const { firstName, lastName, email, department, role, linkedin_url } = req.body;
+
+    let imageUrl;
+
+    if (req.body.image === "null") {
+        imageUrl;
+        console.log("actualiza solo datos");
+    } else if (req.file) {
+        imageUrl = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
+        console.log("hubo imagen nueva");
+    } else {
+        imageUrl = req.body.image;
+        console.log("ya tiene imagen pero solo actualiza datos");
+    }
 
     // Validation des donnés
     let isFirstName = validator.matches(firstName, regExText);
@@ -84,9 +93,9 @@ exports.updateUserProfile = (req, res, next) => {
     let isLinkedinUrl = validator.isURL(linkedin_url, [["http", "https"]]);
 
     if (isFirstName && isLastName && isEmail && isDepartment && isRole && isLinkedinUrl) {
-        const inserts = [firstName, lastName, email, department, role, linkedin_url, id];
         const string =
-            "UPDATE users SET firstName = ?, lastName = ?, email = ?,  department = ?, role = ?, linkedin_url = ? WHERE id = ?";
+            "UPDATE users SET firstName = ?, lastName = ?, email = ?, photo_url = ?,  department = ?, role = ?, linkedin_url = ? WHERE id = ?";
+        const inserts = [firstName, lastName, email, imageUrl, department, role, linkedin_url, user.id];
         const sql = mysql.format(string, inserts);
 
         const query = db.query(sql, (error, profile) => {
@@ -119,12 +128,15 @@ exports.updateUserProfile = (req, res, next) => {
 // PUT Update User Password Controller
 //==========================================================================================================
 exports.updatePassword = (req, res, next) => {
-    const { id, password } = req.body;
+    const user = decodeUid(req.headers.authorization);
+    const { password } = req.body;
+
+    console.log("body =>", req.body);
 
     if (passValid.validate(password, options).valid) {
         bcrypt.hash(req.body.password, 10).then((hash) => {
             const string = "UPDATE users SET password = ? WHERE id = ? ";
-            const inserts = [hash, id];
+            const inserts = [hash, user.id];
             const sql = mysql.format(string, inserts);
 
             const query = db
@@ -145,16 +157,15 @@ exports.updatePassword = (req, res, next) => {
 // DELETE User Controller
 //==========================================================================================================
 exports.deleteProfile = (req, res, next) => {
-    const { userId } = req.body;
-
-    console.log("userid:", userId);
+    const user = decodeUid(req.headers.authorization);
 
     const string = "DELETE FROM users WHERE id = ? ";
-    const inserts = [userId];
+    const inserts = [user.id];
     const sql = mysql.format(string, inserts);
 
-    const query = db.query(sql, [userId], (error, result) => {
+    const query = db.query(sql, (error, result) => {
         if (error) throw error;
+        console.log("delete result =>", result);
         res.status(200).json({ message: "User deleted successfully!" });
     });
 };

@@ -3,13 +3,15 @@ import { useParams } from "react-router-dom";
 import { useHttpRequest } from "../../hooks/httpRequest-hook";
 import { useForm } from "../../hooks/form-hook";
 import { AuthContext } from "../../context/auth-context";
-import { useHistory } from "react-router-dom";
 import { MinLength, MaxLength } from "../../utils/validators";
+
+//Icons
+import send from "../../images/send-icon.svg";
 
 // Components
 import Post from "../../components/Post/Post";
 import Comment from "../../components/Comment/Comment";
-import WriteComment from "../../components/WriteComment/WriteComment";
+import InputField from "../../components/InputField/InputField";
 import Spinner from "../../components/LoadingSpinner/LoadingSpinner";
 
 // Styles
@@ -21,9 +23,6 @@ const CommentPost = () => {
 
     // Post ID
     const postId = useParams().id;
-
-    // Authentication context
-    const history = useHistory();
 
     // Backend Request Hook
     const { isLoading, /*error,*/ sendRequest /*clearError*/ } = useHttpRequest();
@@ -45,24 +44,9 @@ const CommentPost = () => {
         false
     );
 
-    const postCommentHandler = async (event) => {
-        event.preventDefault();
-        const data = {
-            postId: postId,
-            message: formState.inputs.comment.value,
-        };
-
-        try {
-            await sendRequest(`http://localhost:4200/posts/comment`, "POST", JSON.stringify(data), {
-                "Content-Type": "application/json",
-                Authorization: "Bearer " + auth.token,
-            });
-            // history.push(`/posts/${postId}`);
-        } catch (err) {}
-    };
-
+    // Fetch Post
     useEffect(() => {
-        const fetchUser = async () => {
+        const fetchPost = async () => {
             try {
                 const post = await sendRequest(`http://localhost:4200/posts/${postId}`, "GET", null, {
                     Authorization: "Bearer " + auth.token,
@@ -71,8 +55,30 @@ const CommentPost = () => {
                 setComments(post[1].comments);
             } catch (err) {}
         };
-        fetchUser();
-    }, [setComments]);
+        fetchPost();
+    }, [setComments, auth.token, postId, sendRequest]);
+
+    // POST comment Handler
+    const postCommentHandler = async (event) => {
+        event.preventDefault();
+
+        try {
+            const commentData = await sendRequest(
+                `http://localhost:4200/posts/comment`,
+                "POST",
+                JSON.stringify({
+                    postId: postId,
+                    message: formState.inputs.comment.value,
+                }),
+                {
+                    "Content-Type": "application/json",
+                    Authorization: "Bearer " + auth.token,
+                }
+            );
+
+            setComments((prevComments) => [...prevComments, commentData[0]]);
+        } catch (err) {}
+    };
 
     // Delete POST Handler
     const deletePostHandler = (deletedPostId) => {
@@ -82,18 +88,6 @@ const CommentPost = () => {
     // Delete COMMENT Handler
     const deleteCommentHandler = (deletedCommentId) => {
         setComments((prevComments) => prevComments.filter((comment) => comment.id !== deletedCommentId));
-    };
-
-    //Like Handler
-    const likePostHandler = async (event) => {
-        event.preventDefault();
-        console.log("like click!");
-    };
-
-    //Dislike Handler
-    const dislikePostHandler = async (event) => {
-        event.preventDefault();
-        console.log("dislike click!");
     };
 
     if (isLoading) {
@@ -113,7 +107,8 @@ const CommentPost = () => {
             </div>
         );
     }
-
+    console.log("Form state value =>", formState.inputs.comment.value);
+    console.log("inputs =>", formState);
     return (
         <div className={styles.container}>
             {!isLoading && post && comments && (
@@ -134,8 +129,8 @@ const CommentPost = () => {
                         comments={post.commentsCounter}
                         userReaction={post.userReaction}
                         post_link={`/posts/${post.post_id}`}
-                        onLike={likePostHandler}
-                        onDislike={dislikePostHandler}
+                        // onLike={likePostHandler}
+                        // onDislike={dislikePostHandler}
                         onDelete={deletePostHandler}
                     />
                     <section>
@@ -155,18 +150,26 @@ const CommentPost = () => {
                             );
                         })}
                     </section>
-                    <form id="comment-form" onSubmit={postCommentHandler}>
-                        <WriteComment
+                    <form className={styles.comment_form} id="comment-form" onSubmit={postCommentHandler}>
+                        <InputField
                             id="comment"
+                            className={styles.box}
                             name="comment"
                             type="text"
                             placeholder="Écrivez un commentaire"
-                            validators={[MinLength(2), MaxLength(255)]}
-                            errorText="Veillez remplir le champ"
+                            maxLength="65"
+                            element="textarea"
+                            hasLabel="yes"
+                            textIsWhite="no"
+                            validators={[MinLength(2), MaxLength(65)]}
+                            errorText="Veillez ecrire un commentaire"
                             onInput={inputHandler}
                             initialValue={formState.inputs.comment.value}
                             initialValid={formState.inputs.comment.isValid}
                         />
+                        <button form="comment-form" className={styles.btn} type="submit">
+                            <img className={styles.icon} src={send} alt="publier commentaire" />
+                        </button>
                     </form>
                 </div>
             )}

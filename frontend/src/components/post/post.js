@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Link, withRouter, useHistory } from "react-router-dom";
 import { useHttpRequest } from "../../hooks/httpRequest-hook";
 import { AuthContext } from "../../context/auth-context";
@@ -16,6 +16,8 @@ import Spinner from "../../components/LoadingSpinner/LoadingSpinner";
 // Styles
 import styles from "./Post.module.css";
 
+// manejar el useState de manera local para los likes
+
 const Post = (props) => {
     // Authentication context
     const auth = useContext(AuthContext);
@@ -30,7 +32,11 @@ const Post = (props) => {
     const path = props.location.pathname;
     const postId = props.location.pathname.split("/")[2];
 
-    //Delete Post
+    const [likes, setLikes] = useState();
+
+    const [userReaction, setUserReaction] = useState();
+
+    // Delete Post
     const DeleteHandler = async () => {
         try {
             await sendRequest(
@@ -48,6 +54,20 @@ const Post = (props) => {
                 props.onDelete(props.id);
             }
         } catch (err) {}
+    };
+
+    //Like Handler
+    const likePostHandler = async (event) => {
+        event.preventDefault();
+        // hacer verificacion si dio like antes
+        // hacer verificacion si dio like antes
+        // setLikes( count + 1, );
+    };
+
+    //Dislike Handler
+    const dislikePostHandler = async (event) => {
+        event.preventDefault();
+        console.log("dislike click!");
     };
 
     // Color the like Btn if User has liked post

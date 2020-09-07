@@ -8,7 +8,6 @@ import { MinLength, MaxLength } from "../../utils/validators";
 // Components
 import ImageUpload from "../../components/ImageUpload/ImageUpload";
 import SelectField from "../../components/SelectField/SelectField";
-import UserHeader from "../../components/UserHeader/UserHeader";
 import InputField from "../../components/InputField/InputField";
 import Spinner from "../../components/LoadingSpinner/LoadingSpinner";
 
@@ -41,11 +40,11 @@ const NewPost = (props) => {
             } catch (err) {}
         };
         fetchPosts();
-    }, []);
+    }, [sendRequest, auth.token, setCategories]);
 
     // Form Hook
     //===========================================================================================
-    const [formState, inputHandler, setFormData] = useForm(
+    const [formState, inputHandler] = useForm(
         {
             title: {
                 value: "",

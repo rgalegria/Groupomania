@@ -51,13 +51,22 @@ exports.postComment = (req, res, next) => {
     const inserts = [user.id, postId, message];
     const sql = mysql.format(string, inserts);
 
-    const createComment = db.query(sql, (error, comment) => {
-        if (!error) {
-            console.log("MySQL Res =>", comment);
-            res.status(201).json({ message: "Comment Posted successfully!" });
-        } else {
-            res.status(400).json({ error });
-        }
+    const createComment = db.query(sql, (error, commentId) => {
+        if (error) throw error;
+
+        const string =
+            "SELECT users.firstName, users.lastName, users.photo_url, comments.Posts_id as id, comments.Users_id as user_id,  comments.message, comments.comment_date FROM comments INNER JOIN posts ON comments.posts_id = posts.id  INNER JOIN users ON comments.Users_id = users.id WHERE comments.id = ?";
+        const inserts = [commentId.insertId];
+        const sql = mysql.format(string, inserts);
+
+        const returnComment = db.query(sql, (error, response) => {
+            if (!error) {
+                console.log("comment =>", response);
+                res.status(201).json(response);
+            } else {
+                res.status(400).json({ error });
+            }
+        });
     });
 };
 

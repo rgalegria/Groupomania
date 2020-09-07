@@ -95,7 +95,7 @@ const InputField = (props) => {
                 value={inputState.value}
                 onChange={changeHandler}
                 onBlur={touchHandler}
-            ></textarea>
+            />
         );
 
     return (

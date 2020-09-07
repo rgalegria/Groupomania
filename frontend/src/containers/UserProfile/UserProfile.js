@@ -44,7 +44,7 @@ const UserProfile = () => {
             } catch (err) {}
         };
         fetchUser();
-    }, []);
+    }, [sendRequest, auth.token, userId]);
 
     if (isLoading) {
         return (

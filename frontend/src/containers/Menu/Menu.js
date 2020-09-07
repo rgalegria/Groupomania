@@ -42,7 +42,7 @@ const Menu = () => {
             } catch (err) {}
         };
         fetchPosts();
-    }, [sendRequest, auth.token]);
+    }, [sendRequest, auth.token, auth.userId]);
 
     const logoutHandler = (event) => {
         event.preventDefault();

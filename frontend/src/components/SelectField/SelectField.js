@@ -1,11 +1,10 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState } from "react";
 
 // Styles
 import styles from "./SelectField.module.css";
 
 // Component
 const SelectField = (props) => {
-    // const icon = props.icon ? <img className={styles.icon} src={props.icon} alt={props.alt} /> : null;
     const [category, setCategory] = useState();
     const [isValid, setIsValid] = useState(false);
 

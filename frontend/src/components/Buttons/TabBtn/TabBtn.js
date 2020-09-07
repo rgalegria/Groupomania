@@ -5,8 +5,6 @@ import styles from "./TabBtn.module.css";
 const tabBtn = (props) => {
     let btn;
 
-    console.log("btn props =>", props);
-
     if (props.active === "active") {
         btn = (
             <button className={styles.btn_active} onClick={props.onClick}>

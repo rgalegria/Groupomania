@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { useForm } from "../../hooks/form-hook";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { AuthContext } from "../../context/auth-context";
 import { isEmail, MinLength } from "../../utils/validators";
 

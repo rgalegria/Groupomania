@@ -5,9 +5,6 @@ import { useHttpRequest } from "../../hooks/httpRequest-hook";
 import { useForm } from "../../hooks/form-hook";
 import { isEmail, MinLength, MaxLength } from "../../utils/validators";
 
-// Static Images
-import GenProfile from "../../images/generic_profile_picture.jpg";
-
 // Icons
 import password from "../../images/password-icon.svg";
 import deleteIcon from "../../images/delete-icon.svg";
@@ -31,7 +28,7 @@ const UpdateProfile = () => {
     const history = useHistory();
 
     // Backend Request Hook
-    const { isLoading, error, sendRequest /*clearError*/ } = useHttpRequest();
+    const { isLoading, /*error,*/ sendRequest /*clearError*/ } = useHttpRequest();
 
     //Profile Hook
     const [userDataState, setUserDataState] = useState();

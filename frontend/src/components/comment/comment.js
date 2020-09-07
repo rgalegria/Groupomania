@@ -13,7 +13,7 @@ const Comment = (props) => {
     const auth = useContext(AuthContext);
 
     // Request Hook
-    const { isLoading, /*error,*/ sendRequest /*clearError*/ } = useHttpRequest();
+    const { /*isLoading, error,*/ sendRequest /*clearError*/ } = useHttpRequest();
 
     //Delete Comment
     const DeleteCommentHandler = async () => {

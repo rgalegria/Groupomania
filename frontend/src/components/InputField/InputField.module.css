@@ -3,6 +3,7 @@
     flex-direction: column;
     border-bottom: 1px solid #c4c4c4;
     margin-bottom: 1.6rem;
+    width: 100%;
 }
 
 .border_white {

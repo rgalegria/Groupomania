@@ -2,7 +2,6 @@ import React from "react";
 
 // Icons
 import back from "../../images/back-icon.svg";
-import comment from "../../images/comment-icon.svg";
 
 // Components
 import ActionBtn from "../../components/Buttons/ActionBtn/ActionBtn";

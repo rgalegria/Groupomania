@@ -52,7 +52,7 @@ const ImageUpload = (props) => {
                             <img
                                 className={styles.preview_post}
                                 src={previewUrl}
-                                alt="Previsualisation de la photo de la publication"
+                                alt="Previsualisation de la publication"
                             />
                             <div className={styles.red_banner_post}>
                                 <span className={styles.banner_text_post}>changer l'image</span>
@@ -60,7 +60,7 @@ const ImageUpload = (props) => {
                         </>
                     ) : (
                         <div className={styles.icon_block}>
-                            <img className={styles.icon} src={Image} />
+                            <img className={styles.icon} src={Image} alt="" />
                             <span className={styles.text}>Veillez choisir une image en cliquant ici</span>
                         </div>
                     )}
@@ -81,11 +81,7 @@ const ImageUpload = (props) => {
             <label htmlFor="upload-button" className={styles.photo_container}>
                 {previewUrl ? (
                     <>
-                        <img
-                            className={styles.preview_img}
-                            src={previewUrl}
-                            alt="Previsualisation de la photo du profil"
-                        />
+                        <img className={styles.preview_img} src={previewUrl} alt="Previsualisation du profil" />
 
                         <div className={styles.red_banner}>
                             <span className={styles.banner_text}>changer</span>
@@ -93,7 +89,7 @@ const ImageUpload = (props) => {
                     </>
                 ) : (
                     <div>
-                        <img className={styles.profile_photo} src={props.photo_url || GenProfile} />
+                        <img className={styles.profile_photo} src={props.photo_url || GenProfile} alt="" />
                         <div className={styles.red_banner}>
                             <span className={styles.banner_text}>changer</span>
                         </div>

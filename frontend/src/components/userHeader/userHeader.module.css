@@ -1,11 +1,10 @@
 .block {
     display: flex;
     flex-direction: row;
-    font-weight: 500;
-    font-size: 1.4rem;
+    font-size: 1.5rem;
     color: #828282;
     max-width: 500px;
-    margin: auto auto 1rem auto;
+    margin-bottom: 1rem;
 }
 
 .photo {
@@ -20,16 +19,28 @@
 }
 
 .text_division {
-    margin: 0 4px;
+    margin: 0 8px;
     font-size: 1.8rem;
 }
 
 a {
     font-style: normal;
     font-weight: 500;
-    font-size: 1.4rem;
+    font-size: 1.49rem;
     display: flex;
     align-items: center;
     color: black;
     text-decoration: none;
+}
+
+.delete_btn {
+    background-color: transparent;
+    border: 0;
+    padding: 0;
+    width: 32px;
+    margin-left: auto;
+}
+
+.delete_icon {
+    width: 30px;
 }

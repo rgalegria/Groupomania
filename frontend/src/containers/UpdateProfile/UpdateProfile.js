@@ -14,6 +14,7 @@ import deleteIcon from "../../images/delete-icon.svg";
 
 // Components
 import UIBtn from "../../components/Buttons/UIBtn/UIBtn";
+import ImageUpload from "../../components/ImageUpload/ImageUpload";
 import InputField from "../../components/InputField/InputField";
 import Spinner from "../../components/LoadingSpinner/LoadingSpinner";
 
@@ -26,19 +27,22 @@ const UpdateProfile = () => {
     // Authentication context
     const auth = useContext(AuthContext);
 
-    // Authentication context
+    // History context
     const history = useHistory();
 
     // Backend Request Hook
-    const { isLoading, error, sendRequest, clearError } = useHttpRequest();
+    const { isLoading, error, sendRequest /*clearError*/ } = useHttpRequest();
 
     //Profile Hook
     const [userDataState, setUserDataState] = useState();
 
-    // console.log("userDataState:", userDataState);
     // Form Hook
     const [formState, inputHandler, setFormData] = useForm(
         {
+            image: {
+                value: null,
+                isValid: false,
+            },
             firstName: {
                 value: "",
                 isValid: false,
@@ -70,7 +74,6 @@ const UpdateProfile = () => {
         },
         false
     );
-    // console.log("formState:", formState.inputs.firstName);
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -81,6 +84,10 @@ const UpdateProfile = () => {
                 setUserDataState(userData);
                 setFormData(
                     {
+                        image: {
+                            value: userData.photo_url,
+                            isValid: false,
+                        },
                         firstName: {
                             value: userData.firstName,
                             isValid: true,
@@ -105,10 +112,6 @@ const UpdateProfile = () => {
                             value: userData.linkedin_url,
                             isValid: true,
                         },
-                        password: {
-                            value: "",
-                            isValid: false,
-                        },
                     },
                     true
                 );
@@ -119,25 +122,52 @@ const UpdateProfile = () => {
 
     const updateProfileHandler = async (event) => {
         event.preventDefault();
+
+        const formData = new FormData();
+        formData.append("image", formState.inputs.image.value);
+        formData.append("firstName", formState.inputs.firstName.value);
+        formData.append("lastName", formState.inputs.lastName.value);
+        formData.append("department", formState.inputs.department.value);
+        formData.append("role", formState.inputs.role.value);
+        formData.append("email", formState.inputs.email.value);
+        formData.append("linkedin_url", formState.inputs.linkedin_url.value);
+        try {
+            await sendRequest(`http://localhost:4200/profile/update`, "PATCH", formData, {
+                Authorization: "Bearer " + auth.token,
+            });
+            history.push(`/profile/${auth.userId}`);
+        } catch (err) {}
+    };
+
+    const updatePasswordHandler = async (event) => {
+        event.preventDefault();
+        // console.log("password =>", formState.inputs.password.value);
         try {
             await sendRequest(
                 `http://localhost:4200/profile/update`,
-                "PATCH",
+                "PUT",
                 JSON.stringify({
-                    id: auth.userId,
-                    firstName: formState.inputs.firstName.value,
-                    lastName: formState.inputs.lastName.value,
-                    department: formState.inputs.department.value,
-                    role: formState.inputs.role.value,
-                    email: formState.inputs.email.value,
-                    linkedin_url: formState.inputs.linkedin_url.value,
+                    password: formState.inputs.password.value,
                 }),
                 {
                     "Content-Type": "application/json",
                     Authorization: "Bearer " + auth.token,
                 }
             );
-            history.push(`/profile/${auth.userId}`);
+            // history.push(`/profile/${auth.userId}`);
+        } catch (err) {}
+    };
+
+    const deleteUserHandler = async (event) => {
+        event.preventDefault();
+        console.log("delete click");
+        try {
+            await sendRequest(`http://localhost:4200/profile/update`, "DELETE", null, {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + auth.token,
+            });
+            auth.logout();
+            history.push(`/`);
         } catch (err) {}
     };
 
@@ -159,17 +189,17 @@ const UpdateProfile = () => {
         );
     }
 
-    console.log("error hook:", error);
-
     return (
         <div className={styles.container}>
             {!isLoading && userDataState && (
                 <div className={styles.background_img}>
                     <div className={styles.wrapper}>
-                        <img
-                            src={userDataState.photo_url || GenProfile}
-                            className={styles.profile_photo}
-                            alt={`${userDataState.firstName} ${userDataState.lastName}, employé chez groupomania.`}
+                        <ImageUpload
+                            center
+                            id="image"
+                            onInput={inputHandler}
+                            errorText="Choisisez une image"
+                            photo_url={userDataState.photo_url}
                         />
                         <h4 className={styles.title}>Vos informations personnelles</h4>
                         <form id="update-form" className={styles.update_list} onSubmit={updateProfileHandler}>
@@ -271,14 +301,9 @@ const UpdateProfile = () => {
                                 initialValid={true}
                             />
                         </form>
-                        <UIBtn
-                            id="update-profile-btn"
-                            form="update-form"
-                            name="Mettre à jour mon profil"
-                            type="submit"
-                        />
+                        <UIBtn id="update-profile-btn" form="update-form" name="Mettre à jour profil" type="submit" />
                         <h4 className={styles.title}>Changer mot de passe</h4>
-                        <form id="password-update-form" className={styles.update_list}>
+                        <form id="update-password-form" className={styles.update_list} onSubmit={updatePasswordHandler}>
                             <InputField
                                 id="password"
                                 label="Nouveau mot de passe :"
@@ -300,8 +325,8 @@ const UpdateProfile = () => {
                         </form>
                         <UIBtn
                             id="update-password-btn"
-                            form="password-update-form"
-                            name="Changer mon mot de passe"
+                            form="update-password-form"
+                            name="Changer mot de passe"
                             type="submit"
                         />
                         <h4 className={styles.title}>Supprimer mon compte</h4>
@@ -312,7 +337,7 @@ const UpdateProfile = () => {
                         </p>
                         <h5 className={styles.title}>Êtes-vous sur de supprimer votre compte?</h5>
                         <div className={styles.btn_block}>
-                            <UIBtn id="accept-btn" name="Oui" type="submit" />
+                            <UIBtn id="accept-btn" name="Oui" type="submit" onClick={deleteUserHandler} />
                             <UIBtn id="cancel-btn" name="Annuler" />
                         </div>
                     </div>

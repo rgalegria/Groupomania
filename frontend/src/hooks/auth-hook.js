@@ -5,11 +5,13 @@ let logoutTimer;
 export const useAuth = () => {
     const [token, setToken] = useState(false);
     const [userId, setUserId] = useState(false);
+    const [account, setAccount] = useState(false);
     const [tokenExpirationDate, setTokenExpirationDate] = useState();
 
-    const login = useCallback((userId, token, expirationDate) => {
-        setToken(token);
+    const login = useCallback((userId, token, account, expirationDate) => {
         setUserId(userId);
+        setToken(token);
+        setAccount(account);
         const tokenExpirationDate = expirationDate || new Date(new Date().getTime() + 1000 * 60 * 60 * 24);
         setTokenExpirationDate(tokenExpirationDate);
         localStorage.setItem(
@@ -17,18 +19,18 @@ export const useAuth = () => {
             JSON.stringify({
                 userId: userId,
                 token: token,
+                account: account,
                 expiration: tokenExpirationDate.toISOString(),
             })
         );
-        // console.log("App.js login funct.:", userId, token);
     }, []);
 
     const logout = useCallback(() => {
         setToken(null);
         setUserId(null);
+        setAccount(null);
         setTokenExpirationDate(null);
         localStorage.removeItem("userData");
-        // console.log("App.js logout funct.:", userId, token);
     }, []);
 
     useEffect(() => {
@@ -43,10 +45,16 @@ export const useAuth = () => {
     useEffect(() => {
         const storedData = JSON.parse(localStorage.getItem("userData"));
 
-        if (storedData && storedData.token && new Date(storedData.expiration) > new Date()) {
-            login(storedData.userId, storedData.token, new Date(storedData.expiration));
+        if (
+            storedData &&
+            storedData.userId &&
+            storedData.token &&
+            storedData.account &&
+            new Date(storedData.expiration) > new Date()
+        ) {
+            login(storedData.userId, storedData.token, storedData.account, new Date(storedData.expiration));
         }
     }, [login]);
 
-    return { token, login, logout, userId };
+    return { userId, token, account, login, logout };
 };

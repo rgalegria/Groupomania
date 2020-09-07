@@ -2,32 +2,35 @@ import React, { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../../context/auth-context";
 import { useHttpRequest } from "../../hooks/httpRequest-hook";
 
-// Components
-import Post from "../../components/Post/Post";
-import TabBtn from "../../components/Buttons/TabBtn/TabBtn";
-import Spinner from "../../components/LoadingSpinner/LoadingSpinner";
-
 // Icons
 import clockIcon from "../../images/clock-icon.svg";
 import coffeeIcon from "../../images/coffee-icon.svg";
+
+// Components
+import TabBtn from "../../components/Buttons/TabBtn/TabBtn";
+import PostList from "../../components/PostList/PostList";
+import Spinner from "../../components/LoadingSpinner/LoadingSpinner";
 
 // Styles
 import styles from "./Posts.module.css";
 
 const Posts = () => {
-    console.log("POSTS");
+    //Posts Hook
+    const [posts, setPosts] = useState();
+
+    // Tab Btn state
+    const [activeBtn, setActiveBtn] = useState({
+        mostRecents: "active",
+        mostLiked: "",
+    });
+
+    // Request Hook
+    const { isLoading, /*error,*/ sendRequest /*clearError*/ } = useHttpRequest();
+
     // Authentication context
     const auth = useContext(AuthContext);
 
-    // console.log("Auth POST:", auth);
-
-    // Backend Request Hook
-    const { isLoading, error, sendRequest, clearError } = useHttpRequest();
-
-    //Posts Hook
-    const [posts, setPosts] = useState([]);
-
-    //Fetch Data
+    //Fetch Most recent posts
     useEffect(() => {
         const fetchPosts = async () => {
             try {
@@ -38,38 +41,56 @@ const Posts = () => {
             } catch (err) {}
         };
         fetchPosts();
-    }, []);
+    }, [sendRequest, auth.token]);
 
-    console.log("posts =>", posts);
+    const fetchMostRecent = async () => {
+        setActiveBtn({
+            mostRecents: "active",
+            mostLiked: "",
+        });
+        try {
+            const postsData = await sendRequest("http://localhost:4200/posts", "GET", null, {
+                Authorization: "Bearer " + auth.token,
+            });
+            setPosts(postsData);
+        } catch (err) {}
+    };
 
-    let postsBlock = (
-        <>
-            {posts.map((post, index) => {
-                return (
-                    <Post
-                        key={index}
-                        user_id={post.users_id}
-                        photo_url={post.photo_url}
-                        firstName={post.firstName}
-                        lastName={post.lastName}
-                        date={post.post_date}
-                        category={post.category}
-                        title={post.title}
-                        image_url={post.image_url}
-                        likes={post.likes || 0}
-                        dislikes={post.dislikes || 0}
-                        comments={post.comments || 0}
-                    />
-                );
-            })}
-        </>
-    );
+    const fetchMostLiked = async () => {
+        setActiveBtn({
+            mostRecents: "",
+            mostLiked: "active",
+        });
+        try {
+            const postsData = await sendRequest("http://localhost:4200/posts/most-liked", "GET", null, {
+                Authorization: "Bearer " + auth.token,
+            });
+            setPosts(postsData);
+        } catch (err) {}
+    };
+
+    // Delete POST Handler
+    const deletePostHandler = (deletedPostId) => {
+        setPosts((prevPosts) => prevPosts.filter((post) => post.post_id !== deletedPostId));
+    };
+
+    //Like Handler
+    const likePostHandler = async (event) => {
+        event.preventDefault();
+        console.log("like click!");
+    };
+
+    //Dislike Handler
+    const dislikePostHandler = async (event) => {
+        event.preventDefault();
+        console.log("dislike click!");
+    };
 
     return (
         <>
             <nav className={styles.header}>
-                <TabBtn link="/posts" name="À LA UNE" icon={clockIcon} active="active" />
-                <TabBtn link="/mosted-liked" icon={coffeeIcon} name="LES PLUS AIMÉS" />
+                <TabBtn name="À LA UNE" icon={clockIcon} active={activeBtn.mostRecents} onClick={fetchMostRecent} />
+                <TabBtn name="LES PLUS AIMÉS" icon={coffeeIcon} active={activeBtn.mostLiked} onClick={fetchMostLiked} />
             </nav>
             <div className={styles.container}>
                 {isLoading && (
@@ -77,7 +98,14 @@ const Posts = () => {
                         <Spinner />
                     </div>
                 )}
-                {!isLoading && posts && postsBlock}
+                {!isLoading && posts && (
+                    <PostList
+                        items={posts}
+                        onDeletePost={deletePostHandler}
+                        onLikePost={likePostHandler}
+                        onDislikePost={dislikePostHandler}
+                    />
+                )}
             </div>
         </>
     );

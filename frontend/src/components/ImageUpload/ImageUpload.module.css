@@ -1,0 +1,92 @@
+.image-upload__preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.photo_container {
+    margin: 0 auto 0 auto;
+    width: 15rem;
+    height: 15rem;
+    border-radius: 3.5rem;
+    filter: drop-shadow(0px 4px 15px rgba(0, 0, 0, 0.25));
+    z-index: 10;
+}
+
+.profile_photo {
+    background-size: cover;
+    width: 15rem;
+    height: 15rem;
+    border-radius: 3.5rem;
+    z-index: 10;
+    object-fit: cover;
+}
+
+.preview_img {
+    margin: 0 auto 0 auto;
+    height: 15rem;
+    width: 15rem;
+    border-radius: 3.5rem;
+    object-fit: cover;
+}
+
+.red_banner {
+    position: absolute;
+    display: flex;
+    bottom: 0;
+    background-color: #c30000;
+    width: 100%;
+    color: white;
+    height: 2.8rem;
+    border-radius: 0 0 3.5rem 3.5rem;
+}
+
+.banner_text {
+    margin: auto;
+}
+
+/* Image Upload New Post*/
+
+.image_container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background-color: #f4f4f8;
+    margin-bottom: 1.6rem;
+}
+
+.icon_block {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 34rem;
+}
+
+.icon {
+    margin: 35% auto 5% auto;
+    width: 28%;
+}
+
+.text {
+    margin: 0 auto;
+    text-align: center;
+    width: 50%;
+    font-size: 15px;
+    color: #b2b2b2;
+}
+
+.preview_post {
+    width: 100%;
+}
+
+.red_banner_post {
+    display: flex;
+    background-color: #c30000;
+    width: 100%;
+    color: white;
+    height: 3rem;
+}
+
+.banner_text_post {
+    margin: auto;
+}

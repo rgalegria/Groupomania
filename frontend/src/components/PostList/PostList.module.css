@@ -8,10 +8,11 @@
 .container {
     display: flex;
     flex-direction: column;
-    height: 79vh;
+    height: 77.4vh;
     overflow-y: scroll;
-    padding: 0 2rem;
+    background-color: white;
     border-radius: 0 0 5rem 5rem;
+    padding: 0 2rem;
 }
 
 /*---------------------------------*/
@@ -19,7 +20,7 @@
 /*-------------------------------*/
 
 .container::-webkit-scrollbar {
-    width: 0.5rem;
+    width: 0.8rem;
 }
 
 .container::-webkit-scrollbar-thumb {

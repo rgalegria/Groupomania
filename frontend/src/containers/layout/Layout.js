@@ -7,10 +7,9 @@ import Nav from "../../components/Nav/Nav";
 import "./Layout.css";
 
 const Layout = (props) => {
-    console.log("LAYOUT");
     return (
         <>
-            <main className="container">{props.children}</main>
+            <main className="wrapper">{props.children}</main>
             <Nav />
         </>
     );

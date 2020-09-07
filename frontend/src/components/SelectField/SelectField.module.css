@@ -1,0 +1,27 @@
+.label {
+    font-size: 1.3rem;
+    color: #828282;
+}
+
+.dropdown {
+    display: flex;
+    flex-direction: column;
+    font-family: Montserrat;
+    font-size: 1.5rem;
+}
+
+.dropdown_btn {
+    cursor: pointer;
+    color: black;
+    background-color: #ffffff00;
+    padding: 1.6rem 0em 1rem 0;
+    border: none;
+    border-bottom: 1px solid #bdbdbd;
+    font-family: Montserrat;
+    font-size: 1.5rem;
+}
+
+.option {
+    font-family: Montserrat;
+    font-size: 1.5rem;
+}

@@ -23,7 +23,7 @@ const UserProfile = () => {
     const auth = useContext(AuthContext);
 
     // Backend Request Hook
-    const { isLoading, error, sendRequest, clearError } = useHttpRequest();
+    const { isLoading, /*error,*/ sendRequest /*clearError*/ } = useHttpRequest();
 
     //Profile Hook
     const [profileData, setProfileData] = useState();
@@ -31,14 +31,14 @@ const UserProfile = () => {
     const userId = useParams().id;
 
     useEffect(() => {
-        console.log("useEFFECT");
+        // console.log("useEFFECT");
         const fetchUser = async () => {
             try {
-                console.log("FETCHING");
+                // console.log("FETCHING");
                 const userData = await sendRequest(`http://localhost:4200/profile/${userId}`, "GET", null, {
                     Authorization: "Bearer " + auth.token,
                 });
-                console.log("BACKEND Data:", userData);
+                // console.log("BACKEND Data:", userData);
                 setProfileData(userData);
                 // console.log("REACT Data:", profileData);
             } catch (err) {}

@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { useForm } from "../../hooks/form-hook";
+import { Link, useHistory } from "react-router-dom";
 import { AuthContext } from "../../context/auth-context";
 import { isEmail, MinLength } from "../../utils/validators";
 
@@ -20,7 +21,11 @@ import "../../containers/Home/Home.css";
 import styles from "./Signup.module.css";
 
 const SignUp = () => {
+    // Authentication context
     const auth = useContext(AuthContext);
+
+    // History context
+    const history = useHistory();
 
     const [formState, inputHandler] = useForm(
         {
@@ -65,11 +70,12 @@ const SignUp = () => {
         })
             .then((response) => response.json())
             .then((responseData) => {
-                auth.login(responseData.userId, responseData.token);
+                auth.login(responseData.userId, responseData.token, responseData.account);
             })
             .catch((error) => {
                 console.error("Error:", error);
             });
+        history.push("/posts");
     };
 
     return (

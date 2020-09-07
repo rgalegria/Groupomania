@@ -1,55 +1,100 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { useHttpRequest } from "../../hooks/httpRequest-hook";
+import { useForm } from "../../hooks/form-hook";
 import { AuthContext } from "../../context/auth-context";
-
-// Static Images
-
-// Icons
+import { useHistory } from "react-router-dom";
+import { MinLength, MaxLength } from "../../utils/validators";
 
 // Components
 import Post from "../../components/Post/Post";
 import Comment from "../../components/Comment/Comment";
+import WriteComment from "../../components/WriteComment/WriteComment";
 import Spinner from "../../components/LoadingSpinner/LoadingSpinner";
 
 // Styles
 import styles from "./CommentPost.module.css";
 
-const UserProfile = () => {
-    console.log("POST Comment");
-
+const CommentPost = () => {
     // Authentication context
     const auth = useContext(AuthContext);
 
-    // Backend Request Hook
-    const { isLoading, error, sendRequest, clearError } = useHttpRequest();
-
-    //Posts Hook
-    const [postData, setPostData] = useState();
-    console.log("PostData:", postData);
-
-    //Comments Hook
-    const [postComments, setPostComments] = useState();
-    console.log("postComments:", postComments);
-
+    // Post ID
     const postId = useParams().id;
 
+    // Authentication context
+    const history = useHistory();
+
+    // Backend Request Hook
+    const { isLoading, /*error,*/ sendRequest /*clearError*/ } = useHttpRequest();
+
+    //Posts Hook
+    const [post, setPost] = useState();
+
+    //Comments Hook
+    const [comments, setComments] = useState();
+
+    // Input Hook
+    const [formState, inputHandler] = useForm(
+        {
+            comment: {
+                value: "",
+                isValid: false,
+            },
+        },
+        false
+    );
+
+    const postCommentHandler = async (event) => {
+        event.preventDefault();
+        const data = {
+            postId: postId,
+            message: formState.inputs.comment.value,
+        };
+
+        try {
+            await sendRequest(`http://localhost:4200/posts/comment`, "POST", JSON.stringify(data), {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + auth.token,
+            });
+            // history.push(`/posts/${postId}`);
+        } catch (err) {}
+    };
+
     useEffect(() => {
-        console.log("useEFFECT");
         const fetchUser = async () => {
             try {
-                console.log("FETCHING");
-                const userData = await sendRequest(`http://localhost:4200/posts/${postId}`, "GET", null, {
+                const post = await sendRequest(`http://localhost:4200/posts/${postId}`, "GET", null, {
                     Authorization: "Bearer " + auth.token,
                 });
-                // console.log("BACKEND Data:", userData);
-                // console.log("BACKEND Comments:", userData.comments);
-                setPostData(userData);
-                setPostComments(userData.comments);
+                setPost(post[0]);
+                setComments(post[1].comments);
             } catch (err) {}
         };
         fetchUser();
-    }, []);
+    }, [setComments]);
+
+    // Delete POST Handler
+    const deletePostHandler = (deletedPostId) => {
+        setPost((prevPosts) => prevPosts.filter((post) => post.post_id !== deletedPostId));
+    };
+
+    // Delete COMMENT Handler
+    const deleteCommentHandler = (deletedCommentId) => {
+        setComments((prevComments) => prevComments.filter((comment) => comment.id !== deletedCommentId));
+    };
+
+    //Like Handler
+    const likePostHandler = async (event) => {
+        event.preventDefault();
+        console.log("like click!");
+    };
+
+    //Dislike Handler
+    const dislikePostHandler = async (event) => {
+        event.preventDefault();
+        console.log("dislike click!");
+    };
 
     if (isLoading) {
         return (
@@ -61,7 +106,7 @@ const UserProfile = () => {
         );
     }
 
-    if (!postData) {
+    if (!post) {
         return (
             <div className={styles.container}>
                 <h2>No User Data!</h2>
@@ -71,38 +116,62 @@ const UserProfile = () => {
 
     return (
         <div className={styles.container}>
-            {!isLoading && postData && postComments && (
+            {!isLoading && post && comments && (
                 <div className={styles.wrapper}>
                     <Post
-                        user_id={postData.user_id}
-                        photo_url={postData.photo_url}
-                        firstName={postData.firstName}
-                        lastName={postData.lastName}
-                        date={postData.post_date}
-                        category={postData.category}
-                        title={postData.title}
-                        image_url={postData.image_url}
-                        likes={postData.likes}
-                        dislikes={postData.dislikes}
-                        comments={postData.comments}
+                        key={post.post_id}
+                        id={post.post_id}
+                        user_id={post.user_id}
+                        photo_url={post.photo_url}
+                        firstName={post.firstName}
+                        lastName={post.lastName}
+                        date={post.post_date}
+                        category={post.category}
+                        title={post.title}
+                        image_url={post.image_url}
+                        likes={post.likes}
+                        dislikes={post.dislikes}
+                        comments={post.commentsCounter}
+                        userReaction={post.userReaction}
+                        post_link={`/posts/${post.post_id}`}
+                        onLike={likePostHandler}
+                        onDislike={dislikePostHandler}
+                        onDelete={deletePostHandler}
                     />
-                    {postComments.map((comment, index) => {
-                        return (
-                            <Comment
-                                key={index}
-                                user_id={comment.id}
-                                photo_url={comment.photo_url}
-                                firstName={comment.firstName}
-                                lastName={comment.lastName}
-                                date={comment.comment_date}
-                                message={comment.message}
-                            />
-                        );
-                    })}
+                    <section>
+                        {comments.map((comment) => {
+                            return (
+                                <Comment
+                                    key={comment.id}
+                                    id={comment.id}
+                                    user_id={comment.user_id}
+                                    photo_url={comment.photo_url}
+                                    firstName={comment.firstName}
+                                    lastName={comment.lastName}
+                                    date={comment.comment_date}
+                                    message={comment.message}
+                                    onDeleteComment={deleteCommentHandler}
+                                />
+                            );
+                        })}
+                    </section>
+                    <form id="comment-form" onSubmit={postCommentHandler}>
+                        <WriteComment
+                            id="comment"
+                            name="comment"
+                            type="text"
+                            placeholder="Écrivez un commentaire"
+                            validators={[MinLength(2), MaxLength(255)]}
+                            errorText="Veillez remplir le champ"
+                            onInput={inputHandler}
+                            initialValue={formState.inputs.comment.value}
+                            initialValid={formState.inputs.comment.isValid}
+                        />
+                    </form>
                 </div>
             )}
         </div>
     );
 };
 
-export default UserProfile;
+export default CommentPost;

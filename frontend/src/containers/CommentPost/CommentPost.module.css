@@ -13,3 +13,9 @@
     flex-direction: column;
     margin-top: 2rem;
 }
+
+.comment_form {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}

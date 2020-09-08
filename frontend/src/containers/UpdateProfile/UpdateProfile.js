@@ -30,10 +30,13 @@ const UpdateProfile = () => {
     // Backend Request Hook
     const { isLoading, /*error,*/ sendRequest /*clearError*/ } = useHttpRequest();
 
-    //Profile Hook
+    // Profile useState
     const [userDataState, setUserDataState] = useState();
 
-    // Form Hook
+    // Delete message useState
+    const [showInfo, setShowInfo] = useState(false);
+
+    // Form useState
     const [formState, inputHandler, setFormData] = useForm(
         {
             image: {
@@ -75,9 +78,14 @@ const UpdateProfile = () => {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const userData = await sendRequest(`http://localhost:4200/profile/${auth.userId}`, "GET", null, {
-                    Authorization: "Bearer " + auth.token,
-                });
+                const userData = await sendRequest(
+                    `${process.env.REACT_APP_API_URL}/profile/${auth.userId}`,
+                    "GET",
+                    null,
+                    {
+                        Authorization: "Bearer " + auth.token,
+                    }
+                );
                 setUserDataState(userData);
                 setFormData(
                     {
@@ -129,7 +137,7 @@ const UpdateProfile = () => {
         formData.append("email", formState.inputs.email.value);
         formData.append("linkedin_url", formState.inputs.linkedin_url.value);
         try {
-            await sendRequest(`http://localhost:4200/profile/update`, "PATCH", formData, {
+            await sendRequest(`${process.env.REACT_APP_API_URL}/profile/update`, "PATCH", formData, {
                 Authorization: "Bearer " + auth.token,
             });
             history.push(`/profile/${auth.userId}`);
@@ -141,7 +149,7 @@ const UpdateProfile = () => {
         // console.log("password =>", formState.inputs.password.value);
         try {
             await sendRequest(
-                `http://localhost:4200/profile/update`,
+                `${process.env.REACT_APP_API_URL}/profile/update`,
                 "PUT",
                 JSON.stringify({
                     password: formState.inputs.password.value,
@@ -155,11 +163,23 @@ const UpdateProfile = () => {
         } catch (err) {}
     };
 
+    const showMessage = (event) => {
+        event.preventDefault();
+        console.log("click");
+        if (showInfo === false) {
+            setShowInfo(true);
+            console.log("true");
+        } else {
+            setShowInfo(false);
+            console.log("true");
+        }
+    };
+
     const deleteUserHandler = async (event) => {
         event.preventDefault();
         console.log("delete click");
         try {
-            await sendRequest(`http://localhost:4200/profile/update`, "DELETE", null, {
+            await sendRequest(`${process.env.REACT_APP_API_URL}/profile/${auth.userId}`, "DELETE", null, {
                 "Content-Type": "application/json",
                 Authorization: "Bearer " + auth.token,
             });
@@ -167,6 +187,8 @@ const UpdateProfile = () => {
             history.push(`/`);
         } catch (err) {}
     };
+
+    console.log("showInfo Value =>", showInfo);
 
     if (isLoading) {
         return (
@@ -187,10 +209,11 @@ const UpdateProfile = () => {
     }
 
     return (
-        <div className={styles.container}>
+        <div className={`container ${styles.class_mod}`}>
             {!isLoading && userDataState && (
-                <div className={styles.background_img}>
+                <>
                     <div className={styles.wrapper}>
+                        <div className={styles.background_img}></div>
                         <ImageUpload
                             center
                             id="image"
@@ -298,15 +321,21 @@ const UpdateProfile = () => {
                                 initialValid={true}
                             />
                         </form>
-                        <UIBtn id="update-profile-btn" form="update-form" name="Mettre à jour profil" type="submit" />
+                        <UIBtn
+                            id="update-profile-btn"
+                            form="update-form"
+                            name="Mettre à jour profil"
+                            type="submit"
+                            btnType="valid"
+                        />
                         <h4 className={styles.title}>Changer mot de passe</h4>
                         <form id="update-password-form" className={styles.update_list} onSubmit={updatePasswordHandler}>
                             <InputField
                                 id="password"
-                                label="Nouveau mot de passe :"
+                                label="Mot de passe :"
                                 name="password"
                                 type="password"
-                                placeholder="Ecrivez votre nouveau mot de passe"
+                                placeholder="Votre nouveau mot de passe"
                                 icon={password}
                                 alt="password icon"
                                 maxLength="50"
@@ -325,20 +354,35 @@ const UpdateProfile = () => {
                             form="update-password-form"
                             name="Changer mot de passe"
                             type="submit"
+                            btnType="valid"
                         />
                         <h4 className={styles.title}>Supprimer mon compte</h4>
-                        <UIBtn id="delete-profile-btn" icon={deleteIcon} name="Supprimer" />
-                        <p className={styles.role}>
-                            Vous êtes sur le bord de supprimer votre compte. Toutes les informations liés à ce compte
-                            seront supprimées.
-                        </p>
-                        <h5 className={styles.title}>Êtes-vous sur de supprimer votre compte?</h5>
-                        <div className={styles.btn_block}>
-                            <UIBtn id="accept-btn" name="Oui" type="submit" onClick={deleteUserHandler} />
-                            <UIBtn id="cancel-btn" name="Annuler" />
+                        <UIBtn
+                            id="delete-profile-btn"
+                            icon={deleteIcon}
+                            name="Supprimer"
+                            onClick={showMessage}
+                            btnType="warning"
+                        />
+                        <div style={{ display: showInfo === true ? "block" : "none" }}>
+                            <p className={styles.role}>
+                                Vous êtes sur le bord de supprimer votre compte. Toutes les informations liés à ce
+                                compte seront supprimées.
+                            </p>
+                            <h5 className={styles.title}>Êtes-vous sur de supprimer votre compte?</h5>
+                            <div className={styles.btn_block}>
+                                <UIBtn
+                                    id="accept-btn"
+                                    name="Oui"
+                                    type="submit"
+                                    onClick={deleteUserHandler}
+                                    btnType="warning"
+                                />
+                                <UIBtn id="cancel-btn" name="Annuler" onClick={showMessage} btnType="cancel" />
+                            </div>
                         </div>
                     </div>
-                </div>
+                </>
             )}
         </div>
     );

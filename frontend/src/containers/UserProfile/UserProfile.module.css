@@ -1,16 +1,14 @@
-.container {
-    display: flex;
-    background-color: white;
-    height: 87vh;
-    border-radius: 0 0 5rem 5rem;
+.class_mod {
+    flex-direction: unset;
+    padding: 0;
 }
 
 .background_img {
-    position: absolute;
-    height: 23%;
-    width: 100%;
     background: rgba(0, 0, 0) url(../../images/background.jpg) center no-repeat;
     background-size: cover;
+    position: absolute;
+    height: 150px;
+    width: 100%;
     resize: both;
     border-radius: 0 0 5rem 5rem;
 }
@@ -19,23 +17,23 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    padding: 0 4rem;
-    margin: auto 0;
+    padding: 0 3rem;
 }
 
 .profile_photo {
-    margin: 0 auto 0 auto;
+    filter: drop-shadow(0px 4px 15px rgba(0, 0, 0, 0.25));
     width: 15rem;
     height: 15rem;
+    object-fit: cover;
+    margin: 4rem auto 0 auto;
     border-radius: 3.5rem;
-    filter: drop-shadow(0px 4px 15px rgba(0, 0, 0, 0.25));
-    z-index: 10;
+    /* z-index: 10; */
 }
 
 .hero_block {
     display: flex;
     flex-direction: row;
-    margin: 5vh auto 0 auto;
+    margin: 6vh auto 0 auto;
 }
 
 .title {
@@ -45,7 +43,7 @@
 
 .Linkedin_icon {
     width: 2rem;
-    margin: 0.7rem 0 auto 1.6rem;
+    margin: 0.4rem 0 auto 1.6rem;
 }
 
 .department {
@@ -60,14 +58,16 @@
     text-align: center;
     font-weight: 500;
     line-height: 160%;
-    margin: 7vh 0 0 0;
+    /* margin: 7vh 0 0 0; */
+    margin: auto;
 }
 
 .email {
     text-align: center;
     font-size: 1.35rem;
     line-height: 160%;
-    margin: 4vh auto 0 auto;
+    /* margin: 4vh auto 0 auto; */
+    margin: auto;
     color: rgb(0, 0, 238);
     text-decoration: none;
 }

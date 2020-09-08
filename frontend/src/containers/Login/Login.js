@@ -47,7 +47,7 @@ const Login = () => {
             password: formState.inputs.password.value,
         };
 
-        await fetch("http://localhost:4200/login", {
+        await fetch(`${process.env.REACT_APP_API_URL}/login`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -88,7 +88,7 @@ const Login = () => {
                 <InputField
                     id="password"
                     name="password"
-                    type="text"
+                    type="password"
                     onInput={inputHandler}
                     placeholder="password"
                     autocomplete="current-password"

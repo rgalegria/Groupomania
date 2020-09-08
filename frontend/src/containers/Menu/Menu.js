@@ -34,10 +34,14 @@ const Menu = () => {
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                const userData = await sendRequest(`http://localhost:4200/profile/${auth.userId}`, "GET", null, {
-                    Authorization: "Bearer " + auth.token,
-                });
-                console.log("user Data=>", userData);
+                const userData = await sendRequest(
+                    `${process.env.REACT_APP_API_URL}/profile/${auth.userId}`,
+                    "GET",
+                    null,
+                    {
+                        Authorization: "Bearer " + auth.token,
+                    }
+                );
                 setProfileData(userData);
             } catch (err) {}
         };
@@ -86,7 +90,7 @@ const Menu = () => {
                     <div className={styles.list}>
                         <Link to={`profile/${auth.userId}`} className={`${styles.btn} ${styles.border}`}>
                             <span className={styles.text}>Mon profil</span>
-                            <img className={styles.icon} src={person} alt="A REVISAR" />
+                            <img className={`${styles.icon} icon_white`} src={person} alt="A REVISAR" />
                         </Link>
                         <Link to={`/menu`} className={`${styles.btn} ${styles.border}`}>
                             <span className={styles.text}>Annuaire</span>

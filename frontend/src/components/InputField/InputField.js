@@ -52,13 +52,18 @@ const InputField = (props) => {
         });
     };
 
-    let textColor;
+    // const clearInput = () => {
+    //     document.getElementById({ id }).value = "";
+    // };
+
+    let typeOfBox;
     let borderColor;
+
     if (props.textIsWhite === "yes") {
-        textColor = styles.white;
-        borderColor = styles.white;
+        typeOfBox = styles.white_box;
+        borderColor = styles.border_white;
     } else {
-        textColor = "";
+        typeOfBox = styles.box;
         borderColor = "";
     }
 
@@ -68,13 +73,21 @@ const InputField = (props) => {
         </label>
     ) : null;
 
-    const icon = props.icon ? <img className={styles.icon} src={props.icon} alt={props.alt} /> : null;
+    let icon;
+
+    if (props.icon && props.textIsWhite === "yes") {
+        icon = <img className={`${styles.icon} icon_white`} src={props.icon} alt={props.alt} />;
+    } else if (props.icon) {
+        icon = <img className={styles.icon} src={props.icon} alt={props.alt} />;
+    } else {
+        icon = "";
+    }
 
     const element =
         props.element === "input" ? (
             <input
                 id={props.id}
-                className={`${styles.box} ${styles.input} ${textColor}`}
+                className={`${typeOfBox} ${styles.input_height} `}
                 name={props.name}
                 type={props.type}
                 placeholder={props.placeholder}
@@ -86,13 +99,14 @@ const InputField = (props) => {
         ) : (
             <textarea
                 id={props.id}
-                className={`${styles.box} ${styles.textarea}`}
+                className={`${typeOfBox} ${styles.textarea}`}
                 name={props.name}
                 type={props.type}
                 rows={props.rows || 3}
                 placeholder={props.placeholder}
                 autoComplete={props.autocomplete}
                 value={inputState.value}
+                // onClear={clearInput}
                 onChange={changeHandler}
                 onBlur={touchHandler}
             />

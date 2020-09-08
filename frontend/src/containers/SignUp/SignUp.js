@@ -61,7 +61,7 @@ const SignUp = () => {
             password: formState.inputs.password.value,
         };
 
-        fetch("http://localhost:4200/signup", {
+        fetch(`${process.env.REACT_APP_API_URL}/signup`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -152,9 +152,6 @@ const SignUp = () => {
                 />
             </form>
             <div className="background_blur"></div>
-            <p id="error_message" className={styles.error_message}>
-                Error message à definir
-            </p>
         </div>
     );
 };

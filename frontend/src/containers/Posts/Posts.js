@@ -34,7 +34,7 @@ const Posts = () => {
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                const postsData = await sendRequest("http://localhost:4200/posts", "GET", null, {
+                const postsData = await sendRequest(`${process.env.REACT_APP_API_URL}/posts`, "GET", null, {
                     Authorization: "Bearer " + auth.token,
                 });
                 setPosts(postsData);
@@ -49,7 +49,7 @@ const Posts = () => {
             mostLiked: "",
         });
         try {
-            const postsData = await sendRequest("http://localhost:4200/posts", "GET", null, {
+            const postsData = await sendRequest(`${process.env.REACT_APP_API_URL}/posts`, "GET", null, {
                 Authorization: "Bearer " + auth.token,
             });
             setPosts(postsData);
@@ -62,7 +62,7 @@ const Posts = () => {
             mostLiked: "active",
         });
         try {
-            const postsData = await sendRequest("http://localhost:4200/posts/most-liked", "GET", null, {
+            const postsData = await sendRequest(`${process.env.REACT_APP_API_URL}/posts/most-liked`, "GET", null, {
                 Authorization: "Bearer " + auth.token,
             });
             setPosts(postsData);
@@ -92,13 +92,13 @@ const Posts = () => {
                 <TabBtn name="À LA UNE" icon={clockIcon} active={activeBtn.mostRecents} onClick={fetchMostRecent} />
                 <TabBtn name="LES PLUS AIMÉS" icon={coffeeIcon} active={activeBtn.mostLiked} onClick={fetchMostLiked} />
             </nav>
-            <div className={styles.container}>
+            <div className="container">
                 {isLoading && (
                     <div className="spinner">
                         <Spinner />
                     </div>
                 )}
-                {!isLoading && posts && (
+                {!isLoading && posts && activeBtn && (
                     <PostList
                         items={posts}
                         onDeletePost={deletePostHandler}

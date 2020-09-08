@@ -35,3 +35,7 @@ button {
 .icon_red {
     filter: invert(15%) sepia(76%) saturate(4057%) hue-rotate(353deg) brightness(87%) contrast(124%);
 }
+
+.icon_white {
+    filter: invert(100%) sepia(0%) saturate(100%) hue-rotate(174deg) brightness(100%) contrast(100%);
+}

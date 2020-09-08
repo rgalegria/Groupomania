@@ -8,11 +8,42 @@
     padding: 0 2rem;
 }
 
+.head {
+    display: flex;
+    flex-direction: column;
+    height: 5rem;
+    padding: 0 2rem;
+    margin-bottom: 1rem;
+    background-color: #f4f4f8;
+}
+
+.tab {
+    background-color: white;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.tab_border {
+    border-bottom: 2px solid #c30000;
+    width: 85%;
+    margin: 0px auto;
+}
+
 .wrapper {
     margin-top: 2rem;
 }
 
 .title {
-    margin: 1.6rem auto;
+    font-size: 1.49rem;
+    font-weight: 500;
     text-align: center;
+    text-transform: uppercase;
+    margin: 1.3rem auto;
+    color: #c30000;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }

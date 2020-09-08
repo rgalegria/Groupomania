@@ -159,13 +159,17 @@ exports.updatePassword = (req, res, next) => {
 exports.deleteProfile = (req, res, next) => {
     const user = decodeUid(req.headers.authorization);
 
-    const string = "DELETE FROM users WHERE id = ? ";
-    const inserts = [user.id];
-    const sql = mysql.format(string, inserts);
+    if (user.id === req.params.id) {
+        const string = "DELETE FROM users WHERE id = ? ";
+        const inserts = [user.id];
+        const sql = mysql.format(string, inserts);
 
-    const query = db.query(sql, (error, result) => {
-        if (error) throw error;
-        console.log("delete result =>", result);
-        res.status(200).json({ message: "User deleted successfully!" });
-    });
+        const query = db.query(sql, (error, result) => {
+            if (error) throw error;
+            console.log("delete result =>", result);
+            res.status(200).json({ message: "User deleted successfully!" });
+        });
+    } else {
+        res.status(401).json({ message: "Non Autorisé !" });
+    }
 };

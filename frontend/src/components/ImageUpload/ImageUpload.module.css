@@ -5,12 +5,12 @@
 }
 
 .photo_container {
-    margin: 0 auto 0 auto;
+    margin: 4rem auto 0 auto;
     width: 15rem;
     height: 15rem;
     border-radius: 3.5rem;
     filter: drop-shadow(0px 4px 15px rgba(0, 0, 0, 0.25));
-    z-index: 10;
+    /* z-index: 10; */
 }
 
 .profile_photo {
@@ -50,21 +50,28 @@
 .image_container {
     display: flex;
     flex-direction: column;
-    width: 100%;
+    /* width: 100%; */
     background-color: #f4f4f8;
-    margin-bottom: 1.6rem;
+    /* margin-bottom: 1.6rem; */
+    height: 100%;
 }
 
 .icon_block {
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: 34rem;
+    /* height: 100%; */
+    /* margin: 1rem auto auto auto; */
+    /* margin-bottom: auto; */
+    /* height: 53vh; */
+    margin: auto;
 }
 
 .icon {
-    margin: 35% auto 5% auto;
+    /*margin: 44% auto auto auto; */
     width: 28%;
+    margin: auto auto 1.6rem auto;
+    /* height: 100%;*/
 }
 
 .text {

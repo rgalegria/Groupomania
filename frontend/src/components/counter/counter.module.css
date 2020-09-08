@@ -1,6 +1,7 @@
 .block {
     display: flex;
-    margin: 7vh auto 0 auto;
+
+    margin: auto auto 5rem auto;
 }
 .counter {
     display: flex;

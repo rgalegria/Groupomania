@@ -18,7 +18,7 @@ const Comment = (props) => {
     //Delete Comment
     const DeleteCommentHandler = async () => {
         try {
-            await sendRequest(`http://localhost:4200/posts/comment/${props.id}`, "DELETE", null, {
+            await sendRequest(`${process.env.REACT_APP_API_URL}/posts/comment/${props.id}`, "DELETE", null, {
                 Authorization: "Bearer " + auth.token,
             });
             props.onDeleteComment(props.id);

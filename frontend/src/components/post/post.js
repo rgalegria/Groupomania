@@ -40,7 +40,7 @@ const Post = (props) => {
     const DeleteHandler = async () => {
         try {
             await sendRequest(
-                `http://localhost:4200/posts/${props.id}`,
+                `${process.env.REACT_APP_API_URL}/posts/${props.id}`,
                 "DELETE",
                 JSON.stringify({ image_url: props.image_url }),
                 {
@@ -116,9 +116,9 @@ const Post = (props) => {
     return (
         <article id={props.post_id}>
             {isLoading && (
-                // <div className="spinner">
-                <Spinner asOverlay />
-                //</div>
+                <div className="spinner">
+                    <Spinner asOverlay />
+                </div>
             )}
             <UserHeader
                 user_id={props.user_id}

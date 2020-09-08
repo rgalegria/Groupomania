@@ -35,7 +35,7 @@ const UserProfile = () => {
         const fetchUser = async () => {
             try {
                 // console.log("FETCHING");
-                const userData = await sendRequest(`http://localhost:4200/profile/${userId}`, "GET", null, {
+                const userData = await sendRequest(`${process.env.REACT_APP_API_URL}/profile/${userId}`, "GET", null, {
                     Authorization: "Bearer " + auth.token,
                 });
                 // console.log("BACKEND Data:", userData);
@@ -65,7 +65,7 @@ const UserProfile = () => {
     }
 
     return (
-        <div className={styles.container}>
+        <div className={`container ${styles.class_mod}`}>
             {!isLoading && profileData && (
                 <>
                     <div className={styles.background_img}></div>

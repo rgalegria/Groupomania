@@ -24,6 +24,21 @@
     flex-direction: row;
 }
 
+.input_height {
+    height: 4rem;
+}
+
+.textarea {
+    margin-top: 1.1rem;
+    resize: none;
+}
+
+.icon {
+    width: 1.6rem;
+    margin: auto 0 auto 1rem;
+    color: black;
+}
+
 .box {
     font-family: "Montserrat", "Roboto";
     font-size: 1.5rem;
@@ -35,44 +50,50 @@
     border: 0;
 }
 
-.input {
-    height: 4rem;
-}
-
-.textarea {
-    height: 5rem;
-    margin-top: 1.1rem;
-    resize: none;
-}
-
-.white {
-    color: white;
-    width: 93%;
-}
-
 .box:focus {
     border: 0;
     filter: none;
 }
 
-.icon {
-    height: 1em;
-    margin: auto 0 auto 1rem;
-    color: black;
+.box::placeholder {
+    /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #828282;
+    opacity: 1; /* Firefox */
 }
 
-::placeholder {
+.box:-ms-input-placeholder {
+    /* Internet Explorer 10-11 */
+    color: #828282;
+}
+
+.box::-ms-input-placeholder {
+    /* Microsoft Edge */
+    color: #828282;
+}
+
+.white_box {
+    font-family: "Montserrat", "Roboto";
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: white;
+    width: 100%;
+    padding: 0;
+    background-color: transparent;
+    border: 0;
+}
+
+.white_box::placeholder {
     /* Chrome, Firefox, Opera, Safari 10.1+ */
     color: #eeeeee;
     opacity: 1; /* Firefox */
 }
 
-:-ms-input-placeholder {
+.white_box:-ms-input-placeholder {
     /* Internet Explorer 10-11 */
     color: #eeeeee;
 }
 
-::-ms-input-placeholder {
+.white_box::-ms-input-placeholder {
     /* Microsoft Edge */
     color: #eeeeee;
 }

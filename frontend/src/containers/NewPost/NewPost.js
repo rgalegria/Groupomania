@@ -32,7 +32,7 @@ const NewPost = (props) => {
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                const categories = await sendRequest("http://localhost:4200/posts/categories", "GET", null, {
+                const categories = await sendRequest(`${process.env.REACT_APP_API_URL}/posts/categories`, "GET", null, {
                     Authorization: "Bearer " + auth.token,
                 });
                 // console.log("categories =>", categories);
@@ -73,7 +73,7 @@ const NewPost = (props) => {
 
         // console.log("To Backend =>", formData);
         try {
-            await sendRequest(`http://localhost:4200/posts`, "POST", formData, {
+            await sendRequest(`${process.env.REACT_APP_API_URL}/posts`, "POST", formData, {
                 Authorization: "Bearer " + auth.token,
             });
             history.push(`/posts`);
@@ -99,39 +99,53 @@ const NewPost = (props) => {
     }
 
     return (
-        <div className={styles.container}>
-            {!isLoading && categories && (
-                <div className={styles.wrapper}>
-                    <h2 className={styles.title}>Nouvelle Publication</h2>
-                    <form id="send-post-form" onSubmit={sendPostHandler}>
-                        <InputField
-                            id="title"
-                            // label="Titre du poste :"
-                            name="title"
-                            type="text"
-                            placeholder="Titre ou message de la publication"
-                            maxLength="100"
-                            element="textarea"
-                            hasLabel="no"
-                            textIsWhite="no"
-                            validators={[MinLength(3), MaxLength(100)]}
-                            errorText="Veillez écrire un titre ou commentaire pour votre post"
-                            onInput={inputHandler}
-                            initialValue={formState.inputs.title.value}
-                            initialValid={formState.inputs.title.isValid}
-                        />
-                        <ImageUpload center id="image" onInput={inputHandler} errorText="Choisisez une image ou gif" />
-                        <SelectField
-                            id="category"
-                            label="Categories :"
-                            name="categories"
-                            onInput={inputHandler}
-                            options={categories}
-                        />
-                    </form>
+        <>
+            <header className={styles.head}>
+                <div className={styles.tab}>
+                    <div className={styles.tab_border}>
+                        <h3 className={styles.title}>Nouvelle Publication</h3>
+                    </div>
                 </div>
-            )}
-        </div>
+            </header>
+
+            <div className="container">
+                {!isLoading && categories && (
+                    <>
+                        <form className={styles.form} id="send-post-form" onSubmit={sendPostHandler}>
+                            <InputField
+                                id="title"
+                                // label="Titre du poste :"
+                                name="title"
+                                type="text"
+                                placeholder="Titre ou message de la publication"
+                                maxLength="100"
+                                element="textarea"
+                                hasLabel="no"
+                                textIsWhite="no"
+                                validators={[MinLength(3), MaxLength(100)]}
+                                errorText="Veillez écrire un titre ou commentaire pour votre post"
+                                onInput={inputHandler}
+                                initialValue={formState.inputs.title.value}
+                                initialValid={formState.inputs.title.isValid}
+                            />
+                            <ImageUpload
+                                center
+                                id="image"
+                                onInput={inputHandler}
+                                errorText="Choisisez une image ou gif"
+                            />
+                            <SelectField
+                                id="category"
+                                label="Categories :"
+                                name="categories"
+                                onInput={inputHandler}
+                                options={categories}
+                            />
+                        </form>
+                    </>
+                )}
+            </div>
+        </>
     );
 };
 

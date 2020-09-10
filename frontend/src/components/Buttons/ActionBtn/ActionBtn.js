@@ -2,7 +2,7 @@ import React from "react";
 
 import styles from "./ActionBtn.module.css";
 
-const SubmitBtn = (props) => {
+const ActionBtn = (props) => {
     return (
         <button id={props.id} form={props.form} className={styles.btn} type={props.type} onClick={props.onClick}>
             <img className={styles.icon} src={props.icon} alt="A REVISAR" />
@@ -11,4 +11,4 @@ const SubmitBtn = (props) => {
     );
 };
 
-export default SubmitBtn;
+export default ActionBtn;

@@ -25,3 +25,9 @@
     display: flex;
     margin: auto 1vw;
 }
+
+@media only screen and (min-width: 1024px) {
+    .logotype {
+        width: 8vw;
+    }
+}

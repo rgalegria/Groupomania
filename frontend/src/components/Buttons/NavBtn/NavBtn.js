@@ -6,9 +6,9 @@ import styles from "./NavBtn.module.css";
 
 const navBtn = (props) => {
     return (
-        <Link to={props.link} className={styles.btn}>
-            <img className={styles.icon} src={props.icon} alt="A REVISAR" />
-            <span className={styles.text}>{props.name}</span>
+        <Link to={props.link} className={props.btnStyle || styles.btn}>
+            <img className={props.iconStyle || styles.icon} src={props.icon} alt="A REVISAR" />
+            <span className={props.textStyle || styles.text}>{props.name}</span>
         </Link>
     );
 };

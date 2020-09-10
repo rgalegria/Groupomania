@@ -30,10 +30,9 @@ const App = () => {
                 <Route path="/posts/new" exact component={NewPost} />
                 <Route path="/menu" exact component={Menu} />
                 <Route path="/profile/:id" exact component={UserProfile} />
-                <Route path="/profile/:id/update" component={UpdateProfile} />
+                <Route path="/profile/:id/update" exact component={UpdateProfile} />
                 <Route path="/posts/:id" exact component={CommentPost} />
-                <Route path="/posts/:id" exact component={CommentPost} />
-                {/* <Redirect to="/posts" /> */}
+                <Redirect to="/posts" />
             </Switch>
         );
     } else {
@@ -42,7 +41,7 @@ const App = () => {
                 <Route path="/" exact component={Home} />
                 <Route path="/login" exact component={Login} />
                 <Route path="/signup" exact component={Signup} />
-                {/* <Redirect to="/" /> */}
+                <Redirect to="/" />
             </Switch>
         );
     }

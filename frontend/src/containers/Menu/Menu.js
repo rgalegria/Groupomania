@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link, useHistory } from "react-router-dom";
+import { useWindowDimensions } from "../../hooks/window-hook";
 import { useHttpRequest } from "../../hooks/httpRequest-hook";
 import { AuthContext } from "../../context/auth-context";
 
@@ -9,7 +10,9 @@ import GenProfile from "../../images/generic_profile_picture.jpg";
 // Icons
 import person from "../../images/person-icon.svg";
 import agenda from "../../images/agenda-icon.svg";
+import categories from "../../images/categories-icon.svg";
 import logout from "../../images/logout-icon.svg";
+import posts from "../../images/posts-icon.svg";
 
 // Components
 import Spinner from "../../components/LoadingSpinner/LoadingSpinner";
@@ -24,6 +27,9 @@ const Menu = () => {
     // Backend Request Hook
     const { isLoading, /*error,*/ sendRequest /*clearError*/ } = useHttpRequest();
 
+    // Window Size
+    const { width } = useWindowDimensions();
+
     // History context
     const history = useHistory();
 
@@ -32,6 +38,7 @@ const Menu = () => {
 
     //Fetch Most recent posts
     useEffect(() => {
+        let mounted = true;
         const fetchPosts = async () => {
             try {
                 const userData = await sendRequest(
@@ -42,17 +49,36 @@ const Menu = () => {
                         Authorization: "Bearer " + auth.token,
                     }
                 );
-                setProfileData(userData);
+                if (mounted) {
+                    setProfileData(userData);
+                }
             } catch (err) {}
         };
         fetchPosts();
-    }, [sendRequest, auth.token, auth.userId]);
+        return () => (mounted = false);
+    }, [sendRequest, auth.token, auth.userId, setProfileData]);
 
     const logoutHandler = (event) => {
         event.preventDefault();
         auth.logout();
         history.push(`/`);
     };
+
+    let navLinks;
+    if (width >= 1024) {
+        navLinks = (
+            <>
+                <Link to="/posts" className={`${styles.btn} ${styles.border}`}>
+                    <span className={styles.text}>Publications</span>
+                    <img className={`${styles.icon} icon_white`} src={posts} alt="" />
+                </Link>
+                <Link to="/posts" className={`${styles.btn} ${styles.border}`}>
+                    <span className={styles.text}>Catégories</span>
+                    <img className={styles.icon} src={categories} alt="" />
+                </Link>
+            </>
+        );
+    }
 
     if (isLoading) {
         return (
@@ -87,20 +113,21 @@ const Menu = () => {
                             <h2 className={styles.title}>Bienvenue {profileData.firstName} !</h2>
                         </div>
                     </div>
-                    <div className={styles.list}>
+                    <nav className={styles.list}>
                         <Link to={`profile/${auth.userId}`} className={`${styles.btn} ${styles.border}`}>
                             <span className={styles.text}>Mon profil</span>
-                            <img className={`${styles.icon} icon_white`} src={person} alt="A REVISAR" />
+                            <img className={`${styles.icon} icon_white`} src={person} alt="" />
                         </Link>
-                        <Link to={`/menu`} className={`${styles.btn} ${styles.border}`}>
+                        {navLinks}
+                        <Link to="/posts" className={`${styles.btn} ${styles.border}`}>
                             <span className={styles.text}>Annuaire</span>
-                            <img className={styles.icon} src={agenda} alt="A REVISAR" />
+                            <img className={styles.icon} src={agenda} alt="" />
                         </Link>
                         <button className={`${styles.btn} ${styles.logout_margin}`} onClick={logoutHandler}>
                             <span className={styles.text}>Se deconnecter</span>
-                            <img className={styles.icon} src={logout} alt="A REVISAR" />
+                            <img className={styles.icon} src={logout} alt="" />
                         </button>
-                    </div>
+                    </nav>
                 </>
             )}
         </div>

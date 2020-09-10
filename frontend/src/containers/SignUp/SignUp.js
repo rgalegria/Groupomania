@@ -79,80 +79,82 @@ const SignUp = () => {
     };
 
     return (
-        <div className="background_image">
-            <img src={logo} className="logo" alt="Logo de Groupomania, entreprise de grand distribution européen" />
-            <form id="signup-form" className={styles.input_list} onSubmit={signupHandler}>
-                <InputField
-                    id="firstName"
-                    name="firstName"
-                    type="text"
-                    placeholder="prénom"
-                    autocomplete="given-name"
-                    icon={person}
-                    alt="first name icon"
-                    element="input"
-                    hasLabel="no"
-                    textIsWhite="yes"
-                    validators={[MinLength(2)]}
-                    errorText="Veillez rentrer des charactères valides"
-                    onInput={inputHandler}
-                    initialValue={formState.inputs.firstName.value}
-                    initialValid={formState.inputs.firstName.isValid}
-                />
-                <InputField
-                    id="lastName"
-                    name="lastName"
-                    type="text"
-                    placeholder="nom"
-                    autocomplete="family-name"
-                    icon={lastname}
-                    alt="last name icon"
-                    element="input"
-                    hasLabel="no"
-                    textIsWhite="yes"
-                    validators={[MinLength(2)]}
-                    errorText="Veillez rentrer des charactères valides"
-                    onInput={inputHandler}
-                    initialValue={formState.inputs.lastName.value}
-                    initialValid={formState.inputs.lastName.isValid}
-                />
-                <InputField
-                    id="email"
-                    name="email"
-                    type="email"
-                    placeholder="email"
-                    autocomplete="email"
-                    icon={email}
-                    alt="email icon"
-                    element="input"
-                    hasLabel="no"
-                    textIsWhite="yes"
-                    validators={[isEmail(), MinLength(6)]}
-                    errorText="Votre email n'est pas correct"
-                    onInput={inputHandler}
-                    initialValue={formState.inputs.email.value}
-                    initialValid={formState.inputs.email.isValid}
-                />
-                <InputField
-                    id="password"
-                    name="password"
-                    type="text"
-                    placeholder="password"
-                    autocomplete="current-password"
-                    icon={password}
-                    alt="password icon"
-                    element="input"
-                    hasLabel="no"
-                    textIsWhite="yes"
-                    validators={[MinLength(8)]}
-                    errorText="Votre mot de passe n'est pas correct"
-                    onInput={inputHandler}
-                    initialValue={formState.inputs.password.value}
-                    initialValid={formState.inputs.password.isValid}
-                />
-            </form>
+        <>
+            <div className="background_image">
+                <img src={logo} className="logo" alt="Logo de Groupomania, entreprise de grand distribution européen" />
+                <form id="signup-form" className={styles.input_list} onSubmit={signupHandler}>
+                    <InputField
+                        id="firstName"
+                        name="firstName"
+                        type="text"
+                        placeholder="prénom"
+                        autocomplete="given-name"
+                        icon={person}
+                        alt="first name icon"
+                        element="input"
+                        hasLabel="no"
+                        textIsWhite="yes"
+                        validators={[MinLength(2)]}
+                        errorText="Veillez rentrer des charactères valides"
+                        onInput={inputHandler}
+                        initialValue={formState.inputs.firstName.value}
+                        initialValid={formState.inputs.firstName.isValid}
+                    />
+                    <InputField
+                        id="lastName"
+                        name="lastName"
+                        type="text"
+                        placeholder="nom"
+                        autocomplete="family-name"
+                        icon={lastname}
+                        alt="last name icon"
+                        element="input"
+                        hasLabel="no"
+                        textIsWhite="yes"
+                        validators={[MinLength(2)]}
+                        errorText="Veillez rentrer des charactères valides"
+                        onInput={inputHandler}
+                        initialValue={formState.inputs.lastName.value}
+                        initialValid={formState.inputs.lastName.isValid}
+                    />
+                    <InputField
+                        id="email"
+                        name="email"
+                        type="email"
+                        placeholder="email"
+                        autocomplete="email"
+                        icon={email}
+                        alt="email icon"
+                        element="input"
+                        hasLabel="no"
+                        textIsWhite="yes"
+                        validators={[isEmail(), MinLength(6)]}
+                        errorText="Votre email n'est pas correct"
+                        onInput={inputHandler}
+                        initialValue={formState.inputs.email.value}
+                        initialValid={formState.inputs.email.isValid}
+                    />
+                    <InputField
+                        id="password"
+                        name="password"
+                        type="text"
+                        placeholder="password"
+                        autocomplete="current-password"
+                        icon={password}
+                        alt="password icon"
+                        element="input"
+                        hasLabel="no"
+                        textIsWhite="yes"
+                        validators={[MinLength(8)]}
+                        errorText="Votre mot de passe n'est pas correct"
+                        onInput={inputHandler}
+                        initialValue={formState.inputs.password.value}
+                        initialValid={formState.inputs.password.isValid}
+                    />
+                </form>
+            </div>
             <div className="background_blur"></div>
-        </div>
+        </>
     );
 };
 

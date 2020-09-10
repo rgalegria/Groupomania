@@ -14,6 +14,24 @@
     border-radius: 0 0 5rem 5rem;
 }
 
+.btn {
+    background-color: #ebebeb;
+    font-size: 1.49rem;
+    font-weight: 500;
+    width: 50%;
+    padding: 0;
+    border: 0;
+}
+.text {
+    color: #828282;
+    margin: 1.5rem 0 auto auto;
+}
+.icon {
+    filter: invert(55%) sepia(13%) saturate(0%) hue-rotate(286deg) brightness(90%) contrast(94%);
+    height: 2rem;
+    margin: 1.2rem auto auto 1rem;
+}
+
 /*---------------------------------*/
 /*         _scrollbar.scss       */
 /*-------------------------------*/

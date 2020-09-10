@@ -1,25 +1,20 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 
 // Styles
 import styles from "./SelectField.module.css";
 
 // Component
 const SelectField = (props) => {
-    const [category, setCategory] = useState();
-    const [isValid, setIsValid] = useState(false);
-
     const categoryPickerRef = useRef();
 
     const pickedHandler = (event) => {
         let pickedCategory;
-        let categoryIsValid = isValid;
+        let categoryIsValid = false;
         if (event.target.value !== " ") {
             pickedCategory = event.target.value;
-            setCategory(pickedCategory);
-            setIsValid(true);
+
             categoryIsValid = true;
         } else {
-            setIsValid(false);
             categoryIsValid = false;
         }
         props.onInput(props.id, pickedCategory, categoryIsValid);

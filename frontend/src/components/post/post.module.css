@@ -1,7 +1,7 @@
 .block {
     display: flex;
     flex-direction: column;
-    max-width: 400px;
+    /* max-width: 400px; */
     border-bottom: 1px solid #bdbdbd;
     margin-bottom: 16px;
 }
@@ -15,6 +15,7 @@
     width: 100%;
     height: auto;
 }
+
 .reactions {
     display: flex;
     flex-direction: row;
@@ -65,4 +66,15 @@
     width: auto;
     height: 1.8rem;
     margin-right: 8px;
+}
+
+@media only screen and (min-width: 1024px) {
+    .photo {
+        width: 90%;
+        margin: 0 auto;
+    }
+
+    .title {
+        font-size: 2.3rem;
+    }
 }

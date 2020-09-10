@@ -10,3 +10,17 @@
     margin: auto;
     z-index: 15;
 }
+
+/* TABLETS */
+@media only screen and (min-width: 768px) {
+    .input_list {
+        margin-top: 50%;
+    }
+}
+
+/* DESKTOP */
+@media only screen and (min-width: 1024px) {
+    .input_list {
+        margin-top: 20%;
+    }
+}

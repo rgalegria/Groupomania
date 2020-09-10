@@ -2,10 +2,15 @@ import React, { useState, useEffect, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import { AuthContext } from "../../context/auth-context";
 import { useForm } from "../../hooks/form-hook";
+import { useWindowDimensions } from "../../hooks/window-hook";
 import { useHttpRequest } from "../../hooks/httpRequest-hook";
 import { MinLength, MaxLength } from "../../utils/validators";
 
+// icons
+import backIcon from "../../images/back-icon.svg";
+
 // Components
+import UIBtn from "../../components/Buttons/UIBtn/UIBtn";
 import ImageUpload from "../../components/ImageUpload/ImageUpload";
 import SelectField from "../../components/SelectField/SelectField";
 import InputField from "../../components/InputField/InputField";
@@ -18,32 +23,19 @@ const NewPost = (props) => {
     // Authentication context
     const auth = useContext(AuthContext);
 
-    // Backend Request Hook
-    const { isLoading, /*error,*/ sendRequest /*clearError*/ } = useHttpRequest();
-
     // History context
     const history = useHistory();
 
-    //Categories Hook
-    //===========================================================================================
+    // Request Hook
+    const { isLoading, /*error,*/ sendRequest /*clearError*/ } = useHttpRequest();
+
+    // Window Size
+    const { width } = useWindowDimensions();
+
+    //Categories State
     const [categories, setCategories] = useState();
 
-    //Fetch Categories
-    useEffect(() => {
-        const fetchPosts = async () => {
-            try {
-                const categories = await sendRequest(`${process.env.REACT_APP_API_URL}/posts/categories`, "GET", null, {
-                    Authorization: "Bearer " + auth.token,
-                });
-                // console.log("categories =>", categories);
-                setCategories(categories);
-            } catch (err) {}
-        };
-        fetchPosts();
-    }, [sendRequest, auth.token, setCategories]);
-
-    // Form Hook
-    //===========================================================================================
+    // Form State
     const [formState, inputHandler] = useForm(
         {
             title: {
@@ -62,6 +54,21 @@ const NewPost = (props) => {
         false
     );
 
+    //Fetch Categories
+    //===========================================================================================
+    useEffect(() => {
+        const fetchPosts = async () => {
+            try {
+                const categories = await sendRequest(`${process.env.REACT_APP_API_URL}/posts/categories`, "GET", null, {
+                    Authorization: "Bearer " + auth.token,
+                });
+                // console.log("categories =>", categories);
+                setCategories(categories);
+            } catch (err) {}
+        };
+        fetchPosts();
+    }, [sendRequest, auth.token, setCategories]);
+
     // Send Post to Backend
     //===========================================================================================
     const sendPostHandler = async (event) => {
@@ -79,6 +86,30 @@ const NewPost = (props) => {
             history.push(`/posts`);
         } catch (err) {}
     };
+
+    // Back Button
+    //===========================================================================================
+    const backHandle = (e) => {
+        e.preventDefault();
+        props.history.goBack();
+    };
+
+    let sendBtn;
+    let backBtn;
+
+    // Desktop Btns
+    if (width >= 1024) {
+        sendBtn = (
+            <div className={styles.send_btn}>
+                <UIBtn id="send-post-btn" form="send-post-form" name="Publier" type="submit" btnType="valid" />
+            </div>
+        );
+        backBtn = (
+            <button className={styles.back_btn} onClick={backHandle}>
+                <img className="icon_red" src={backIcon} alt="" />
+            </button>
+        );
+    }
 
     if (isLoading) {
         return (
@@ -102,6 +133,7 @@ const NewPost = (props) => {
         <>
             <header className={styles.head}>
                 <div className={styles.tab}>
+                    {backBtn}
                     <div className={styles.tab_border}>
                         <h3 className={styles.title}>Nouvelle Publication</h3>
                     </div>
@@ -114,7 +146,6 @@ const NewPost = (props) => {
                         <form className={styles.form} id="send-post-form" onSubmit={sendPostHandler}>
                             <InputField
                                 id="title"
-                                // label="Titre du poste :"
                                 name="title"
                                 type="text"
                                 placeholder="Titre ou message de la publication"
@@ -141,6 +172,7 @@ const NewPost = (props) => {
                                 onInput={inputHandler}
                                 options={categories}
                             />
+                            {sendBtn}
                         </form>
                     </>
                 )}

@@ -12,6 +12,7 @@
     height: 4.7rem;
     border-bottom: 2px solid #c30000;
     margin: auto 1.6rem;
+    cursor: pointer;
 }
 
 .icon_active {
@@ -32,12 +33,14 @@
     width: 50%;
     padding: 0;
     border: 0;
+    /* cursor: pointer; */
 }
 
 .container {
     display: flex;
     height: 4.7rem;
     margin: auto;
+    cursor: pointer;
 }
 
 .icon {

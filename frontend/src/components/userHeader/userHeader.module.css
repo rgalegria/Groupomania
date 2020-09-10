@@ -3,7 +3,7 @@
     flex-direction: row;
     font-size: 1.5rem;
     color: #828282;
-    max-width: 500px;
+    /* max-width: 500px; */
     margin-bottom: 1rem;
 }
 
@@ -43,4 +43,29 @@ a {
 
 .delete_icon {
     width: 30px;
+}
+
+@media only screen and (min-width: 1024px) {
+    .block {
+        font-size: 1.7rem;
+    }
+
+    a {
+        font-size: 1.7rem;
+    }
+
+    .photo {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+    }
+
+    .delete_btn {
+        width: 48px;
+        height: 48px;
+    }
+
+    .delete_icon {
+        width: 40px;
+    }
 }

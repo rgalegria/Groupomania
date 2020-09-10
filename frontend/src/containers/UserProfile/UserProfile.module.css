@@ -1,6 +1,7 @@
 .class_mod {
     flex-direction: unset;
     padding: 0;
+    position: relative;
 }
 
 .background_img {
@@ -70,4 +71,17 @@
     margin: auto;
     color: rgb(0, 0, 238);
     text-decoration: none;
+}
+
+.btnStyle {
+    color: #c30000;
+    margin: 2rem auto 6rem auto;
+    cursor: pointer;
+    flex-direction: row-reverse;
+}
+
+.iconStyle {
+    height: 2.4rem;
+    width: auto;
+    margin: 0 0 0 1.6rem;
 }

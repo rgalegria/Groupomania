@@ -18,8 +18,6 @@ import Spinner from "../../components/LoadingSpinner/LoadingSpinner";
 import styles from "./CommentPost.module.css";
 
 const CommentPost = () => {
-    console.log("renderiza pagina");
-
     // Authentication context
     const auth = useContext(AuthContext);
 

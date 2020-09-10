@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { useForm } from "../../hooks/form-hook";
+import { useHttpRequest } from "../../hooks/httpRequest-hook";
 import { AuthContext } from "../../context/auth-context";
 import { isEmail, MinLength } from "../../utils/validators";
 
@@ -13,6 +14,7 @@ import person from "../../images/person-icon.svg";
 
 // Components
 import InputField from "../../components/InputField/InputField";
+import Spinner from "../../components/LoadingSpinner/LoadingSpinner";
 
 // Styles
 import "../Home/Home.css";
@@ -23,6 +25,9 @@ const Login = () => {
 
     // History context
     const history = useHistory();
+
+    // Request Hook
+    const { isLoading, error, sendRequest, clearError } = useHttpRequest();
 
     // Input Hook
     const [formState, inputHandler] = useForm(
@@ -65,49 +70,51 @@ const Login = () => {
     };
 
     return (
-        <div className="background_image">
-            <img src={logo} className="logo" alt="Logo de Groupomania, entreprise de grand distribution européen" />
-            <form id="login-form" className="input_list" onSubmit={loginHandler}>
-                <InputField
-                    id="email"
-                    name="email"
-                    type="email"
-                    onInput={inputHandler}
-                    placeholder="email"
-                    autocomplete="email"
-                    icon={person}
-                    alt="email icon"
-                    element="input"
-                    hasLabel="no"
-                    textIsWhite="yes"
-                    validators={[isEmail(), MinLength(6)]}
-                    errorText="Votre email n'est pas correct"
-                    initialValue={formState.inputs.email.value}
-                    initialValid={formState.inputs.email.isValid}
-                />
-                <InputField
-                    id="password"
-                    name="password"
-                    type="password"
-                    onInput={inputHandler}
-                    placeholder="password"
-                    autocomplete="current-password"
-                    icon={password}
-                    alt="password icon"
-                    element="input"
-                    hasLabel="no"
-                    textIsWhite="yes"
-                    validators={[MinLength(8)]}
-                    errorText="Votre mot de passe n'est pas correct"
-                    initialValue={formState.inputs.password.value}
-                    initialValid={formState.inputs.password.isValid}
-                />
-            </form>
-            <Link className="forgot_pass_link" to={"/login"}>
-                mot de pass oublié ?
-            </Link>
+        <>
+            <div className="background_image">
+                <img src={logo} className="logo" alt="Logo de Groupomania, entreprise de grand distribution européen" />
+                <form id="login-form" className="input_list" onSubmit={loginHandler}>
+                    <InputField
+                        id="email"
+                        name="email"
+                        type="email"
+                        onInput={inputHandler}
+                        placeholder="email"
+                        autocomplete="email"
+                        icon={person}
+                        alt="email icon"
+                        element="input"
+                        hasLabel="no"
+                        textIsWhite="yes"
+                        validators={[isEmail(), MinLength(6)]}
+                        errorText="Votre email n'est pas correct"
+                        initialValue={formState.inputs.email.value}
+                        initialValid={formState.inputs.email.isValid}
+                    />
+                    <InputField
+                        id="password"
+                        name="password"
+                        type="password"
+                        onInput={inputHandler}
+                        placeholder="password"
+                        autocomplete="current-password"
+                        icon={password}
+                        alt="password icon"
+                        element="input"
+                        hasLabel="no"
+                        textIsWhite="yes"
+                        validators={[MinLength(8)]}
+                        errorText="Votre mot de passe n'est pas correct"
+                        initialValue={formState.inputs.password.value}
+                        initialValid={formState.inputs.password.isValid}
+                    />
+                </form>
+                <Link className="forgot_pass_link" to={"/login"}>
+                    mot de pass oublié ?
+                </Link>
+            </div>
             <div className="background_blur"></div>
-        </div>
+        </>
     );
 };
 

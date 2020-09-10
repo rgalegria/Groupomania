@@ -1,10 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../../context/auth-context";
+import { Link } from "react-router-dom";
 import { useHttpRequest } from "../../hooks/httpRequest-hook";
+import { useWindowDimensions } from "../../hooks/window-hook";
 
 // Icons
 import clockIcon from "../../images/clock-icon.svg";
 import coffeeIcon from "../../images/coffee-icon.svg";
+import postIcon from "../../images/post-icon.svg";
 
 // Components
 import TabBtn from "../../components/Buttons/TabBtn/TabBtn";
@@ -15,20 +18,23 @@ import Spinner from "../../components/LoadingSpinner/LoadingSpinner";
 import styles from "./Posts.module.css";
 
 const Posts = () => {
-    //Posts Hook
-    const [posts, setPosts] = useState();
+    // Authentication context
+    const auth = useContext(AuthContext);
 
-    // Tab Btn state
-    const [activeBtn, setActiveBtn] = useState({
-        mostRecents: "active",
-        mostLiked: "",
-    });
+    // Window Size
+    const { width } = useWindowDimensions();
 
     // Request Hook
     const { isLoading, /*error,*/ sendRequest /*clearError*/ } = useHttpRequest();
 
-    // Authentication context
-    const auth = useContext(AuthContext);
+    //Posts State
+    const [posts, setPosts] = useState();
+
+    // Tab Btn State
+    const [activeBtn, setActiveBtn] = useState({
+        mostRecents: "active",
+        mostLiked: "",
+    });
 
     //Fetch Most recent posts
     useEffect(() => {
@@ -86,11 +92,22 @@ const Posts = () => {
         console.log("dislike click!");
     };
 
+    let newPost;
+    if (width >= 1024) {
+        newPost = (
+            <Link to={`posts/new`} className={styles.btn}>
+                <span className={styles.text}>NOUVEAU POST</span>
+                <img className={styles.icon} src={postIcon} alt="" />
+            </Link>
+        );
+    }
+
     return (
         <>
             <nav className={styles.header}>
                 <TabBtn name="À LA UNE" icon={clockIcon} active={activeBtn.mostRecents} onClick={fetchMostRecent} />
                 <TabBtn name="LES PLUS AIMÉS" icon={coffeeIcon} active={activeBtn.mostLiked} onClick={fetchMostLiked} />
+                {newPost}
             </nav>
             <div className="container">
                 {isLoading && (

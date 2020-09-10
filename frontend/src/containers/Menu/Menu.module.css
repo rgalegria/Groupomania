@@ -58,6 +58,7 @@
     width: 100%;
     padding: 0;
     border: 0;
+    cursor: pointer;
 }
 
 .logout_margin {
@@ -79,4 +80,21 @@
 .icon {
     height: 20px;
     margin: auto 0;
+}
+
+@media only screen and (min-width: 1024px) {
+    .cover {
+        width: 40%;
+        height: 93vh;
+        margin-left: 3.2rem;
+        position: relative;
+    }
+
+    .wrapper {
+        height: 40vh;
+    }
+
+    .list {
+        height: 50vh;
+    }
 }

@@ -2,14 +2,17 @@ import React, { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { useHttpRequest } from "../../hooks/httpRequest-hook";
 import { AuthContext } from "../../context/auth-context";
+import { useWindowDimensions } from "../../hooks/window-hook";
 
 // Static Images
 import GenProfile from "../../images/generic_profile_picture.jpg";
 
 // Icons
 import LinkedinIcon from "../../images/linkedin-icon.svg";
+import modify from "../../images/modify-icon.svg";
 
 // Components
+import NavBtn from "../../components/Buttons/NavBtn/NavBtn";
 import Counter from "../../components/Counter/Counter";
 import Spinner from "../../components/LoadingSpinner/LoadingSpinner";
 
@@ -17,8 +20,6 @@ import Spinner from "../../components/LoadingSpinner/LoadingSpinner";
 import styles from "./UserProfile.module.css";
 
 const UserProfile = () => {
-    // console.log("USER PROFILE");
-
     // Authentication context
     const auth = useContext(AuthContext);
 
@@ -28,7 +29,10 @@ const UserProfile = () => {
     //Profile Hook
     const [profileData, setProfileData] = useState();
 
-    const userId = useParams().id;
+    // Window Size
+    const { width } = useWindowDimensions();
+
+    const userId = Number(useParams().id);
 
     useEffect(() => {
         // console.log("useEFFECT");
@@ -45,6 +49,30 @@ const UserProfile = () => {
         };
         fetchUser();
     }, [sendRequest, auth.token, userId]);
+
+    // Modify Btn
+
+    let btnStyle = styles.btnStyle;
+    let iconStyle = `${styles.iconStyle} icon_red`;
+
+    let modifyBtn;
+
+    if (width >= 1024) {
+        if (auth.userId === userId) {
+            modifyBtn = (
+                <NavBtn
+                    id="update-profile"
+                    name="Modifier profil"
+                    icon={modify}
+                    link={`/profile/${auth.userId}/update`}
+                    btnStyle={btnStyle}
+                    iconStyle={iconStyle}
+                />
+            );
+        } else {
+            modifyBtn = "";
+        }
+    }
 
     if (isLoading) {
         return (
@@ -93,6 +121,7 @@ const UserProfile = () => {
                             {profileData.email}
                         </a>
                         <Counter likesCount={profileData.likesCount || 0} postsCount={profileData.postsCount || 0} />
+                        {modifyBtn}
                     </div>
                 </>
             )}

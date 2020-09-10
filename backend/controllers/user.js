@@ -9,6 +9,9 @@ const validator = require("validator");
 const passValid = require("secure-password-validator");
 // const passBlackList = require("secure-password-validator/build/main/blacklists/first10_000");
 
+// Error Class
+const HttpError = require("../models/http-error");
+
 // Database Route
 const db = require("../config/db");
 
@@ -59,7 +62,7 @@ exports.getUserProfile = (req, res, next) => {
         if (!error) {
             res.status(200).json(profile[0]);
         } else {
-            res.status(400).json({ error });
+            return next(new HttpError("Utilisateur non trouvé", 404));
         }
     });
 };
@@ -68,20 +71,19 @@ exports.getUserProfile = (req, res, next) => {
 //==========================================================================================================
 exports.updateUserProfile = (req, res, next) => {
     const user = decodeUid(req.headers.authorization);
-    console.log("lo que llega =>", req.body, req.file);
     const { firstName, lastName, email, department, role, linkedin_url } = req.body;
 
     let imageUrl;
 
     if (req.body.image === "null") {
         imageUrl;
-        console.log("actualiza solo datos");
+        // console.log("actualiza solo datos");
     } else if (req.file) {
         imageUrl = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
-        console.log("hubo imagen nueva");
+        // console.log("hubo imagen nueva");
     } else {
         imageUrl = req.body.image;
-        console.log("ya tiene imagen pero solo actualiza datos");
+        // console.log("ya tiene imagen pero solo actualiza datos");
     }
 
     // Validation des donnés
@@ -102,7 +104,7 @@ exports.updateUserProfile = (req, res, next) => {
             if (!error) {
                 res.status(200).json({ message: "User Updated successfully!" });
             } else {
-                res.status(400).json({ error });
+                return next(new HttpError("Erreur de requête, la mise-à-jour du profil n'a pas été faite", 500));
             }
         });
     } else if (!isFirstName || !isLastName || !isEmail || !isDepartment || !isRole || !isLinkedinUrl) {
@@ -119,9 +121,7 @@ exports.updateUserProfile = (req, res, next) => {
 
         errorMessages = errorMessages.join();
 
-        return res.status(400).json({
-            message: "Veillez vérifier les champs suivants :" + errorMessages,
-        });
+        return next(new HttpError("Veillez vérifier les champs suivants :" + errorMessages, 400));
     }
 };
 
@@ -139,18 +139,18 @@ exports.updatePassword = (req, res, next) => {
             const inserts = [hash, user.id];
             const sql = mysql.format(string, inserts);
 
-            const query = db
-                .query(sql, (error, password) => {
-                    if (!error) {
-                        res.status(201).json({ message: "Password Updated successfully!" });
-                    } else {
-                        res.status(400).json({ error });
-                    }
-                })
-                .catch((error) => res.status(400).json({ error }));
+            const query = db.query(sql, (error, password) => {
+                if (!error) {
+                    res.status(201).json({ message: "Password Updated successfully!" });
+                } else {
+                    return next(
+                        new HttpError("Erreur de requête, la mise-à-jour du mot de passe n'a pas été faite", 500)
+                    );
+                }
+            });
         });
     } else {
-        res.status(400).json({ error: "Votre mot de passe n'est pas valide" });
+        return next(new HttpError("Votre mot de passe n'est pas valide", 401));
     }
 };
 
@@ -165,9 +165,11 @@ exports.deleteProfile = (req, res, next) => {
         const sql = mysql.format(string, inserts);
 
         const query = db.query(sql, (error, result) => {
-            if (error) throw error;
-            console.log("delete result =>", result);
-            res.status(200).json({ message: "User deleted successfully!" });
+            if (+error) {
+                res.status(200).json({ message: "User deleted successfully!" });
+            } else {
+                return next(new HttpError("Erreur de requête, l'utilisateur/trice n'a pas été supprimé(e)", 500));
+            }
         });
     } else {
         res.status(401).json({ message: "Non Autorisé !" });

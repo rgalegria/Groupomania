@@ -5,6 +5,9 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const mysql = require("mysql");
 
+// Error Class
+const HttpError = require("../models/http-error");
+
 // Database Route
 const db = require("../config/db");
 
@@ -13,8 +16,16 @@ exports.login = (req, res, next) => {
     const { email, password } = req.body;
 
     // Vérifie que les champs sont vides
-    if (!email || !password) {
-        return res.status(400).json({ error: "Veillez rentrer vos identifiants" });
+    if (!email && !password) {
+        return next(new HttpError("Veillez rentrer vos identifiants", 400));
+    }
+
+    if (!email) {
+        return next(new HttpError("Veillez rentrer votre email", 400));
+    }
+
+    if (!password) {
+        return next(new HttpError("Veillez rentrer votre mot de passe", 400));
     }
 
     // Requete de l'utilisateur sur la base de donnés
@@ -25,17 +36,13 @@ exports.login = (req, res, next) => {
     const query = db.query(sql, (error, user) => {
         // Vérifie que l'object ne soit pas vide (Utilisateur inexistant)
         if (user.length === 0) {
-            return res.status(401).json({
-                error: "Votre adresse e-mail n'est pas valide",
-            });
+            return next(new HttpError("Votre adresse e-mail n'est pas valide", 401));
         }
 
         // Comparaison entre le hash et le mot de passe
         bcrypt.compare(password, user[0].password).then((valid) => {
             if (!valid) {
-                return res.status(401).json({
-                    error: "Votre mot de passe n'est pas valide",
-                });
+                return next(new HttpError("Votre mot de passe n'est pas valide", 401));
             }
             // Signe le id de l'utilisateur et retourne un JWT dans l'entete
             res.status(200).json({

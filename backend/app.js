@@ -11,6 +11,9 @@ const bouncer = require("express-bouncer")(10000, 600000, 5);
 const toobusy = require("toobusy-js");
 const sanitizeMiddleware = require("sanitize-middleware");
 
+// Error Class
+const HttpError = require("./models/http-error");
+
 // App Routes
 const signupRoutes = require("./routes/signup-route");
 const loginRoutes = require("./routes/login-route");
@@ -62,6 +65,25 @@ app.use("/signup", signupRoutes);
 app.use("/login", loginRoutes);
 app.use("/profile", userRoutes);
 app.use("/posts", postRoutes);
+
+// Error Handling 404
+app.use((req, res, next) => {
+    const error = new HttpError("Route non trouvé", 404);
+    throw error;
+});
+
+// Error Handling App
+app.use((error, req, res, next) => {
+    if (res.headersSent) {
+        // console.log("has a req. header?", res.headersSent);
+        console.log("error =>", error);
+        return next(error);
+    }
+    res.status(error.code || 500);
+    res.json({ message: error.message || "Un problème est survenu sur le serveur, veillez réessayer ultérieurement" });
+    // console.log("has a req. header?", res.headersSent);
+    console.log("error =>", error);
+});
 
 // App Execution
 module.exports = app;

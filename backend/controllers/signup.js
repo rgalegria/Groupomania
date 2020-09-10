@@ -9,6 +9,9 @@ const validator = require("validator");
 const passValid = require("secure-password-validator");
 // const passBlackList = require("secure-password-validator/build/main/blacklists/first10_000");
 
+// Error Class
+const HttpError = require("../models/http-error");
+
 // Database Route
 const db = require("../config/db");
 
@@ -34,31 +37,41 @@ const options = {
 
 // POST Create User Controller
 
-// CREAR CASO DONDE ES DUPLICADO EN LA BD (USUARIO YA REGISTRADO)
 exports.signup = (req, res, next) => {
+    const { firstName, lastName, email, password } = req.body;
     // RegEx Text
     const regExText = /^[A-ZÀÂÆÇÉÈÊËÏÎÔŒÙÛÜŸ \'\- ]+$/i;
 
+    // Vérifie que les champs ne sont pas uniquement des numéros
+    if (typeof firstName && typeof lastName === "number") {
+        return next(new HttpError("Veillez rentrer uniquement des charactères", 400));
+    }
+    if (typeof firstName === "number") {
+        return next(new HttpError("Veillez rentrer uniquement des charactères", 400));
+    }
+    if (typeof lastName === "number") {
+        return next(new HttpError("Veillez rentrer uniquement des charactères", 400));
+    }
+
     // Validation donnés de l'utilisateur
-    let isFirstName = validator.matches(req.body.firstName, regExText);
-    let isLastName = validator.matches(req.body.lastName, regExText);
-    let isEmail = validator.isEmail(req.body.email);
-    let isPassword = passValid.validate(req.body.password, options).valid;
+    let isFirstName = validator.matches(firstName, regExText);
+    let isLastName = validator.matches(lastName, regExText);
+    let isEmail = validator.isEmail(email);
+    let isPassword = passValid.validate(password, options).valid;
 
     if (isFirstName && isLastName && isEmail && isPassword) {
         // Hash du mot de pass de l'utilisateur
-        bcrypt.hash(req.body.password, 10, (error, hash) => {
+        bcrypt.hash(password, 10, (error, hash) => {
             // Enregistrement des donnés de l'utilisateur sur la BD MySQL
             const string = "INSERT INTO users (firstName, lastName, email, password) VALUES (?, ?, ?, ?)";
-            const inserts = [req.body.firstName, req.body.lastName, req.body.email, hash];
-            console.log("inserts:", inserts);
+            const inserts = [firstName, lastName, email, hash];
             const sql = mysql.format(string, inserts);
 
             const signupUser = db.query(sql, (error, user) => {
                 if (!error) {
                     // Signe le id de l'utilisateur et retourne un JWT dans l'entete
                     res.status(201).json({
-                        message: "User created successfully!",
+                        message: "Utilisateur créé correctement",
                         userId: user.insertId,
                         account: "user",
                         token: jwt.sign(
@@ -73,9 +86,7 @@ exports.signup = (req, res, next) => {
                         ),
                     });
                 } else {
-                    res.status(400).json({
-                        error,
-                    });
+                    return next(new HttpError("Utilisateur déjà existant", 400));
                 }
             });
         });
@@ -90,8 +101,6 @@ exports.signup = (req, res, next) => {
         anws = !isPassword ? errorMessages.push(" Mot de passe") : "";
         errorMessages = errorMessages.join();
 
-        return res.status(400).json({
-            error: "Veillez vérifier les champs suivants :" + errorMessages,
-        });
+        return next(new HttpError("Veillez vérifier les champs suivants :" + errorMessages, 400));
     }
 };

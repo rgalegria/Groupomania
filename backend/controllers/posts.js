@@ -5,6 +5,9 @@ const jwt = require("jsonwebtoken");
 const mysql = require("mysql");
 const fs = require("fs");
 
+// Error Class
+const HttpError = require("../models/http-error");
+
 // Database Route
 const db = require("../config/db");
 
@@ -32,9 +35,9 @@ exports.createPost = (req, res, next) => {
 
     const createPost = db.query(sql, (error, post) => {
         if (!error) {
-            res.status(201).json({ message: "Post saved successfully!" });
+            res.status(201).json({ message: "Publication sauvagardé" });
         } else {
-            res.status(400).json({ error });
+            return next(new HttpError("Erreur de requête, la publication n'a pas été créé", 500));
         }
     });
 };
@@ -52,21 +55,23 @@ exports.postComment = (req, res, next) => {
     const sql = mysql.format(string, inserts);
 
     const createComment = db.query(sql, (error, commentId) => {
-        if (error) throw error;
+        if (!error) {
+            const string =
+                "SELECT users.firstName, users.lastName, users.photo_url, comments.Posts_id as id, comments.Users_id as user_id,  comments.message, comments.comment_date FROM comments INNER JOIN posts ON comments.posts_id = posts.id  INNER JOIN users ON comments.Users_id = users.id WHERE comments.id = ?";
+            const inserts = [commentId.insertId];
+            const sql = mysql.format(string, inserts);
 
-        const string =
-            "SELECT users.firstName, users.lastName, users.photo_url, comments.Posts_id as id, comments.Users_id as user_id,  comments.message, comments.comment_date FROM comments INNER JOIN posts ON comments.posts_id = posts.id  INNER JOIN users ON comments.Users_id = users.id WHERE comments.id = ?";
-        const inserts = [commentId.insertId];
-        const sql = mysql.format(string, inserts);
-
-        const returnComment = db.query(sql, (error, response) => {
-            if (!error) {
-                console.log("comment =>", response);
-                res.status(201).json(response);
-            } else {
-                res.status(400).json({ error });
-            }
-        });
+            const returnComment = db.query(sql, (error, response) => {
+                if (!error) {
+                    console.log("comment =>", response);
+                    res.status(201).json(response);
+                } else {
+                    return next(new HttpError("Erreur de requête, le commentaire n'a pas été créé", 500));
+                }
+            });
+        } else {
+            return next(new HttpError("Erreur de requête, le commentaire n'a pas été créé", 500));
+        }
     });
 };
 
@@ -75,8 +80,11 @@ exports.postComment = (req, res, next) => {
 exports.getCategories = (req, res, next) => {
     const sql = "SELECT * FROM categories";
     const query = db.query(sql, (error, results) => {
-        if (error) throw error;
-        res.status(200).json(results);
+        if (!error) {
+            res.status(200).json(results);
+        } else {
+            return next(new HttpError("Erreur de requête, les catégories n'ont pas pu être récuperées", 500));
+        }
     });
 };
 
@@ -90,7 +98,7 @@ exports.getAllPosts = (req, res, next) => {
     const getPosts = () => {
         return new Promise((resolve, reject) => {
             try {
-                const sqlString = `SELECT
+                const string = `SELECT
                                         u.id AS user_id,
                                         u.firstName,
                                         u.lastName,
@@ -109,7 +117,7 @@ exports.getAllPosts = (req, res, next) => {
                                     JOIN users AS u ON p.Users_id = u.id
                                     GROUP BY p.id ORDER BY post_date DESC`;
                 const inserts = [user.id];
-                const sql = mysql.format(sqlString, inserts);
+                const sql = mysql.format(string, inserts);
 
                 // MySQL DB Query
                 const getPosts = db.query(sql, (error, posts) => {
@@ -166,7 +174,7 @@ exports.getAllPosts = (req, res, next) => {
             res.status(200).json(result);
         })
         .catch((error) => {
-            res.status(400).json(error);
+            return next(new HttpError("Erreur de requête, les publications n'ont pas pu être récuperées", 500));
         });
 };
 
@@ -254,7 +262,7 @@ exports.getMostLikedPosts = (req, res, next) => {
             res.status(200).json(result);
         })
         .catch((error) => {
-            res.status(400).json(error);
+            return next(new HttpError("Erreur de requête, les publications n'ont pas pu être récuperées", 500));
         });
 };
 
@@ -287,94 +295,92 @@ exports.getOnePost = (req, res, next) => {
     const commentsSql =
         "SELECT users.id as user_id, users.firstName, users.lastName, users.photo_url, comments.id, comments.comment_date, comments.message FROM comments INNER JOIN users ON comments.Users_id = users.id WHERE Posts_id = ?";
     db.query(`${postSql}; ${commentsSql}`, [user.id, postId, postId], (error, result, fields) => {
-        if (error) throw error;
-
-        // "results" is an array with one element for every statement in the query:
-        let results = [
-            {
-                ...result[0][0],
-                commentsCounter: result[1].length,
-            },
-            {
-                comments: [...result[1]],
-            },
-        ];
-        res.status(200).json(results);
+        if (!error) {
+            // "results" is an array with one element for every statement in the query:
+            let results = [
+                {
+                    ...result[0][0],
+                    commentsCounter: result[1].length,
+                },
+                {
+                    comments: [...result[1]],
+                },
+            ];
+            res.status(200).json(results);
+        } else {
+            return next(new HttpError("Erreur de requête, la publication n'a pas pu être récuperée", 500));
+        }
     });
 };
 
 // POST Reactions to posts Controller
 //==========================================================================================================
-exports.postReaction = (req, res, next) => {
-    const user = decodeUid(req.headers.authorization);
-    const { reaction, post_id, reactionStatus } = req.body;
+// exports.postReaction = (req, res, next) => {
+//     const user = decodeUid(req.headers.authorization);
+//     const { reaction, post_id, reactionStatus } = req.body;
 
-    //agregar una variable que recibe el estado actual desde el frontend ej.
-    //reactionSatus = true (nuevo) /  false (actualizar)
+//     //agregar una variable que recibe el estado actual desde el frontend ej.
+//     //reactionSatus = true (nuevo) /  false (actualizar)
 
-    switch (reaction) {
-        case 1: // Like Post
-            try {
-                if (reactionStatus) {
-                    //TODO FALTA POR CREAR
-                    const string = "INSERT INTO reactions (Posts_id, Users_id, reaction) VALUES (?, ?, 'like')";
-                } else {
-                    const string = "UPDATE reactions reaction = 'like' WHERE Posts_id = ? AND Users_id = ?";
-                }
-                const inserts = [post_id, user.id];
-                const sql = mysql.format(string, inserts);
+//     switch (reaction) {
+//         case 1: // Like Post
+//             try {
+//                 if (reactionStatus) {
+//                     const string = "INSERT INTO reactions (Posts_id, Users_id, reaction) VALUES (?, ?, 'like')";
+//                 } else {
+//                     const string = "UPDATE reactions reaction = 'like' WHERE Posts_id = ? AND Users_id = ?";
+//                 }
+//                 const inserts = [post_id, user.id];
+//                 const sql = mysql.format(string, inserts);
 
-                const likePost = db.query(sql, (error, result) => {
-                    if (error) throw error;
-                    res.status(200).json({ message: "like post successfully!" });
-                });
-            } catch (err) {
-                return new Error(err);
-            }
+//                 const likePost = db.query(sql, (error, result) => {
+//                     if (error) throw error;
+//                     res.status(200).json({ message: "like post successfully!" });
+//                 });
+//             } catch (err) {
+//                 return new Error(err);
+//             }
 
-            break;
-        case -1: // Dislike Post
-            try {
-                if (reactionStatus) {
-                    const string = "INSERT INTO reactions (Posts_id, Users_id, reaction) VALUES (?, ?, 'dislike')";
-                } else {
-                    const string = "UPDATE reactions reaction = 'dislike' WHERE Posts_id = ? AND Users_id = ?";
-                }
-                const inserts = [post_id, user.id];
-                const sql = mysql.format(string, inserts);
+//             break;
+//         case -1: // Dislike Post
+//             try {
+//                 if (reactionStatus) {
+//                     const string = "INSERT INTO reactions (Posts_id, Users_id, reaction) VALUES (?, ?, 'dislike')";
+//                 } else {
+//                     const string = "UPDATE reactions reaction = 'dislike' WHERE Posts_id = ? AND Users_id = ?";
+//                 }
+//                 const inserts = [post_id, user.id];
+//                 const sql = mysql.format(string, inserts);
 
-                const dislikePost = db.query(sql, (error, result) => {
-                    if (error) throw error;
-                    res.status(200).json({ message: "dislike post successfully!" });
-                });
-            } catch (err) {
-                return new Error(err);
-            }
-            break;
-        case 0: // Like ou Dislike Post
-            try {
-                const string = "DELETE FROM reactions WHERE Posts_id = ? and Users_id = ?";
-                const inserts = [post_id, user.id];
-                const sql = mysql.format(string, inserts);
+//                 const dislikePost = db.query(sql, (error, result) => {
+//                     if (error) throw error;
+//                     res.status(200).json({ message: "dislike post successfully!" });
+//                 });
+//             } catch (err) {
+//                 return new Error(err);
+//             }
+//             break;
+//         case 0: // Like ou Dislike Post
+//             try {
+//                 const string = "DELETE FROM reactions WHERE Posts_id = ? and Users_id = ?";
+//                 const inserts = [post_id, user.id];
+//                 const sql = mysql.format(string, inserts);
 
-                const deleteLike = db.query(sql, (error, result) => {
-                    if (error) throw error;
-                    res.status(200).json({ message: "post reaction deleted successfully!" });
-                });
-            } catch (err) {
-                return new Error(err);
-            }
-            break;
-    }
-};
+//                 const deleteLike = db.query(sql, (error, result) => {
+//                     if (error) throw error;
+//                     res.status(200).json({ message: "post reaction deleted successfully!" });
+//                 });
+//             } catch (err) {
+//                 return new Error(err);
+//             }
+//             break;
+//     }
+// };
 
 // DELETE Posts Controller
 //==========================================================================================================
 exports.deletePost = (req, res, next) => {
     const user = decodeUid(req.headers.authorization);
-    //si el user.id es el que hizo el post o si el otro suario tiene los derechos
-    // console.log("Delete post");
-    // console.log("req =>", "postId =>", req.params.id, "user =>", user.id, "image url =>", req.body.image_url);
 
     let string = "";
     let inserts = [];
@@ -395,13 +401,14 @@ exports.deletePost = (req, res, next) => {
     const sql = mysql.format(string, inserts);
 
     const deletePost = db.query(sql, (error, result) => {
-        if (error) throw error;
-
-        fs.unlink(imagePath, (err) => {
-            console.log(err);
-        });
-
-        res.status(200).json({ message: "Post deleted successfully!" });
+        if (!error) {
+            fs.unlink(imagePath, (err) => {
+                console.log(err);
+            });
+            res.status(200).json({ message: "Post deleted successfully!" });
+        } else {
+            return next(new HttpError("Erreur de requête, la publication n'a pas pu être supprimée", 500));
+        }
     });
 };
 
@@ -428,7 +435,10 @@ exports.deleteComment = (req, res, next) => {
     const sql = mysql.format(string, inserts);
 
     const deleteComment = db.query(sql, (error, result) => {
-        if (error) throw error;
-        res.status(200).json({ message: "Comment deleted successfully!" });
+        if (!error) {
+            res.status(200).json({ message: "Comment deleted successfully!" });
+        } else {
+            return next(new HttpError("Erreur de requête, le commentaire n'a pas pu être supprimé", 500));
+        }
     });
 };

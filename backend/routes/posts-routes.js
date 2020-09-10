@@ -13,7 +13,7 @@ const postCtrl = require("../controllers/posts");
 
 // Create Posts Routes
 router.post("/", auth, multer, postCtrl.createPost);
-router.post("/reaction", auth, postCtrl.postReaction);
+// router.post("/reaction", auth, postCtrl.postReaction);
 router.post("/comment", auth, postCtrl.postComment);
 
 // Read Posts Routes

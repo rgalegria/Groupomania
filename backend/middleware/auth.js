@@ -3,6 +3,9 @@
 // Middleware Imports
 const jwt = require("jsonwebtoken");
 
+// Error Class
+const HttpError = require("../models/http-error");
+
 // Middleware config.
 module.exports = (req, res, next) => {
     try {
@@ -10,12 +13,12 @@ module.exports = (req, res, next) => {
         const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
         const userId = decodedToken.userId;
         if (req.body.userId && req.body.userId !== userId) {
-            throw "Invalid user ID";
+            throw next(new HttpError("Non authorisé", 401));
         } else {
             //pasar datos?
             next();
         }
     } catch {
-        res.status(401).json({ error: new Error("Invalid request!") });
+        return next(new HttpError("Non identifié(e)", 401));
     }
 };

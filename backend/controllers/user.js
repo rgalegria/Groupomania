@@ -131,8 +131,6 @@ exports.updatePassword = (req, res, next) => {
     const user = decodeUid(req.headers.authorization);
     const { password } = req.body;
 
-    console.log("body =>", req.body);
-
     if (passValid.validate(password, options).valid) {
         bcrypt.hash(req.body.password, 10).then((hash) => {
             const string = "UPDATE users SET password = ? WHERE id = ? ";
@@ -159,13 +157,15 @@ exports.updatePassword = (req, res, next) => {
 exports.deleteProfile = (req, res, next) => {
     const user = decodeUid(req.headers.authorization);
 
-    if (user.id === req.params.id) {
+    console.log("fijo no son strings =>", user.id, Number(req.params.id));
+
+    if (user.id === Number(req.params.id)) {
         const string = "DELETE FROM users WHERE id = ? ";
         const inserts = [user.id];
         const sql = mysql.format(string, inserts);
 
         const query = db.query(sql, (error, result) => {
-            if (+error) {
+            if (!error) {
                 res.status(200).json({ message: "User deleted successfully!" });
             } else {
                 return next(new HttpError("Erreur de requête, l'utilisateur/trice n'a pas été supprimé(e)", 500));

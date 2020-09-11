@@ -28,6 +28,10 @@ exports.createPost = (req, res, next) => {
     const { title, category } = req.body;
     const imageUrl = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
 
+    if (req.body.image === "null") {
+        return next(new HttpError("Veillez choisir une image", 400));
+    }
+
     // console.log("Req.Body =>", req.body, imageUrl, user.id);
     const string = "INSERT INTO posts (Users_id, Categories_id, title, image_url) VALUES (?, ?, ?, ? )";
     const inserts = [user.id, category, title, imageUrl];
@@ -47,8 +51,6 @@ exports.createPost = (req, res, next) => {
 exports.postComment = (req, res, next) => {
     const user = decodeUid(req.headers.authorization);
     const { postId, message } = req.body;
-
-    console.log("user info =>", user);
 
     const string = "INSERT INTO comments (Users_id, Posts_id, message) VALUES (?, ?, ?)";
     const inserts = [user.id, postId, message];

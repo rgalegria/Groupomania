@@ -39,25 +39,15 @@ const options = {
 
 exports.signup = (req, res, next) => {
     const { firstName, lastName, email, password } = req.body;
+
     // RegEx Text
     const regExText = /^[A-ZÀÂÆÇÉÈÊËÏÎÔŒÙÛÜŸ \'\- ]+$/i;
 
-    // Vérifie que les champs ne sont pas uniquement des numéros
-    if (typeof firstName && typeof lastName === "number") {
-        return next(new HttpError("Veillez rentrer uniquement des charactères", 400));
-    }
-    if (typeof firstName === "number") {
-        return next(new HttpError("Veillez rentrer uniquement des charactères", 400));
-    }
-    if (typeof lastName === "number") {
-        return next(new HttpError("Veillez rentrer uniquement des charactères", 400));
-    }
-
     // Validation donnés de l'utilisateur
-    let isFirstName = validator.matches(firstName, regExText);
-    let isLastName = validator.matches(lastName, regExText);
-    let isEmail = validator.isEmail(email);
-    let isPassword = passValid.validate(password, options).valid;
+    let isFirstName = validator.matches(String(firstName), regExText);
+    let isLastName = validator.matches(String(lastName), regExText);
+    let isEmail = validator.isEmail(String(email));
+    let isPassword = passValid.validate(String(password), options).valid;
 
     if (isFirstName && isLastName && isEmail && isPassword) {
         // Hash du mot de pass de l'utilisateur

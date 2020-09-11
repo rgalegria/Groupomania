@@ -39,13 +39,12 @@ app.use((req, res, next) => {
 
 // Bouncer Middleware (Brute force Attack)
 bouncer.blocked = function (req, res, next, remaining) {
-    res.send(429, "Too many requests have been made, " + "please wait " + remaining / 1000 + " seconds");
+    res.status(429).send("Too many requests have been made, " + "please wait " + remaining / 1000 + " seconds");
 };
 
 // Too Busy Middleware (DoS Attacks)
 app.use(function (req, res, next) {
     if (toobusy()) {
-        // log if you see necessary
         res.status(503).send("Server Too Busy");
     } else {
         next();

@@ -101,23 +101,23 @@ exports.getAllPosts = (req, res, next) => {
         return new Promise((resolve, reject) => {
             try {
                 const string = `SELECT
-                                        u.id AS user_id,
-                                        u.firstName,
-                                        u.lastName,
-                                        u.photo_url,
-                                        p.title,
-                                        p.post_date,
-                                        p.image_url,
-                                        p.id AS post_id,
-                                        c.category,
-                                    COUNT(if(r.reaction = 'like', 1, NULL)) AS likes,
-                                    COUNT(if(r.reaction = 'dislike', 1, NULL)) AS dislikes,
-                                        (SELECT reaction FROM reactions WHERE Users_id = 2 AND  Posts_id = r.Posts_id) AS userReaction
-                                    FROM posts AS p
-                                    LEFT JOIN reactions AS r ON p.id = r.Posts_id
-                                    JOIN categories AS c ON p.Categories_id = c.id
-                                    JOIN users AS u ON p.Users_id = u.id
-                                    GROUP BY p.id ORDER BY post_date DESC`;
+                                    u.id AS user_id,
+                                    u.firstName,
+                                    u.lastName,
+                                    u.photo_url,
+                                    p.title,
+                                    p.post_date,
+                                    p.image_url,
+                                    p.id AS post_id,
+                                    c.category,
+                                COUNT(if(r.reaction = 'like', 1, NULL)) AS likes,
+                                COUNT(if(r.reaction = 'dislike', 1, NULL)) AS dislikes,
+                                    (SELECT reaction FROM reactions WHERE Users_id = 2 AND  Posts_id = r.Posts_id) AS userReaction
+                                FROM posts AS p
+                                LEFT JOIN reactions AS r ON p.id = r.Posts_id
+                                JOIN categories AS c ON p.Categories_id = c.id
+                                JOIN users AS u ON p.Users_id = u.id
+                                GROUP BY p.id ORDER BY post_date DESC`;
                 const inserts = [user.id];
                 const sql = mysql.format(string, inserts);
 
@@ -202,7 +202,7 @@ exports.getMostLikedPosts = (req, res, next) => {
                                         c.category,
                                     COUNT(if(r.reaction = 'like', 1, NULL)) AS likes,
                                     COUNT(if(r.reaction = 'dislike', 1, NULL)) AS dislikes,
-                                        (SELECT reaction FROM reactions WHERE Users_id = 2 AND Posts_id = r.Posts_id) AS userReaction
+                                        (SELECT reaction FROM reactions WHERE Users_id = ? AND Posts_id = r.Posts_id) AS userReaction
                                     FROM posts AS p
                                     LEFT JOIN reactions AS r ON p.id = r.Posts_id
                                     JOIN categories AS c ON p.Categories_id = c.id

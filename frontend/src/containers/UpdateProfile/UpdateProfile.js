@@ -3,13 +3,14 @@ import { useHistory } from "react-router-dom";
 import { AuthContext } from "../../context/auth-context";
 import { useHttpRequest } from "../../hooks/httpRequest-hook";
 import { useForm } from "../../hooks/form-hook";
-import { isEmail, MinLength, MaxLength } from "../../utils/validators";
+import { isEmail, MinLength, MaxLength, isText } from "../../utils/validators";
 
 // Icons
 import password from "../../images/password-icon.svg";
 import deleteIcon from "../../images/delete-icon.svg";
 
 // Components
+import ErrorModal from "../../components/ErrorModal/ErrorModal";
 import UIBtn from "../../components/Buttons/UIBtn/UIBtn";
 import ImageUpload from "../../components/ImageUpload/ImageUpload";
 import InputField from "../../components/InputField/InputField";
@@ -28,7 +29,7 @@ const UpdateProfile = () => {
     const history = useHistory();
 
     // Backend Request Hook
-    const { isLoading, /*error,*/ sendRequest /*clearError*/ } = useHttpRequest();
+    const { isLoading, error, sendRequest, clearError } = useHttpRequest();
 
     // Profile useState
     const [userDataState, setUserDataState] = useState();
@@ -163,21 +164,18 @@ const UpdateProfile = () => {
         } catch (err) {}
     };
 
-    const showMessage = (event) => {
+    const showDeleteMessage = (event) => {
         event.preventDefault();
-        console.log("click");
         if (showInfo === false) {
             setShowInfo(true);
-            console.log("true");
         } else {
             setShowInfo(false);
-            console.log("true");
         }
     };
 
     const deleteUserHandler = async (event) => {
         event.preventDefault();
-        console.log("delete click");
+
         try {
             await sendRequest(`${process.env.REACT_APP_API_URL}/profile/${auth.userId}`, "DELETE", null, {
                 "Content-Type": "application/json",
@@ -187,8 +185,6 @@ const UpdateProfile = () => {
             history.push(`/`);
         } catch (err) {}
     };
-
-    console.log("showInfo Value =>", showInfo);
 
     if (isLoading) {
         return (
@@ -209,182 +205,194 @@ const UpdateProfile = () => {
     }
 
     return (
-        <div className={`container ${styles.class_mod}`}>
-            {!isLoading && userDataState && (
-                <>
-                    <div className={styles.wrapper}>
-                        <div className={styles.background_img}></div>
-                        <ImageUpload
-                            center
-                            id="image"
-                            onInput={inputHandler}
-                            errorText="Choisisez une image"
-                            photo_url={userDataState.photo_url}
-                        />
-                        <h4 className={styles.title}>Vos informations personnelles</h4>
-                        <form id="update-form" className={styles.update_list} onSubmit={updateProfileHandler}>
-                            <InputField
-                                id="firstName"
-                                label="Prénom :"
-                                name="firstName"
-                                type="text"
-                                placeholder="Votre prénom"
-                                autocomplete="given-name"
-                                maxLength="45"
-                                element="input"
-                                hasLabel="yes"
-                                textIsWhite="no"
-                                validators={[MinLength(2), MaxLength(45)]}
-                                errorText="Votre email n'est pas correct"
+        <>
+            <ErrorModal error={error} onClear={clearError} />
+            <div className={`container ${styles.class_mod}`}>
+                {!isLoading && userDataState && (
+                    <>
+                        <div className={styles.wrapper}>
+                            <div className={styles.background_img}></div>
+                            <ImageUpload
+                                center
+                                id="image"
                                 onInput={inputHandler}
-                                initialValue={userDataState.firstName}
-                                initialValid={true}
+                                errorText="Choisisez une image"
+                                photo_url={userDataState.photo_url}
                             />
-                            <InputField
-                                id="lastName"
-                                label="Nom :"
-                                name="lastName"
-                                type="text"
-                                placeholder="Votre nom"
-                                autocomplete="family-name"
-                                maxLength="45"
-                                element="input"
-                                hasLabel="yes"
-                                textIsWhite="no"
-                                validators={[MinLength(2), MaxLength(45)]}
-                                errorText="Votre email n'est pas correct"
-                                onInput={inputHandler}
-                                initialValue={userDataState.lastName}
-                                initialValid={true}
-                            />
-                            <InputField
-                                id="department"
-                                label="Departement :"
-                                name="department"
-                                type="text"
-                                placeholder="Votre departement"
-                                maxLength="65"
-                                element="input"
-                                hasLabel="yes"
-                                textIsWhite="no"
-                                validators={[MinLength(2), MaxLength(65)]}
-                                errorText="Veillez remplir le departement auquel vous appartenez"
-                                onInput={inputHandler}
-                                initialValue={userDataState.department}
-                                initialValid={true}
-                            />
-                            <InputField
-                                id="role"
-                                label="Description poste :"
-                                name="role"
-                                type="text"
-                                placeholder="Description du poste"
-                                maxLength="65"
-                                element="textarea"
-                                hasLabel="yes"
-                                textIsWhite="no"
-                                validators={[MinLength(2), MaxLength(65)]}
-                                errorText="Veillez remplir la description du poste"
-                                onInput={inputHandler}
-                                initialValue={userDataState.role}
-                                initialValid={true}
-                            />
-                            <InputField
-                                id="email"
-                                label="E-mail :"
-                                name="email"
-                                type="email"
-                                placeholder="Votre e-mail"
-                                autocomplete="email"
-                                maxLength="100"
-                                element="input"
-                                hasLabel="yes"
-                                textIsWhite="no"
-                                validators={[isEmail(), MinLength(6), MaxLength(100)]}
-                                errorText="Votre email n'est pas correct"
-                                onInput={inputHandler}
-                                initialValue={userDataState.email}
-                                initialValid={true}
-                            />
-                            <InputField
-                                id="linkedin_url"
-                                label="Linkedin (facultatif) :"
-                                name="linkedin"
-                                type="text"
-                                placeholder="Votre addresse Linkedin"
-                                element="input"
-                                hasLabel="yes"
-                                textIsWhite="no"
-                                validators={[]}
-                                onInput={inputHandler}
-                                initialValue={userDataState.linkedin_url}
-                                initialValid={true}
-                            />
-                        </form>
-                        <UIBtn
-                            id="update-profile-btn"
-                            form="update-form"
-                            name="Mettre à jour profil"
-                            type="submit"
-                            btnType="valid"
-                        />
-                        <h4 className={styles.title}>Changer mot de passe</h4>
-                        <form id="update-password-form" className={styles.update_list} onSubmit={updatePasswordHandler}>
-                            <InputField
-                                id="password"
-                                label="Mot de passe :"
-                                name="password"
-                                type="password"
-                                placeholder="Votre nouveau mot de passe"
-                                icon={password}
-                                alt="password icon"
-                                maxLength="50"
-                                element="input"
-                                hasLabel="yes"
-                                textIsWhite="no"
-                                validators={[MinLength(8), MaxLength(50)]}
-                                errorText="Votre mot de passe n'est pas correct"
-                                onInput={inputHandler}
-                                initialValue={formState.inputs.password.value}
-                                initialValid={formState.inputs.password.isValid}
-                            />
-                        </form>
-                        <UIBtn
-                            id="update-password-btn"
-                            form="update-password-form"
-                            name="Changer mot de passe"
-                            type="submit"
-                            btnType="valid"
-                        />
-                        <h4 className={styles.title}>Supprimer mon compte</h4>
-                        <UIBtn
-                            id="delete-profile-btn"
-                            icon={deleteIcon}
-                            name="Supprimer"
-                            onClick={showMessage}
-                            btnType="warning"
-                        />
-                        <div style={{ display: showInfo === true ? "block" : "none" }}>
-                            <p className={styles.role}>
-                                Vous êtes sur le bord de supprimer votre compte. Toutes les informations liés à ce
-                                compte seront supprimées.
-                            </p>
-                            <h5 className={styles.title}>Êtes-vous sur de supprimer votre compte?</h5>
-                            <div className={styles.btn_block}>
-                                <UIBtn
-                                    id="accept-btn"
-                                    name="Oui"
-                                    type="submit"
-                                    onClick={deleteUserHandler}
-                                    btnType="warning"
+                            <h4 className={styles.title}>Vos informations personnelles</h4>
+                            <form id="update-form" className={styles.update_list} onSubmit={updateProfileHandler}>
+                                <InputField
+                                    id="firstName"
+                                    label="Prénom :"
+                                    name="firstName"
+                                    type="text"
+                                    placeholder="Votre prénom"
+                                    autocomplete="given-name"
+                                    maxLength="45"
+                                    element="input"
+                                    hasLabel="yes"
+                                    textIsWhite="no"
+                                    validators={[MinLength(2), MaxLength(45), isText()]}
+                                    errorText="Veillez rentrer votre prénom"
+                                    onInput={inputHandler}
+                                    initialValue={userDataState.firstName}
+                                    initialValid={true}
                                 />
-                                <UIBtn id="cancel-btn" name="Annuler" onClick={showMessage} btnType="cancel" />
+                                <InputField
+                                    id="lastName"
+                                    label="Nom :"
+                                    name="lastName"
+                                    type="text"
+                                    placeholder="Votre nom"
+                                    autocomplete="family-name"
+                                    maxLength="45"
+                                    element="input"
+                                    hasLabel="yes"
+                                    textIsWhite="no"
+                                    validators={[MinLength(2), MaxLength(45), isText()]}
+                                    errorText="Veillez rentrer votre nom de famille"
+                                    onInput={inputHandler}
+                                    initialValue={userDataState.lastName}
+                                    initialValid={true}
+                                />
+                                <InputField
+                                    id="department"
+                                    label="Departement :"
+                                    name="department"
+                                    type="text"
+                                    placeholder="Votre departement"
+                                    maxLength="65"
+                                    element="input"
+                                    hasLabel="yes"
+                                    textIsWhite="no"
+                                    validators={[MinLength(2), MaxLength(65), isText()]}
+                                    errorText="Veillez remplir le departement auquel vous appartenez"
+                                    onInput={inputHandler}
+                                    initialValue={userDataState.department}
+                                    initialValid={true}
+                                />
+                                <InputField
+                                    id="role"
+                                    label="Description poste :"
+                                    name="role"
+                                    type="text"
+                                    placeholder="Description du poste"
+                                    maxLength="65"
+                                    element="textarea"
+                                    hasLabel="yes"
+                                    textIsWhite="no"
+                                    validators={[MinLength(2), MaxLength(65), isText()]}
+                                    errorText="Veillez remplir la description de votre poste"
+                                    onInput={inputHandler}
+                                    initialValue={userDataState.role}
+                                    initialValid={true}
+                                />
+                                <InputField
+                                    id="email"
+                                    label="E-mail :"
+                                    name="email"
+                                    type="email"
+                                    placeholder="Votre e-mail"
+                                    autocomplete="email"
+                                    maxLength="100"
+                                    element="input"
+                                    hasLabel="yes"
+                                    textIsWhite="no"
+                                    validators={[isEmail(), MinLength(6), MaxLength(100)]}
+                                    errorText="Votre email n'est pas correct"
+                                    onInput={inputHandler}
+                                    initialValue={userDataState.email}
+                                    initialValid={true}
+                                />
+                                <InputField
+                                    id="linkedin_url"
+                                    label="Linkedin (facultatif) :"
+                                    name="linkedin"
+                                    type="text"
+                                    placeholder="Votre addresse Linkedin"
+                                    element="input"
+                                    hasLabel="yes"
+                                    textIsWhite="no"
+                                    validators={[]}
+                                    onInput={inputHandler}
+                                    initialValue={userDataState.linkedin_url}
+                                    initialValid={true}
+                                />
+                            </form>
+                            <UIBtn
+                                id="update-profile-btn"
+                                form="update-form"
+                                name="Mettre à jour profil"
+                                type="submit"
+                                btnType="valid"
+                            />
+                            <h4 className={styles.title}>Changer mot de passe</h4>
+                            <form
+                                id="update-password-form"
+                                className={styles.update_list}
+                                onSubmit={updatePasswordHandler}
+                            >
+                                <InputField
+                                    id="password"
+                                    label="Mot de passe :"
+                                    name="password"
+                                    type="password"
+                                    placeholder="Votre nouveau mot de passe"
+                                    icon={password}
+                                    alt="password icon"
+                                    maxLength="50"
+                                    element="input"
+                                    hasLabel="yes"
+                                    textIsWhite="no"
+                                    validators={[MinLength(8), MaxLength(50)]}
+                                    errorText="Minimum une mayuscule, un chiffre et 8 charactères"
+                                    onInput={inputHandler}
+                                    initialValue={formState.inputs.password.value}
+                                    initialValid={formState.inputs.password.isValid}
+                                />
+                            </form>
+                            <UIBtn
+                                id="update-password-btn"
+                                form="update-password-form"
+                                name="Changer mot de passe"
+                                type="submit"
+                                btnType="valid"
+                            />
+                            <h4 className={styles.title}>Supprimer mon compte</h4>
+                            <UIBtn
+                                id="delete-profile-btn"
+                                icon={deleteIcon}
+                                name="Supprimer"
+                                onClick={showDeleteMessage}
+                                btnType="warning"
+                            />
+                            <div style={{ display: showInfo === true ? "block" : "none" }}>
+                                <p className={styles.role}>
+                                    Vous êtes sur le bord de supprimer votre compte. Toutes les informations liés à ce
+                                    compte seront supprimées.
+                                </p>
+                                <h5 className={styles.title}>Êtes-vous sur de supprimer votre compte?</h5>
+                                <div className={styles.btn_block}>
+                                    <UIBtn
+                                        id="accept-btn"
+                                        name="Oui"
+                                        type="submit"
+                                        onClick={deleteUserHandler}
+                                        btnType="warning"
+                                    />
+                                    <UIBtn
+                                        id="cancel-btn"
+                                        name="Annuler"
+                                        onClick={showDeleteMessage}
+                                        btnType="cancel"
+                                    />
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </>
-            )}
-        </div>
+                    </>
+                )}
+            </div>
+        </>
     );
 };
 

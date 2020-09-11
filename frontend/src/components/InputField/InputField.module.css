@@ -19,6 +19,14 @@
     color: #828282;
 }
 
+.input_error {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin: 0;
+    color: #ff6c6c;
+    margin-bottom: 1rem;
+}
+
 .wrapper {
     display: flex;
     flex-direction: row;

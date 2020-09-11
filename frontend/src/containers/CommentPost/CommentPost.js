@@ -62,6 +62,10 @@ const CommentPost = () => {
     const postCommentHandler = async (event) => {
         event.preventDefault();
 
+        if (!formState.isValid) {
+            return;
+        }
+
         try {
             const commentData = await sendRequest(
                 `${process.env.REACT_APP_API_URL}/posts/comment`,
@@ -170,28 +174,30 @@ const CommentPost = () => {
                                 );
                             })}
                     </section>
-                    <form className={styles.comment_form} id="comment-form" onSubmit={postCommentHandler}>
-                        <InputField
-                            id="comment"
-                            className={styles.box}
-                            name="comment"
-                            type="text"
-                            placeholder="Écrivez un commentaire"
-                            maxLength="65"
-                            element="textarea"
-                            hasLabel="yes"
-                            textIsWhite="no"
-                            validators={[MinLength(2), MaxLength(65)]}
-                            errorText="Veillez ecrire un commentaire"
-                            onInput={inputHandler}
-                            // onClear={clearHandler}
-                            initialValue={formState.inputs.comment.value}
-                            initialValid={formState.inputs.comment.isValid}
-                        />
+                    <div className={styles.comment_wrap}>
+                        <form className={styles.comment_form} id="comment-form" onSubmit={postCommentHandler}>
+                            <InputField
+                                id="comment"
+                                className={styles.box}
+                                name="comment"
+                                type="text"
+                                placeholder="Écrivez un commentaire"
+                                maxLength="65"
+                                element="textarea"
+                                hasLabel="yes"
+                                textIsWhite="no"
+                                validators={[MinLength(2), MaxLength(65)]}
+                                errorText="Veillez ecrire un commentaire"
+                                onInput={inputHandler}
+                                // onClear={clearHandler}
+                                initialValue={formState.inputs.comment.value}
+                                initialValid={formState.inputs.comment.isValid}
+                            />
+                        </form>
                         <button form="comment-form" className={styles.btn} type="submit">
                             <img className={styles.icon} src={send} alt="publier commentaire" />
                         </button>
-                    </form>
+                    </div>
                 </div>
             )}
         </div>

@@ -2,7 +2,8 @@ import React, { useContext } from "react";
 import { useForm } from "../../hooks/form-hook";
 import { useHistory } from "react-router-dom";
 import { AuthContext } from "../../context/auth-context";
-import { isEmail, MinLength } from "../../utils/validators";
+import { useHttpRequest } from "../../hooks/httpRequest-hook";
+import { isEmail, MinLength, isText } from "../../utils/validators";
 
 // Static Images
 import logo from "../../images/logo.png";
@@ -49,33 +50,35 @@ const SignUp = () => {
         false
     );
 
-    const signupHandler = (event) => {
+    // Request Hook
+    const { error, sendRequest } = useHttpRequest();
+
+    const signupHandler = async (event) => {
         event.preventDefault();
 
-        console.log(formState.inputs);
+        if (!formState.isValid) {
+            return;
+        }
 
-        const data = {
-            firstName: formState.inputs.firstName.value,
-            lastName: formState.inputs.lastName.value,
-            email: formState.inputs.email.value,
-            password: formState.inputs.password.value,
-        };
+        try {
+            const data = {
+                firstName: formState.inputs.firstName.value,
+                lastName: formState.inputs.lastName.value.toUpperCase(),
+                email: formState.inputs.email.value,
+                password: formState.inputs.password.value,
+            };
 
-        fetch(`${process.env.REACT_APP_API_URL}/signup`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-        })
-            .then((response) => response.json())
-            .then((responseData) => {
-                auth.login(responseData.userId, responseData.token, responseData.account);
-            })
-            .catch((error) => {
-                console.error("Error:", error);
-            });
-        history.push("/posts");
+            const responseData = await sendRequest(
+                `${process.env.REACT_APP_API_URL}/signup`,
+                "POST",
+                JSON.stringify(data),
+                {
+                    "Content-Type": "application/json",
+                }
+            );
+            auth.login(responseData.userId, responseData.token, responseData.account);
+            history.push("/posts");
+        } catch (err) {}
     };
 
     return (
@@ -94,8 +97,8 @@ const SignUp = () => {
                         element="input"
                         hasLabel="no"
                         textIsWhite="yes"
-                        validators={[MinLength(2)]}
-                        errorText="Veillez rentrer des charactères valides"
+                        validators={[MinLength(2), isText()]}
+                        errorText="Veillez rentrer uniquement des charactères"
                         onInput={inputHandler}
                         initialValue={formState.inputs.firstName.value}
                         initialValid={formState.inputs.firstName.isValid}
@@ -111,8 +114,8 @@ const SignUp = () => {
                         element="input"
                         hasLabel="no"
                         textIsWhite="yes"
-                        validators={[MinLength(2)]}
-                        errorText="Veillez rentrer des charactères valides"
+                        validators={[MinLength(2), isText()]}
+                        errorText="Veillez rentrer uniquement des charactères"
                         onInput={inputHandler}
                         initialValue={formState.inputs.lastName.value}
                         initialValid={formState.inputs.lastName.isValid}
@@ -137,7 +140,7 @@ const SignUp = () => {
                     <InputField
                         id="password"
                         name="password"
-                        type="text"
+                        type="password"
                         placeholder="password"
                         autocomplete="current-password"
                         icon={password}
@@ -146,12 +149,13 @@ const SignUp = () => {
                         hasLabel="no"
                         textIsWhite="yes"
                         validators={[MinLength(8)]}
-                        errorText="Votre mot de passe n'est pas correct"
+                        errorText="Minimum une mayuscule, un chiffre et 8 charactères"
                         onInput={inputHandler}
                         initialValue={formState.inputs.password.value}
                         initialValid={formState.inputs.password.isValid}
                     />
                 </form>
+                <p className="error_message">{error}</p>
             </div>
             <div className="background_blur"></div>
         </>

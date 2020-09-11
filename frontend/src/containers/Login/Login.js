@@ -27,7 +27,7 @@ const Login = () => {
     const history = useHistory();
 
     // Request Hook
-    const { isLoading, error, sendRequest, clearError } = useHttpRequest();
+    const { error, sendRequest } = useHttpRequest();
 
     // Input Hook
     const [formState, inputHandler] = useForm(
@@ -47,26 +47,43 @@ const Login = () => {
     const loginHandler = async (event) => {
         event.preventDefault();
 
-        const data = {
-            email: formState.inputs.email.value,
-            password: formState.inputs.password.value,
-        };
+        if (!formState.isValid) {
+            return;
+        }
 
-        await fetch(`${process.env.REACT_APP_API_URL}/login`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-        })
-            .then((response) => response.json())
-            .then((responseData) => {
-                auth.login(responseData.userId, responseData.token, responseData.account);
-            })
-            .catch((error) => {
-                console.error("Error:", error);
-            });
-        history.push("/posts");
+        try {
+            const data = {
+                email: formState.inputs.email.value,
+                password: formState.inputs.password.value,
+            };
+
+            const responseData = await sendRequest(
+                `${process.env.REACT_APP_API_URL}/login`,
+                "POST",
+                JSON.stringify(data),
+                {
+                    "Content-Type": "application/json",
+                }
+            );
+            auth.login(responseData.userId, responseData.token, responseData.account);
+            history.push("/posts");
+        } catch (err) {}
+
+        // await fetch(`${process.env.REACT_APP_API_URL}/login`, {
+        //     method: "POST",
+        //     headers: {
+        //         "Content-Type": "application/json",
+        //     },
+        //     body: JSON.stringify(data),
+        // })
+        //     .then((response) => response.json())
+        //     .then((responseData) => {
+        //         auth.login(responseData.userId, responseData.token, responseData.account);
+        //     })
+        //     .catch((error) => {
+        //         console.error("Error:", error);
+        //     });
+        // history.push("/posts");
     };
 
     return (
@@ -109,6 +126,7 @@ const Login = () => {
                         initialValid={formState.inputs.password.isValid}
                     />
                 </form>
+                <p className="error_message">{error}</p>
                 <Link className="forgot_pass_link" to={"/login"}>
                     mot de pass oublié ?
                 </Link>

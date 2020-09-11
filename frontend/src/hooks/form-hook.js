@@ -27,12 +27,6 @@ const formReducer = (state, action) => {
                 inputs: action.inputs,
                 isValid: action.formIsValid,
             };
-        case "RESET_DATA":
-            //loop
-            return {
-                inputs: action.inputs,
-                isValid: action.formIsValid,
-            };
         default:
             return state;
     }
@@ -61,14 +55,5 @@ export const useForm = (initialInputs, initialFormValidity) => {
         });
     }, []);
 
-    // const setClearForm = useCallback((id, value, isValid) => {
-    //     dispatch({
-    //         type: "RESET_DATA",
-    //         value: value,
-    //         isValid: isValid,
-    //         inputId: id,
-    //     });
-    // }, []);
-
-    return [formState, inputHandler, setFormData /*setClearForm*/];
+    return [formState, inputHandler, setFormData];
 };

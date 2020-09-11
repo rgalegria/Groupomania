@@ -3,14 +3,6 @@
     z-index: 15;
 }
 
-.error_message {
-    font-size: 1.4rem;
-    font-weight: 500;
-    color: white;
-    margin: auto;
-    z-index: 15;
-}
-
 /* TABLETS */
 @media only screen and (min-width: 768px) {
     .input_list {

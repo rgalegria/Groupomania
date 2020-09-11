@@ -26,13 +26,10 @@ const Btn = (props) => {
         btnType = styles.warning;
     }
 
-    console.log(props.btnType);
-    console.log(btnType);
-
     return (
         <button
             id={props.id}
-            className={`${styles.btn} ${btnType}`}
+            className={`${styles.btn} ${btnType} ${props.buttonClass}`}
             type={props.type}
             form={props.form}
             onClick={props.onClick}

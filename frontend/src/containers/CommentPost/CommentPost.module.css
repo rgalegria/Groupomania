@@ -16,8 +16,14 @@
 
 .comment_form {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     width: 100%;
+}
+
+.comment_wrap {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 1.6rem;
 }
 
 .btn {
@@ -27,6 +33,7 @@
     min-width: 50px;
     height: 50px;
     padding: 0;
+    margin-top: 1rem;
 }
 
 .icon {

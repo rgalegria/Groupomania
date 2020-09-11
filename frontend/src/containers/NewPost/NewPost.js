@@ -73,6 +73,11 @@ const NewPost = (props) => {
     //===========================================================================================
     const sendPostHandler = async (event) => {
         event.preventDefault();
+
+        if (!formState.isValid) {
+            return;
+        }
+
         const formData = new FormData();
         formData.append("title", formState.inputs.title.value);
         formData.append("category", formState.inputs.category.value);
@@ -153,8 +158,8 @@ const NewPost = (props) => {
                                 element="textarea"
                                 hasLabel="no"
                                 textIsWhite="no"
-                                validators={[MinLength(3), MaxLength(100)]}
-                                errorText="Veillez écrire un titre ou commentaire pour votre post"
+                                validators={[MinLength(2), MaxLength(100)]}
+                                errorText="Veillez écrire un commentaire pour votre post"
                                 onInput={inputHandler}
                                 initialValue={formState.inputs.title.value}
                                 initialValid={formState.inputs.title.isValid}
@@ -171,6 +176,7 @@ const NewPost = (props) => {
                                 name="categories"
                                 onInput={inputHandler}
                                 options={categories}
+                                errorText="Choisisez une catégorie"
                             />
                             {sendBtn}
                         </form>

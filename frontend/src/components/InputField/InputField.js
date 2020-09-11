@@ -106,23 +106,25 @@ const InputField = (props) => {
                 placeholder={props.placeholder}
                 autoComplete={props.autocomplete}
                 value={inputState.value}
-                // onClear={clearInput}
                 onChange={changeHandler}
                 onBlur={touchHandler}
             />
         );
 
     return (
-        <div
-            className={`${styles.block} ${borderColor}
+        <>
+            <div
+                className={`${styles.block} ${borderColor}
         ${!inputState.isValid && inputState.isTouched && styles.invalid}`}
-        >
-            {label}
-            <div className={styles.wrapper}>
-                {element}
-                {icon}
+            >
+                {label}
+                <div className={styles.wrapper}>
+                    {element}
+                    {icon}
+                </div>
             </div>
-        </div>
+            {!inputState.isValid && inputState.isTouched && <p className={styles.input_error}>{props.errorText}</p>}
+        </>
     );
     // });
 };

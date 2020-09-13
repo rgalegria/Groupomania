@@ -1,7 +1,6 @@
 "use strict";
 
 // Middleware Imports
-
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const mysql = require("mysql");
@@ -36,7 +35,6 @@ const options = {
 };
 
 // POST Create User Controller
-
 exports.signup = (req, res, next) => {
     const { firstName, lastName, email, password } = req.body;
 
@@ -82,7 +80,6 @@ exports.signup = (req, res, next) => {
         });
     } else if (!isFirstName || !isLastName || !isEmail || !isPassword) {
         // Error Handling
-
         let errorMessages = [];
 
         let anws = !isFirstName ? errorMessages.push(" Prénom") : "";

@@ -14,7 +14,7 @@ const UserHeader = (props) => {
     // Authentication context
     const auth = useContext(AuthContext);
 
-    // Format Post Date in sec, min, hours, days and years
+    // Format de la date de la publication en sec, min, heurs, jours et années
     const postDate = new Date(props.date);
     const today = new Date();
     const diffTime = Math.abs(today - postDate);
@@ -46,7 +46,7 @@ const UserHeader = (props) => {
         newPostDate = formatDate;
     }
 
-    // Show category in posts only
+    // Changer l'affichage selon la page posts ou comments
     let category;
 
     if (props.category) {
@@ -60,7 +60,7 @@ const UserHeader = (props) => {
         category = "";
     }
 
-    // Show Delete button to post/comment creator and admin
+    // verification admin pour montrer le bouton de supprimer post/comment
     let deleteBtn;
 
     if (auth.userId === props.user_id || auth.account === "admin") {

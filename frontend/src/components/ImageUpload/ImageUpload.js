@@ -11,16 +11,25 @@ import GenProfile from "../../images/generic_profile_picture.jpg";
 import styles from "./ImageUpload.module.css";
 
 const ImageUpload = (props) => {
+    // Use state de l'image
     const [file, setFile] = useState();
+
+    // Use state de la previsualisation de l'image
     const [previewUrl, setPreviewUrl] = useState();
+
+    // Use state de la validation
     const [isValid, setIsValid] = useState(false);
 
+    // Localisation actuelle de l'app
     const path = props.location.pathname;
 
     useEffect(() => {
+        // verification s'il y a une image ou pas dans le useState
         if (!file) {
             return;
         }
+
+        // Accéder à la previsualisation de l'image du navigateur et le transferer au useState
         const fileReader = new FileReader();
         fileReader.onload = () => {
             setPreviewUrl(fileReader.result);
@@ -28,9 +37,12 @@ const ImageUpload = (props) => {
         fileReader.readAsDataURL(file);
     }, [file]);
 
+    // Fontion qui prend l'image
     const pickedImageHandler = (event) => {
         let pickedFile;
         let fileIsValid = isValid;
+
+        // S'il y a une image dans l'événement
         if (event.target.files && event.target.files.length === 1) {
             pickedFile = event.target.files[0];
             setFile(pickedFile);
@@ -43,6 +55,7 @@ const ImageUpload = (props) => {
         props.onInput(props.id, pickedFile, fileIsValid);
     };
 
+    // Construction pour la page new post
     if (path === "/posts/new") {
         return (
             <>
@@ -76,6 +89,7 @@ const ImageUpload = (props) => {
         );
     }
 
+    // Construction pour la page Update Profile
     return (
         <>
             <label htmlFor="upload-button" className={styles.photo_container}>

@@ -94,6 +94,17 @@
     justify-content: space-between;
 }
 
+.btnStyle {
+    color: #c30000;
+    margin: 0 auto 3rem auto;
+}
+
+.iconStyle {
+    height: 2.4rem;
+    width: auto;
+    margin: 0 1rem 0 0;
+}
+
 ::placeholder {
     /* Chrome, Firefox, Opera, Safari 10.1+ */
     font-weight: 400;

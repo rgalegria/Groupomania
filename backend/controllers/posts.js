@@ -28,11 +28,12 @@ exports.createPost = (req, res, next) => {
     const { title, category } = req.body;
     const imageUrl = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
 
+    // Vérification s'il y a une image dans le body
     if (req.body.image === "null") {
         return next(new HttpError("Veillez choisir une image", 400));
     }
 
-    // console.log("Req.Body =>", req.body, imageUrl, user.id);
+    // Requête
     const string = "INSERT INTO posts (Users_id, Categories_id, title, image_url) VALUES (?, ?, ?, ? )";
     const inserts = [user.id, category, title, imageUrl];
     const sql = mysql.format(string, inserts);
@@ -52,17 +53,29 @@ exports.postComment = (req, res, next) => {
     const user = decodeUid(req.headers.authorization);
     const { postId, message } = req.body;
 
+    // Requête
     const string = "INSERT INTO comments (Users_id, Posts_id, message) VALUES (?, ?, ?)";
     const inserts = [user.id, postId, message];
     const sql = mysql.format(string, inserts);
 
     const createComment = db.query(sql, (error, commentId) => {
         if (!error) {
-            const string =
-                "SELECT users.firstName, users.lastName, users.photo_url, comments.Posts_id as id, comments.Users_id as user_id,  comments.message, comments.comment_date FROM comments INNER JOIN posts ON comments.posts_id = posts.id  INNER JOIN users ON comments.Users_id = users.id WHERE comments.id = ?";
+            const string = `SELECT 
+                                users.firstName, 
+                                users.lastName, 
+                                users.photo_url, 
+                                comments.Posts_id AS id, 
+                                comments.Users_id AS user_id,  
+                                comments.message, 
+                                comments.comment_date 
+                            FROM comments INNER JOIN posts ON comments.posts_id = posts.id  
+                            INNER JOIN users ON comments.Users_id = users.id 
+                            WHERE comments.id = ?`;
+
             const inserts = [commentId.insertId];
             const sql = mysql.format(string, inserts);
 
+            // Requête
             const returnComment = db.query(sql, (error, response) => {
                 if (!error) {
                     console.log("comment =>", response);
@@ -81,6 +94,8 @@ exports.postComment = (req, res, next) => {
 //==========================================================================================================
 exports.getCategories = (req, res, next) => {
     const sql = "SELECT * FROM categories";
+
+    // Requête
     const query = db.query(sql, (error, results) => {
         if (!error) {
             res.status(200).json(results);
@@ -112,7 +127,7 @@ exports.getAllPosts = (req, res, next) => {
                                     c.category,
                                 COUNT(if(r.reaction = 'like', 1, NULL)) AS likes,
                                 COUNT(if(r.reaction = 'dislike', 1, NULL)) AS dislikes,
-                                    (SELECT reaction FROM reactions WHERE Users_id = 2 AND  Posts_id = r.Posts_id) AS userReaction
+                                    (SELECT reaction FROM reactions WHERE Users_id = ? AND  Posts_id = r.Posts_id) AS userReaction
                                 FROM posts AS p
                                 LEFT JOIN reactions AS r ON p.id = r.Posts_id
                                 JOIN categories AS c ON p.Categories_id = c.id
@@ -121,7 +136,7 @@ exports.getAllPosts = (req, res, next) => {
                 const inserts = [user.id];
                 const sql = mysql.format(string, inserts);
 
-                // MySQL DB Query
+                // Requête
                 const getPosts = db.query(sql, (error, posts) => {
                     if (error) reject(error);
                     resolve(posts);
@@ -138,10 +153,9 @@ exports.getAllPosts = (req, res, next) => {
             try {
                 const string = "SELECT COUNT(*) as comments FROM comments WHERE Posts_id = ?";
                 const inserts = [post_id];
-
                 const sql = mysql.format(string, inserts);
 
-                // MySQL DB Query
+                // Requête
                 const commentCount = db.query(sql, (error, comments) => {
                     if (error) reject(error);
                     resolve(comments[0].comments);
@@ -155,24 +169,22 @@ exports.getAllPosts = (req, res, next) => {
     // Fetch reaction par post
     const composePost = async () => {
         try {
-            //consultamos los posts
+            // Résultat des posts
             let finalPost = await getPosts();
+            // Pour chaque post, vérifier commentaires et ajoutez-les
             for (let i = 0; i < finalPost.length; i++) {
-                //consultamos los comentarios
+                // Résultat des commentaires
                 const comments = await getCommentCount(finalPost[i].post_id);
                 finalPost[i].comments = comments;
             }
-
             return finalPost;
         } catch (err) {
-            // console.log("error de finalPost:", err.stack);
             return new Error(err);
         }
     };
 
     composePost()
         .then((result) => {
-            //console.log("error:", result);
             res.status(200).json(result);
         })
         .catch((error) => {
@@ -183,10 +195,9 @@ exports.getAllPosts = (req, res, next) => {
 // GET Most Liked Posts Controller
 //==========================================================================================================
 exports.getMostLikedPosts = (req, res, next) => {
-    // Obtenir l'user ID
     const user = decodeUid(req.headers.authorization);
 
-    // Consulta los 10 posts con mas likes
+    // Fetch les posts avec plus likes
     const getMostLiked = () => {
         return new Promise((resolve, reject) => {
             try {
@@ -210,7 +221,8 @@ exports.getMostLikedPosts = (req, res, next) => {
                                     GROUP BY p.id ORDER BY likes DESC`;
                 const inserts = [user.id];
                 const sql = mysql.format(sqlString, inserts);
-                // MySQL DB Query
+
+                // Requête
                 const getPosts = db.query(sql, (error, posts) => {
                     if (error) reject(error);
                     resolve(posts);
@@ -229,7 +241,7 @@ exports.getMostLikedPosts = (req, res, next) => {
                 const inserts = [post_id];
                 const sql = mysql.format(string, inserts);
 
-                // MySQL DB Query
+                // Requête
                 const commentCount = db.query(sql, (error, comments) => {
                     if (error) reject(error);
                     resolve(comments[0].comments);
@@ -243,24 +255,22 @@ exports.getMostLikedPosts = (req, res, next) => {
     // Fetch reaction par post
     const composePost = async () => {
         try {
-            //consultamos los posts
+            // Résultat des posts
             let finalPost = await getMostLiked();
+            // Pour chaque post, vérifier commentaires et ajoutez-les
             for (let i = 0; i < finalPost.length; i++) {
-                //consultamos los comentarios
+                // Résultat des commentaires
                 const comments = await getCommentCount(finalPost[i].post_id);
                 finalPost[i].comments = comments;
             }
-
             return finalPost;
         } catch (err) {
-            //console.log("error de finalPost:", err.stack);
             return new Error(err);
         }
     };
 
     composePost()
         .then((result) => {
-            console.log("error:", result);
             res.status(200).json(result);
         })
         .catch((error) => {
@@ -294,17 +304,30 @@ exports.getOnePost = (req, res, next) => {
                     WHERE p.id = ?
                     GROUP BY p.id `;
 
-    const commentsSql =
-        "SELECT users.id as user_id, users.firstName, users.lastName, users.photo_url, comments.id, comments.comment_date, comments.message FROM comments INNER JOIN users ON comments.Users_id = users.id WHERE Posts_id = ?";
+    const commentsSql = `SELECT 
+                            users.id AS user_id, 
+                            users.firstName, 
+                            users.lastName, 
+                            users.photo_url, 
+                            comments.id, 
+                            comments.comment_date, 
+                            comments.message 
+                        FROM comments 
+                        INNER JOIN users ON comments.Users_id = users.id 
+                        WHERE Posts_id = ?`;
     db.query(`${postSql}; ${commentsSql}`, [user.id, postId, postId], (error, result, fields) => {
         if (!error) {
-            // "results" is an array with one element for every statement in the query:
+            // "results" c'est un array avec un element de post et un element avec les commentaires
             let results = [
                 {
+                    // copier le résultat de la première requête (le post)
                     ...result[0][0],
+
+                    // Ajoutes le compte des commmentaires
                     commentsCounter: result[1].length,
                 },
                 {
+                    // Ajoutes les commmentaires de la deuxième requête (les commentaires)
                     comments: [...result[1]],
                 },
             ];
@@ -388,8 +411,7 @@ exports.deletePost = (req, res, next) => {
     let inserts = [];
     const imagePath = `/images/${req.body.image_url.split("/")[4]}`;
 
-    console.log("image path =>", imagePath);
-
+    // Vérification si c'est l'admin ou l'utilisateur même
     if (user.clearance === "admin") {
         string = "DELETE FROM posts WHERE id = ?";
         inserts = [req.params.id];
@@ -399,11 +421,12 @@ exports.deletePost = (req, res, next) => {
         inserts = [req.params.id, user.id];
         console.log("user");
     }
-
     const sql = mysql.format(string, inserts);
 
+    // Requête
     const deletePost = db.query(sql, (error, result) => {
         if (!error) {
+            // Supprimer l'image dans le serveur
             fs.unlink(imagePath, (err) => {
                 console.log(err);
             });
@@ -418,12 +441,11 @@ exports.deletePost = (req, res, next) => {
 //==========================================================================================================
 exports.deleteComment = (req, res, next) => {
     const user = decodeUid(req.headers.authorization);
-    console.log("Delete comment");
-    console.log("req =>", "postId =>", req.params.id, "user =>", user.id);
 
     let string = "";
     let inserts = [];
 
+    // Vérification si c'est l'admin ou l'utilisateur même
     if (user.clearance === "admin") {
         string = "DELETE FROM comments WHERE id = ?";
         inserts = [req.params.id];
@@ -433,9 +455,9 @@ exports.deleteComment = (req, res, next) => {
         inserts = [req.params.id, user.id];
         console.log("user");
     }
-
     const sql = mysql.format(string, inserts);
 
+    // Requête
     const deleteComment = db.query(sql, (error, result) => {
         if (!error) {
             res.status(200).json({ message: "Comment deleted successfully!" });

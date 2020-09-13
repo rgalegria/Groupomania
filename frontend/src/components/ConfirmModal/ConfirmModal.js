@@ -1,32 +1,36 @@
 import React from "react";
 
+// Icons
+import ok from "../../images/ok-icon.svg";
+
 // Components
 import Modal from "../Modal/Modal";
 import UIBtn from "../Buttons/UIBtn/UIBtn";
 
 // Styles
-import styles from "./ErrorModal.module.css";
+import styles from "./ConfirmModal.module.css";
 
-const ErrorModal = (props) => {
+const ConfirmModal = (props) => {
     return (
         <Modal
-            onCancel={props.onClear}
-            header="An Error Occurred!"
-            show={!!props.error}
+            show={props.show}
+            onCancel={props.onCancel}
+            // header="titre du modal"
             footer={
                 <UIBtn
                     id="accept-btn"
                     name="Ok"
                     type="submit"
                     btnType="warning"
-                    onClick={props.onClear}
+                    onClick={props.onCancel}
                     buttonClass={styles.btn}
                 />
             }
         >
-            <p>{props.error}</p>
+            <img className={`${styles.okIcon} icon_green`} src={ok} alt="" />
+            <p>{props.message}</p>
         </Modal>
     );
 };
 
-export default ErrorModal;
+export default ConfirmModal;

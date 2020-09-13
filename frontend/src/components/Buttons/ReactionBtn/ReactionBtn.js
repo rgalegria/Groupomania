@@ -11,7 +11,8 @@ import comments from "../../../images/comments-icon.svg";
 import styles from "./ReactionBtn.module.css";
 
 /*
-Expects ==>
+Attends ==>
+
 <ReactionBtn 
     btnType="functional, link, decor" 
     link={props.link} 
@@ -19,10 +20,11 @@ Expects ==>
     onCLick={props.onClick} 
     styling="Herited styles"
 />
+
 */
 
 const ReactionBtn = (props) => {
-    // Colors the like/dislike Btn if User has reacted to post
+    // Couleur du bouton like/dislike en fonction de la reaction de l'utilisateur
     let reactionColor = "";
 
     switch (props.reaction) {
@@ -39,7 +41,7 @@ const ReactionBtn = (props) => {
             console.log("Something went wrong with reactionColor in ReactionBtn Component");
     }
 
-    // Type of icon to show
+    // Type d'icône à montrer
     let icon;
     switch (props.icon) {
         case "like":
@@ -58,7 +60,7 @@ const ReactionBtn = (props) => {
             console.log("Something went wrong with icon in ReactionBtn Component");
     }
 
-    // Type of Btn to show
+    // Type de bouton à montrer
     let btn;
     switch (props.btnType) {
         case "functional":

@@ -10,6 +10,7 @@ import coffeeIcon from "../../images/coffee-icon.svg";
 import postIcon from "../../images/post-icon.svg";
 
 // Components
+import ErrorModal from "../../components/ErrorModal/ErrorModal";
 import TabBtn from "../../components/Buttons/TabBtn/TabBtn";
 import PostList from "../../components/PostList/PostList";
 import Spinner from "../../components/LoadingSpinner/LoadingSpinner";
@@ -25,7 +26,7 @@ const Posts = () => {
     const { width } = useWindowDimensions();
 
     // Request Hook
-    const { isLoading, /*error,*/ sendRequest /*clearError*/ } = useHttpRequest();
+    const { isLoading, error, sendRequest, clearError } = useHttpRequest();
 
     //Posts State
     const [posts, setPosts] = useState();
@@ -36,7 +37,7 @@ const Posts = () => {
         mostLiked: "",
     });
 
-    //Fetch Most recent posts
+    // Fetch Initial
     useEffect(() => {
         const fetchPosts = async () => {
             try {
@@ -49,6 +50,7 @@ const Posts = () => {
         fetchPosts();
     }, [sendRequest, auth.token]);
 
+    //Fetch Most recent posts
     const fetchMostRecent = async () => {
         setActiveBtn({
             mostRecents: "active",
@@ -62,6 +64,7 @@ const Posts = () => {
         } catch (err) {}
     };
 
+    //Fetch Most liked posts
     const fetchMostLiked = async () => {
         setActiveBtn({
             mostRecents: "",
@@ -80,19 +83,10 @@ const Posts = () => {
         setPosts((prevPosts) => prevPosts.filter((post) => post.post_id !== deletedPostId));
     };
 
-    //Like Handler
-    const likePostHandler = async (event) => {
-        event.preventDefault();
-        console.log("like click!");
-    };
-
-    //Dislike Handler
-    const dislikePostHandler = async (event) => {
-        event.preventDefault();
-        console.log("dislike click!");
-    };
+    // Affichage menu post en desktop
 
     let newPost;
+
     if (width >= 1024) {
         newPost = (
             <Link to={`posts/new`} className={styles.btn}>
@@ -104,6 +98,7 @@ const Posts = () => {
 
     return (
         <>
+            <ErrorModal error={error} onClear={clearError} />
             <nav className={styles.header}>
                 <TabBtn name="À LA UNE" icon={clockIcon} active={activeBtn.mostRecents} onClick={fetchMostRecent} />
                 <TabBtn name="LES PLUS AIMÉS" icon={coffeeIcon} active={activeBtn.mostLiked} onClick={fetchMostLiked} />
@@ -115,14 +110,7 @@ const Posts = () => {
                         <Spinner />
                     </div>
                 )}
-                {!isLoading && posts && activeBtn && (
-                    <PostList
-                        items={posts}
-                        onDeletePost={deletePostHandler}
-                        onLikePost={likePostHandler}
-                        onDislikePost={dislikePostHandler}
-                    />
-                )}
+                {!isLoading && activeBtn && posts && <PostList items={posts} onDeletePost={deletePostHandler} />}
             </div>
         </>
     );

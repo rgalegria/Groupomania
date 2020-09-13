@@ -9,6 +9,7 @@ import { MinLength, MaxLength } from "../../utils/validators";
 import send from "../../images/send-icon.svg";
 
 // Components
+import ErrorModal from "../../components/ErrorModal/ErrorModal";
 import Post from "../../components/Post/Post";
 import Comment from "../../components/Comment/Comment";
 import InputField from "../../components/InputField/InputField";
@@ -34,7 +35,7 @@ const CommentPost = () => {
     const [comments, setComments] = useState();
 
     // Form useState
-    const [formState, inputHandler, setFormState] = useForm(
+    const [formState, inputHandler] = useForm(
         {
             comment: {
                 value: "",
@@ -106,79 +107,85 @@ const CommentPost = () => {
 
     if (!post) {
         return (
-            <div className={styles.container}>
-                <h2>No User Data!</h2>
-            </div>
+            <>
+                <ErrorModal error={error} onClear={clearError} />
+                <div className={styles.container}>
+                    <h2>No User Data!</h2>
+                </div>
+            </>
         );
     }
 
     return (
-        <div className="container">
-            {!isLoading && post && comments && (
-                <div className={styles.wrapper}>
-                    <Post
-                        key={post.post_id}
-                        id={post.post_id}
-                        user_id={post.user_id}
-                        photo_url={post.photo_url}
-                        firstName={post.firstName}
-                        lastName={post.lastName}
-                        date={post.post_date}
-                        category={post.category}
-                        title={post.title}
-                        image_url={post.image_url}
-                        likes={post.likes}
-                        dislikes={post.dislikes}
-                        comments={post.commentsCounter}
-                        userReaction={post.userReaction}
-                        post_link={`/posts/${post.post_id}`}
-                        // onLike={likePostHandler}
-                        // onDislike={dislikePostHandler}
-                        onDelete={deletePostHandler}
-                    />
-                    <section>
-                        {comments.map((comment, index) => {
-                            return (
-                                <Comment
-                                    key={index}
-                                    id={comment.id}
-                                    user_id={comment.user_id}
-                                    photo_url={comment.photo_url}
-                                    firstName={comment.firstName}
-                                    lastName={comment.lastName}
-                                    date={comment.comment_date}
-                                    message={comment.message}
-                                    onDeleteComment={deleteCommentHandler}
+        <>
+            <ErrorModal error={error} onClear={clearError} />
+            <div className="container">
+                {!isLoading && post && comments && (
+                    <div className={styles.wrapper}>
+                        <Post
+                            key={post.post_id}
+                            id={post.post_id}
+                            user_id={post.user_id}
+                            photo_url={post.photo_url}
+                            firstName={post.firstName}
+                            lastName={post.lastName}
+                            date={post.post_date}
+                            category={post.category}
+                            title={post.title}
+                            image_url={post.image_url}
+                            likes={post.likes}
+                            dislikes={post.dislikes}
+                            comments={post.commentsCounter}
+                            userReaction={post.userReaction}
+                            post_link={`/posts/${post.post_id}`}
+                            // onLike={likePostHandler}
+                            // onDislike={dislikePostHandler}
+                            onDelete={deletePostHandler}
+                        />
+                        <section>
+                            {comments.map((comment, index) => {
+                                return (
+                                    <Comment
+                                        key={index}
+                                        id={comment.id}
+                                        user_id={comment.user_id}
+                                        photo_url={comment.photo_url}
+                                        firstName={comment.firstName}
+                                        lastName={comment.lastName}
+                                        date={comment.comment_date}
+                                        message={comment.message}
+                                        onDeleteComment={deleteCommentHandler}
+                                    />
+                                );
+                            })}
+                        </section>
+                        <div className={styles.comment_wrap}>
+                            <form className={styles.comment_form} id="comment-form" onSubmit={postCommentHandler}>
+                                <InputField
+                                    id="comment"
+                                    className={styles.box}
+                                    name="comment"
+                                    type="text"
+                                    placeholder="Écrivez un commentaire"
+                                    maxLength="65"
+                                    element="textarea"
+                                    hasLabel="yes"
+                                    textIsWhite="no"
+                                    validators={[MinLength(2), MaxLength(65)]}
+                                    errorText="Veillez ecrire un commentaire"
+                                    onInput={inputHandler}
+                                    initialValue=""
+                                    initialValid={false}
                                 />
-                            );
-                        })}
-                    </section>
-                    <div className={styles.comment_wrap}>
-                        <form className={styles.comment_form} id="comment-form" onSubmit={postCommentHandler}>
-                            <InputField
-                                id="comment"
-                                className={styles.box}
-                                name="comment"
-                                type="text"
-                                placeholder="Écrivez un commentaire"
-                                maxLength="65"
-                                element="textarea"
-                                hasLabel="yes"
-                                textIsWhite="no"
-                                validators={[MinLength(2), MaxLength(65)]}
-                                errorText="Veillez ecrire un commentaire"
-                                onInput={inputHandler}
-                                initialValue=""
-                                initialValid={false}
-                            />
-                        </form>
-                        <button form="comment-form" className={styles.btn} type="submit">
-                            <img className={styles.icon} src={send} alt="publier commentaire" />
-                        </button>
+                            </form>
+                            <button form="comment-form" className={styles.btn} type="submit">
+                                <img className={styles.icon} src={send} alt="publier commentaire" />
+                            </button>
+                        </div>
                     </div>
-                </div>
-            )}
-        </div>
+                )}
+            </div>
+        </>
     );
 };
 

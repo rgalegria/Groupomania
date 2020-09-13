@@ -10,6 +10,7 @@ import { MinLength, MaxLength } from "../../utils/validators";
 import backIcon from "../../images/back-icon.svg";
 
 // Components
+import ErrorModal from "../../components/ErrorModal/ErrorModal";
 import UIBtn from "../../components/Buttons/UIBtn/UIBtn";
 import ImageUpload from "../../components/ImageUpload/ImageUpload";
 import SelectField from "../../components/SelectField/SelectField";
@@ -27,7 +28,7 @@ const NewPost = (props) => {
     const history = useHistory();
 
     // Request Hook
-    const { isLoading, /*error,*/ sendRequest /*clearError*/ } = useHttpRequest();
+    const { isLoading, error, sendRequest, clearError } = useHttpRequest();
 
     // Window Size
     const { width } = useWindowDimensions();
@@ -55,22 +56,20 @@ const NewPost = (props) => {
     );
 
     //Fetch Categories
-    //===========================================================================================
     useEffect(() => {
         const fetchPosts = async () => {
             try {
                 const categories = await sendRequest(`${process.env.REACT_APP_API_URL}/posts/categories`, "GET", null, {
                     Authorization: "Bearer " + auth.token,
                 });
-                // console.log("categories =>", categories);
+
                 setCategories(categories);
             } catch (err) {}
         };
         fetchPosts();
     }, [sendRequest, auth.token, setCategories]);
 
-    // Send Post to Backend
-    //===========================================================================================
+    // Send Post au Backend
     const sendPostHandler = async (event) => {
         event.preventDefault();
 
@@ -93,16 +92,15 @@ const NewPost = (props) => {
     };
 
     // Back Button
-    //===========================================================================================
     const backHandle = (e) => {
         e.preventDefault();
         props.history.goBack();
     };
 
+    // Affichage des boutons pour Desktop
     let sendBtn;
     let backBtn;
 
-    // Desktop Btns
     if (width >= 1024) {
         sendBtn = (
             <div className={styles.send_btn}>
@@ -128,26 +126,29 @@ const NewPost = (props) => {
 
     if (!categories) {
         return (
-            <div className={styles.container}>
-                <h2>No Data!</h2>
-            </div>
+            <>
+                <ErrorModal error={error} onClear={clearError} />
+                <div className={styles.container}>
+                    <h2>No Data!</h2>
+                </div>
+            </>
         );
     }
 
     return (
         <>
-            <header className={styles.head}>
-                <div className={styles.tab}>
-                    {backBtn}
-                    <div className={styles.tab_border}>
-                        <h3 className={styles.title}>Nouvelle Publication</h3>
-                    </div>
-                </div>
-            </header>
-
-            <div className="container">
-                {!isLoading && categories && (
-                    <>
+            <ErrorModal error={error} onClear={clearError} />
+            {!isLoading && categories && (
+                <>
+                    <header className={styles.head}>
+                        <div className={styles.tab}>
+                            {backBtn}
+                            <div className={styles.tab_border}>
+                                <h3 className={styles.title}>Nouvelle Publication</h3>
+                            </div>
+                        </div>
+                    </header>
+                    <div className="container">
                         <form className={styles.form} id="send-post-form" onSubmit={sendPostHandler}>
                             <InputField
                                 id="title"
@@ -180,9 +181,9 @@ const NewPost = (props) => {
                             />
                             {sendBtn}
                         </form>
-                    </>
-                )}
-            </div>
+                    </div>
+                </>
+            )}
         </>
     );
 };

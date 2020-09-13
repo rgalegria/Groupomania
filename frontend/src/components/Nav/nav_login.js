@@ -10,8 +10,15 @@ import ActionBtn from "../../components/Buttons/ActionBtn/ActionBtn";
 const NavLogin = (props) => {
     return (
         <>
-            <ActionBtn icon={back} name="retourner" onClick={props.backHandle} />
-            <ActionBtn id="login-btn" form="login-form" name="connexion" type="submit" icon={login} />
+            <ActionBtn icon={back} name="retourner" onClick={props.backHandle} iconColor="icon_white" />
+            <ActionBtn
+                id="login-btn"
+                form="login-form"
+                name="connexion"
+                type="submit"
+                icon={login}
+                iconColor="icon_white"
+            />
         </>
     );
 };

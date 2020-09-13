@@ -3,17 +3,23 @@ import { useState, useCallback, useEffect } from "react";
 let logoutTimer;
 
 export const useAuth = () => {
+    // UseState du AuthContext
     const [token, setToken] = useState(false);
     const [userId, setUserId] = useState(false);
     const [account, setAccount] = useState(false);
     const [tokenExpirationDate, setTokenExpirationDate] = useState();
 
+    // Login usCallback pour ne pas rentrer dans un cycle infinit
     const login = useCallback((userId, token, account, expirationDate) => {
         setUserId(userId);
         setToken(token);
         setAccount(account);
+
+        // Creér une date 24h dans le futur (validité de la session)
         const tokenExpirationDate = expirationDate || new Date(new Date().getTime() + 1000 * 60 * 60 * 24);
         setTokenExpirationDate(tokenExpirationDate);
+
+        // Stocker les paramètres dans le localStorage du navigateur
         localStorage.setItem(
             "userData",
             JSON.stringify({
@@ -25,6 +31,7 @@ export const useAuth = () => {
         );
     }, []);
 
+    // logout remets tout à null et supprime l'objet du localStorage
     const logout = useCallback(() => {
         setToken(null);
         setUserId(null);
@@ -33,6 +40,7 @@ export const useAuth = () => {
         localStorage.removeItem("userData");
     }, []);
 
+    // Timer de la session
     useEffect(() => {
         if (token && tokenExpirationDate) {
             const remainingTime = tokenExpirationDate.getTime() - new Date().getTime();
@@ -42,6 +50,7 @@ export const useAuth = () => {
         }
     }, [token, logout, tokenExpirationDate]);
 
+    // Auto-login à l'application en utilisant le localStorage pour s'identifier
     useEffect(() => {
         const storedData = JSON.parse(localStorage.getItem("userData"));
 

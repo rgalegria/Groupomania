@@ -78,13 +78,13 @@ exports.updateUserProfile = (req, res, next) => {
 
     if (req.body.image === "null") {
         imageUrl;
-        // console.log("actualiza solo datos");
+        // mis à jour uniquement de donnés
     } else if (req.file) {
         imageUrl = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
-        // console.log("hubo imagen nueva");
+        // mis à jour de l'image ainsi que de donnés
     } else {
         imageUrl = req.body.image;
-        // console.log("ya tiene imagen pero solo actualiza datos");
+        // il y a déjà une image mais c'est un mis à jour uniquement de donnés
     }
 
     // Validation des donnés
@@ -115,6 +115,7 @@ exports.updateUserProfile = (req, res, next) => {
         const inserts = [firstName, lastName, email, imageUrl, department, role, linkedin_url, user.id];
         const sql = mysql.format(string, inserts);
 
+        // Requête
         const query = db.query(sql, (error, profile) => {
             if (!error) {
                 res.status(200).json({ message: "User Updated successfully!" });
@@ -146,12 +147,15 @@ exports.updatePassword = (req, res, next) => {
     const user = decodeUid(req.headers.authorization);
     const { password } = req.body;
 
+    // Vérification du mot de passe
     if (passValid.validate(password, options).valid) {
+        // Hash du nouveau mot de passe
         bcrypt.hash(req.body.password, 10).then((hash) => {
             const string = "UPDATE users SET password = ? WHERE id = ? ";
             const inserts = [hash, user.id];
             const sql = mysql.format(string, inserts);
 
+            // Requête
             const query = db.query(sql, (error, password) => {
                 if (!error) {
                     res.status(201).json({ message: "Password Updated successfully!" });
@@ -172,13 +176,13 @@ exports.updatePassword = (req, res, next) => {
 exports.deleteProfile = (req, res, next) => {
     const user = decodeUid(req.headers.authorization);
 
-    console.log("fijo no son strings =>", user.id, Number(req.params.id));
-
+    // Vérification si c'est le même utilisateur qui fait la demande
     if (user.id === Number(req.params.id)) {
         const string = "DELETE FROM users WHERE id = ? ";
         const inserts = [user.id];
         const sql = mysql.format(string, inserts);
 
+        // Requête
         const query = db.query(sql, (error, result) => {
             if (!error) {
                 res.status(200).json({ message: "User deleted successfully!" });

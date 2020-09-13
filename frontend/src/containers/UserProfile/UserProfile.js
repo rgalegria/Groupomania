@@ -9,9 +9,12 @@ import GenProfile from "../../images/generic_profile_picture.jpg";
 
 // Icons
 import LinkedinIcon from "../../images/linkedin-icon.svg";
+import LinkedinGreyIcon from "../../images/linkedin-grey-icon.svg";
 import modify from "../../images/modify-icon.svg";
+import back from "../../images/back-icon.svg";
 
 // Components
+import ErrorModal from "../../components/ErrorModal/ErrorModal";
 import NavBtn from "../../components/Buttons/NavBtn/NavBtn";
 import Counter from "../../components/Counter/Counter";
 import Spinner from "../../components/LoadingSpinner/LoadingSpinner";
@@ -24,7 +27,7 @@ const UserProfile = () => {
     const auth = useContext(AuthContext);
 
     // Backend Request Hook
-    const { isLoading, /*error,*/ sendRequest /*clearError*/ } = useHttpRequest();
+    const { isLoading, error, sendRequest, clearError } = useHttpRequest();
 
     //Profile Hook
     const [profileData, setProfileData] = useState();
@@ -32,45 +35,66 @@ const UserProfile = () => {
     // Window Size
     const { width } = useWindowDimensions();
 
+    // Id de l'utilisateur à afficher
     const userId = Number(useParams().id);
 
+    // Fetch l'utilisateur à afficher
     useEffect(() => {
-        // console.log("useEFFECT");
         const fetchUser = async () => {
             try {
-                // console.log("FETCHING");
                 const userData = await sendRequest(`${process.env.REACT_APP_API_URL}/profile/${userId}`, "GET", null, {
                     Authorization: "Bearer " + auth.token,
                 });
-                // console.log("BACKEND Data:", userData);
+
                 setProfileData(userData);
-                // console.log("REACT Data:", profileData);
             } catch (err) {}
         };
         fetchUser();
     }, [sendRequest, auth.token, userId]);
 
-    // Modify Btn
-
     let btnStyle = styles.btnStyle;
     let iconStyle = `${styles.iconStyle} icon_red`;
+    let desktopNav;
 
-    let modifyBtn;
+    // Affichage Nav Desktop
+    if (width >= 1024) {
+        desktopNav = (
+            <nav className={styles.nav}>
+                <NavBtn
+                    id="back"
+                    name="retourner"
+                    icon={back}
+                    link="/posts"
+                    btnStyle={btnStyle}
+                    iconColor={iconStyle}
+                />
+            </nav>
+        );
+    }
 
+    // Validation Affichage Nav Desktop si l'utilisateur c'est le même qui s'affiche
     if (width >= 1024) {
         if (auth.userId === userId) {
-            modifyBtn = (
-                <NavBtn
-                    id="update-profile"
-                    name="Modifier profil"
-                    icon={modify}
-                    link={`/profile/${auth.userId}/update`}
-                    btnStyle={btnStyle}
-                    iconStyle={iconStyle}
-                />
+            desktopNav = (
+                <nav className={styles.nav}>
+                    <NavBtn
+                        id="back"
+                        name="retourner"
+                        icon={back}
+                        link="/posts"
+                        btnStyle={btnStyle}
+                        iconColor={iconStyle}
+                    />
+                    <NavBtn
+                        id="update-profile"
+                        name="Modifier"
+                        icon={modify}
+                        link={`/profile/${auth.userId}/update`}
+                        btnStyle={btnStyle}
+                        iconColor={iconStyle}
+                    />
+                </nav>
             );
-        } else {
-            modifyBtn = "";
         }
     }
 
@@ -86,46 +110,63 @@ const UserProfile = () => {
 
     if (!profileData) {
         return (
-            <div className={styles.container}>
-                <h2>No User Data!</h2>
-            </div>
+            <>
+                <ErrorModal error={error} onClear={clearError} />
+                <div className={styles.container}>
+                    <h2>No User Data!</h2>
+                </div>
+            </>
         );
     }
 
     return (
-        <div className={`container ${styles.class_mod}`}>
-            {!isLoading && profileData && (
-                <>
-                    <div className={styles.background_img}></div>
-                    <div className={styles.wrapper}>
-                        <img
-                            src={profileData.photo_url || GenProfile}
-                            className={styles.profile_photo}
-                            alt={`${profileData.firstName} ${profileData.lastName}, employé chez groupomania.`}
-                        />
-                        <div className={styles.hero_block}>
-                            <h2 className={styles.title}>
-                                {profileData.firstName} {profileData.lastName}
-                            </h2>
-                            <a href={profileData.linkedin_url} rel="noopener">
-                                <img
-                                    className={styles.Linkedin_icon}
-                                    src={LinkedinIcon}
-                                    alt="Logo du reseaux social linkedin"
-                                />
+        <>
+            <ErrorModal error={error} onClear={clearError} />
+            <div className={`container ${styles.class_mod}`}>
+                {!isLoading && profileData && (
+                    <>
+                        <div className={styles.background_img}></div>
+                        <div className={styles.wrapper}>
+                            <img
+                                src={profileData.photo_url || GenProfile}
+                                className={styles.profile_photo}
+                                alt={`${profileData.firstName} ${profileData.lastName}, employé chez groupomania.`}
+                            />
+                            <div className={styles.hero_block}>
+                                <h2 className={styles.title}>
+                                    {profileData.firstName} {profileData.lastName}
+                                </h2>
+                                {profileData.linkedin_url ? (
+                                    <a href={profileData.linkedin_url} rel="noopener">
+                                        <img
+                                            className={styles.Linkedin_icon}
+                                            src={LinkedinIcon}
+                                            alt="Logo du reseaux social linkedin"
+                                        />
+                                    </a>
+                                ) : (
+                                    <img
+                                        className={styles.Linkedin_icon}
+                                        src={LinkedinGreyIcon}
+                                        alt="Logo du reseaux social linkedin"
+                                    />
+                                )}
+                            </div>
+                            <p className={styles.department}>{profileData.department}</p>
+                            <p className={styles.role}>{profileData.role}</p>
+                            <a className={styles.email} href={`mailto:${profileData.email}`}>
+                                {profileData.email}
                             </a>
+                            <Counter
+                                likesCount={profileData.likesCount || 0}
+                                postsCount={profileData.postsCount || 0}
+                            />
+                            {desktopNav}
                         </div>
-                        <p className={styles.department}>{profileData.department}</p>
-                        <p className={styles.role}>{profileData.role}</p>
-                        <a className={styles.email} href={`mailto:${profileData.email}`}>
-                            {profileData.email}
-                        </a>
-                        <Counter likesCount={profileData.likesCount || 0} postsCount={profileData.postsCount || 0} />
-                        {modifyBtn}
-                    </div>
-                </>
-            )}
-        </div>
+                    </>
+                )}
+            </div>
+        </>
     );
 };
 

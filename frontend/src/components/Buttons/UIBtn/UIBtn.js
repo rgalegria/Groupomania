@@ -3,13 +3,27 @@ import React from "react";
 // Styles
 import styles from "./UIBtn.module.css";
 
-const Btn = (props) => {
+/*
+Attends ==>
+
+<ActionBtn 
+    id={props.id}
+    form={id du formulaire} 
+    name={nom bu bouton} 
+    type={type de bouton}
+    onClick={fonction onClick}
+    btType={"valid", "cancel", "warning"}
+    icon={icon-name}
+    iconColor={couleur de l'icône}
+/>
+
+*/
+
+const UIBtn = (props) => {
     let icon;
-    // let style;
-    // let style = props.icon ? styles.warning : styles.valid;
 
     if (props.icon) {
-        icon = <img id="icon" className={styles.icon} src={props.icon} alt="" />;
+        icon = <img id="icon" className={`${styles.icon} ${props.iconColor}`} src={props.icon} alt="" />;
     } else {
         icon = null;
     }
@@ -42,4 +56,4 @@ const Btn = (props) => {
     );
 };
 
-export default Btn;
+export default UIBtn;

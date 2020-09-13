@@ -13,7 +13,7 @@ const NavLogin = (props) => {
 
     return (
         <>
-            <NavBtn icon={close} name="annuler" link={`/profile/${auth.userId}`} />
+            <NavBtn icon={close} name="annuler" link={`/profile/${auth.userId}`} iconColor="icon_white" />
         </>
     );
 };

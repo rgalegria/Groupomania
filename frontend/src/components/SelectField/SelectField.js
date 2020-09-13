@@ -5,14 +5,18 @@ import styles from "./SelectField.module.css";
 
 // Component
 const SelectField = (props) => {
+    // UseState des catégories
     const [category, setCategory] = useState();
     const [isValid, setIsValid] = useState(false);
 
     const categoryPickerRef = useRef();
 
+    // Fontion qui prend l'option du select
     const pickedHandler = (event) => {
         let pickedCategory;
         let categoryIsValid = isValid;
+
+        // Si le valeur dans l'événement est different à rien
         if (event.target.value !== " ") {
             pickedCategory = event.target.value;
             setCategory(pickedCategory);

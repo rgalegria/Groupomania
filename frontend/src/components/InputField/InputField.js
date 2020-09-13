@@ -4,12 +4,15 @@ import { validate } from "../../utils/validators";
 // Styles
 import styles from "./InputField.module.css";
 
+// En fonction de l'etat de l'objet html (change = ecriture / touch = utilisateur change de champ)
 const inputReducer = (state, action) => {
     switch (action.type) {
         case "CHANGE":
             return {
+                // coppier tous les valeurs d'avant et ajoute le nouveau événement (une lettre par exemple)
                 ...state,
                 value: action.val,
+                // changer la validation en fonction des validateurs de l'objet html
                 isValid: validate(action.val, action.validators),
             };
         case "TOUCH": {
@@ -25,19 +28,23 @@ const inputReducer = (state, action) => {
 
 // Component
 const InputField = (props) => {
+    // état initielle du composant
     const [inputState, dispatch] = useReducer(inputReducer, {
         value: props.initialValue || "",
         isTouched: false,
         isValid: props.initialValid || false,
     });
 
+    // déconstruction de props et inputState
     const { id, onInput } = props;
     const { value, isValid } = inputState;
 
+    // id du composant, la valeur capturée et sa validation de donnés
     useEffect(() => {
         onInput(id, value, isValid);
     }, [id, value, isValid, onInput]);
 
+    // Fonction pour capturer le changement de l'état du composant (écriture)
     const changeHandler = (event) => {
         dispatch({
             type: "CHANGE",
@@ -46,16 +53,14 @@ const InputField = (props) => {
         });
     };
 
+    // Fonction pour capturer le changement de l'état du composant (changer de champ)
     const touchHandler = () => {
         dispatch({
             type: "TOUCH",
         });
     };
 
-    // const clearInput = () => {
-    //     document.getElementById({ id }).value = "";
-    // };
-
+    // Validation visuelle et type d'objet html (input/textarea)
     let typeOfBox;
     let borderColor;
 
@@ -67,12 +72,14 @@ const InputField = (props) => {
         borderColor = "";
     }
 
+    // si on souhaite un champ label
     const label = props.label ? (
         <label className={styles.label} htmlFor={props.id}>
             {props.label}
         </label>
     ) : null;
 
+    // si on souhaite un icône à coté du champ
     let icon;
 
     if (props.icon && props.textIsWhite === "yes") {

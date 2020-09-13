@@ -1,9 +1,11 @@
 import { useCallback, useReducer } from "react";
 
 const formReducer = (state, action) => {
+    // gestion de la action
     switch (action.type) {
         case "INPUT_CHANGE":
             let formIsValid = true;
+            // Validation pour chaque objet html, il valide avec l'id et le changement d'état de l'objet
             for (const inputId in state.inputs) {
                 if (!state.inputs[inputId]) {
                     continue;
@@ -14,6 +16,7 @@ const formReducer = (state, action) => {
                     formIsValid = formIsValid && state.inputs[inputId].isValid;
                 }
             }
+            // Après, il crée une copie de l'état précédent et ajoutes le nouveau état
             return {
                 ...state,
                 inputs: {
@@ -32,12 +35,15 @@ const formReducer = (state, action) => {
     }
 };
 
+// Composant
 export const useForm = (initialInputs, initialFormValidity) => {
+    // Fonction pour établir l'état initiale des objets html et envoie les donnés à formState
     const [formState, dispatch] = useReducer(formReducer, {
         inputs: initialInputs,
         isValid: initialFormValidity,
     });
 
+    // Fonction pour capturer les valeurs des objets html et envoie les donnés à formState
     const inputHandler = useCallback((id, value, isValid) => {
         dispatch({
             type: "INPUT_CHANGE",
@@ -47,6 +53,7 @@ export const useForm = (initialInputs, initialFormValidity) => {
         });
     }, []);
 
+    // Fonction pour reinitialiser le formState des objets html et envoie les donnés à formState
     const setFormState = useCallback((inputData, formValidity) => {
         dispatch({
             type: "SET_DATA",

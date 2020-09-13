@@ -9,7 +9,7 @@ import ActionBtn from "../../components/Buttons/ActionBtn/ActionBtn";
 const NavComments = (props) => {
     return (
         <>
-            <ActionBtn icon={back} name="retourner" onClick={props.backHandle} />
+            <ActionBtn icon={back} name="retourner" onClick={props.backHandle} iconColor="icon_white" />
         </>
     );
 };

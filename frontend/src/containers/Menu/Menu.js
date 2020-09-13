@@ -15,6 +15,7 @@ import logout from "../../images/logout-icon.svg";
 import posts from "../../images/posts-icon.svg";
 
 // Components
+import ErrorModal from "../../components/ErrorModal/ErrorModal";
 import Spinner from "../../components/LoadingSpinner/LoadingSpinner";
 
 // Styles
@@ -25,7 +26,7 @@ const Menu = () => {
     const auth = useContext(AuthContext);
 
     // Backend Request Hook
-    const { isLoading, /*error,*/ sendRequest /*clearError*/ } = useHttpRequest();
+    const { isLoading, error, sendRequest, clearError } = useHttpRequest();
 
     // Window Size
     const { width } = useWindowDimensions();
@@ -68,6 +69,7 @@ const Menu = () => {
         history.push(`/`);
     };
 
+    // Affichage Navlinks en desktop
     let navLinks;
     if (width >= 1024) {
         navLinks = (
@@ -78,7 +80,7 @@ const Menu = () => {
                 </Link>
                 <Link to="/posts" className={`${styles.btn} ${styles.border}`}>
                     <span className={styles.text}>Catégories</span>
-                    <img className={styles.icon} src={categories} alt="" />
+                    <img className={`${styles.icon} icon_white`} src={categories} alt="" />
                 </Link>
             </>
         );
@@ -96,45 +98,51 @@ const Menu = () => {
 
     if (!profileData) {
         return (
-            <div className={styles.container}>
-                <h2>No User Data!</h2>
-            </div>
+            <>
+                <ErrorModal error={error} onClear={clearError} />
+                <div className={styles.container}>
+                    <h2>No User Data!</h2>
+                </div>
+            </>
         );
     }
 
     return (
-        <div className={styles.cover}>
-            {!isLoading && profileData && (
-                <>
-                    <div className={styles.background_img}></div>
-                    <div className={styles.wrapper}>
-                        <img
-                            src={profileData.photo_url || GenProfile}
-                            className={styles.profile_photo}
-                            alt={`${profileData.firstName} ${profileData.lastName}`}
-                        />
-                        <div className={styles.hero_block}>
-                            <h2 className={styles.title}>Bienvenue {profileData.firstName} !</h2>
+        <>
+            <ErrorModal error={error} onClear={clearError} />
+            <>
+                {!isLoading && profileData && (
+                    <div className={styles.cover}>
+                        <div className={styles.background_img}></div>
+                        <div className={styles.wrapper}>
+                            <img
+                                src={profileData.photo_url || GenProfile}
+                                className={styles.profile_photo}
+                                alt={`${profileData.firstName} ${profileData.lastName}`}
+                            />
+                            <div className={styles.hero_block}>
+                                <h2 className={styles.title}>Bienvenue {profileData.firstName} !</h2>
+                            </div>
                         </div>
+                        <nav className={styles.list}>
+                            <Link to={`profile/${auth.userId}`} className={`${styles.btn} ${styles.border}`}>
+                                <span className={styles.text}>Mon profil</span>
+                                <img className={`${styles.icon} icon_white`} src={person} alt="" />
+                            </Link>
+                            {navLinks}
+                            <Link to="/posts" className={`${styles.btn} ${styles.border}`}>
+                                <span className={styles.text}>Annuaire</span>
+                                <img className={`${styles.icon} icon_white`} src={agenda} alt="" />
+                            </Link>
+                            <button className={`${styles.btn} ${styles.logout_margin}`} onClick={logoutHandler}>
+                                <span className={styles.text}>Se deconnecter</span>
+                                <img className={`${styles.icon} icon_white`} src={logout} alt="" />
+                            </button>
+                        </nav>
                     </div>
-                    <nav className={styles.list}>
-                        <Link to={`profile/${auth.userId}`} className={`${styles.btn} ${styles.border}`}>
-                            <span className={styles.text}>Mon profil</span>
-                            <img className={`${styles.icon} icon_white`} src={person} alt="" />
-                        </Link>
-                        {navLinks}
-                        <Link to="/posts" className={`${styles.btn} ${styles.border}`}>
-                            <span className={styles.text}>Annuaire</span>
-                            <img className={styles.icon} src={agenda} alt="" />
-                        </Link>
-                        <button className={`${styles.btn} ${styles.logout_margin}`} onClick={logoutHandler}>
-                            <span className={styles.text}>Se deconnecter</span>
-                            <img className={styles.icon} src={logout} alt="" />
-                        </button>
-                    </nav>
-                </>
-            )}
-        </div>
+                )}
+            </>
+        </>
     );
 };
 

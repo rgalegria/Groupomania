@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { withRouter, useHistory } from "react-router-dom";
 import { useHttpRequest } from "../../hooks/httpRequest-hook";
 import { AuthContext } from "../../context/auth-context";
@@ -18,7 +18,7 @@ const Post = (props) => {
     const auth = useContext(AuthContext);
 
     // Request Hook
-    const { isLoading, /*error,*/ sendRequest /*clearError*/ } = useHttpRequest();
+    const { isLoading, sendRequest } = useHttpRequest();
 
     // History context
     const history = useHistory();
@@ -27,9 +27,11 @@ const Post = (props) => {
     const path = props.location.pathname;
     const postId = props.location.pathname.split("/")[2];
 
-    const [likes, setLikes] = useState();
+    // User Likes
+    // const [likes, setLikes] = useState();
 
-    const [userReaction, setUserReaction] = useState();
+    // User's reaction to post
+    // const [userReaction, setUserReaction] = useState();
 
     // Delete Post
     const DeletePostHandler = async () => {
@@ -54,20 +56,19 @@ const Post = (props) => {
     //Like Handler
     const likePostHandler = async (event) => {
         event.preventDefault();
-        let postID = props.post_id;
-        console.log("like click! du post #", postID);
+        console.log("like click!");
         // hacer verificacion si dio like antes
         // hacer verificacion si dio dislike antes
         // setLikes( count + 1, );
     };
 
-    //Dislike Handler
+    // Dislike Handler
     const dislikePostHandler = async (event) => {
         event.preventDefault();
-        let postID = props.post_id;
-        console.log("dislike click! du post #", postID);
+        console.log("dislike click!");
     };
 
+    // Type de visualisation en Posts et Comment Post
     let commentBlock;
 
     if (props.location.pathname === "/posts") {

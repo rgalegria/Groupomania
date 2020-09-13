@@ -19,7 +19,13 @@ const NavProfile = (props) => {
 
     if (auth.userId === userId) {
         modifyBtn = (
-            <NavBtn id="update-profile" name="modifier" icon={modify} link={`/profile/${auth.userId}/update`} />
+            <NavBtn
+                id="update-profile"
+                name="modifier"
+                icon={modify}
+                link={`/profile/${auth.userId}/update`}
+                iconColor="icon_white"
+            />
         );
     } else {
         modifyBtn = "";
@@ -27,7 +33,7 @@ const NavProfile = (props) => {
 
     return (
         <>
-            <NavBtn id="back" name="retourner" icon={back} link="/posts" />
+            <NavBtn id="back" name="retourner" icon={back} link="/posts" iconColor="icon_white" />
             {auth.userId && userId && modifyBtn}
         </>
     );

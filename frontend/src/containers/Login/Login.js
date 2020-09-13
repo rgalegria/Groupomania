@@ -14,7 +14,6 @@ import person from "../../images/person-icon.svg";
 
 // Components
 import InputField from "../../components/InputField/InputField";
-import Spinner from "../../components/LoadingSpinner/LoadingSpinner";
 
 // Styles
 import "../Home/Home.css";
@@ -68,22 +67,6 @@ const Login = () => {
             auth.login(responseData.userId, responseData.token, responseData.account);
             history.push("/posts");
         } catch (err) {}
-
-        // await fetch(`${process.env.REACT_APP_API_URL}/login`, {
-        //     method: "POST",
-        //     headers: {
-        //         "Content-Type": "application/json",
-        //     },
-        //     body: JSON.stringify(data),
-        // })
-        //     .then((response) => response.json())
-        //     .then((responseData) => {
-        //         auth.login(responseData.userId, responseData.token, responseData.account);
-        //     })
-        //     .catch((error) => {
-        //         console.error("Error:", error);
-        //     });
-        // history.push("/posts");
     };
 
     return (

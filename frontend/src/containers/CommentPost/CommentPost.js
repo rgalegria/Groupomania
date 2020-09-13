@@ -112,7 +112,6 @@ const CommentPost = () => {
         );
     }
 
-    console.log("inputs afuera", formState.inputs);
     return (
         <div className="container">
             {!isLoading && post && comments && (

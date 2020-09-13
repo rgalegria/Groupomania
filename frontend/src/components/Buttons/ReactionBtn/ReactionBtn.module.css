@@ -1,0 +1,17 @@
+.reaction_btn {
+    background-color: white;
+    display: flex;
+    flex-direction: row;
+    font-weight: bold;
+    font-size: 1.5rem;
+    border: 0;
+    margin: auto 20px auto 0;
+    padding: 0;
+    cursor: pointer;
+}
+
+.icon {
+    width: auto;
+    height: 1.8rem;
+    margin-right: 8px;
+}

@@ -22,18 +22,6 @@
     margin: 16px 0;
 }
 
-.reaction_btn {
-    background-color: white;
-    display: flex;
-    flex-direction: row;
-    font-weight: bold;
-    font-size: 1.5rem;
-    border: 0;
-    margin: auto 20px auto 0;
-    padding: 0;
-    cursor: pointer;
-}
-
 .comments_btn {
     background-color: white;
     display: flex;
@@ -60,12 +48,6 @@
     margin: auto 0 auto auto;
     border: 0;
     padding: 0;
-}
-
-.icon {
-    width: auto;
-    height: 1.8rem;
-    margin-right: 8px;
 }
 
 @media only screen and (min-width: 1024px) {

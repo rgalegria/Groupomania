@@ -1,15 +1,10 @@
 import React, { useContext, useState } from "react";
-import { Link, withRouter, useHistory } from "react-router-dom";
+import { withRouter, useHistory } from "react-router-dom";
 import { useHttpRequest } from "../../hooks/httpRequest-hook";
 import { AuthContext } from "../../context/auth-context";
 
-// Icons
-import like from "../../images/like-icon.svg";
-import dislike from "../../images/dislike-icon.svg";
-import comments from "../../images/comments-icon.svg";
-import comment from "../../images/comment-icon.svg";
-
 // Components
+import ReactionBtn from "../../components/Buttons/ReactionBtn/ReactionBtn";
 import UserHeader from "../UserHeader/UserHeader";
 import Spinner from "../../components/LoadingSpinner/LoadingSpinner";
 
@@ -37,7 +32,7 @@ const Post = (props) => {
     const [userReaction, setUserReaction] = useState();
 
     // Delete Post
-    const DeleteHandler = async () => {
+    const DeletePostHandler = async () => {
         try {
             await sendRequest(
                 `${process.env.REACT_APP_API_URL}/posts/${props.id}`,
@@ -59,57 +54,45 @@ const Post = (props) => {
     //Like Handler
     const likePostHandler = async (event) => {
         event.preventDefault();
+        let postID = props.post_id;
+        console.log("like click! du post #", postID);
         // hacer verificacion si dio like antes
-        // hacer verificacion si dio like antes
+        // hacer verificacion si dio dislike antes
         // setLikes( count + 1, );
     };
 
     //Dislike Handler
     const dislikePostHandler = async (event) => {
         event.preventDefault();
-        console.log("dislike click!");
+        let postID = props.post_id;
+        console.log("dislike click! du post #", postID);
     };
 
-    // Color the like Btn if User has liked post
-    let likeIcon;
-
-    if (props.userReaction === "like") {
-        likeIcon = <img className={`${styles.icon} icon_green`} src={like} alt="like icon" />;
-    } else if (props.userReaction === null) {
-        likeIcon = <img className={styles.icon} src={like} alt="like icon" />;
-    }
-
-    // Color the dislike Btn if User has disliked post
-    let dislikeIcon;
-
-    if (props.userReaction === "dislike") {
-        dislikeIcon = <img className={`${styles.icon} icon_red`} src={dislike} alt="dislike icon" />;
-    } else if (props.userReaction === null) {
-        dislikeIcon = <img className={styles.icon} src={dislike} alt="dislike icon" />;
-    }
-
-    // Hide and Rearrange comments and comment Btns in posts and comment views
     let commentBlock;
 
     if (props.location.pathname === "/posts") {
         commentBlock = (
             <>
-                <div className={styles.reaction_btn}>
-                    <img className={styles.icon} src={comments} alt="comments icon" />
-                    <span>{props.comments}</span>
-                </div>
-                <Link to={props.post_link} className={styles.comment_btn}>
-                    <img className={styles.icon} src={comment} alt="comment icon" />
-                    <span>commentez</span>
-                </Link>
+                <ReactionBtn btnType="decor" icon="comments" text={props.comments} styling="" reaction={null} />
+                <ReactionBtn
+                    btnType="link"
+                    link={props.post_link}
+                    reaction={null}
+                    icon="comment"
+                    text="commenter"
+                    styling={styles.comment_btn}
+                />
             </>
         );
     } else {
         commentBlock = (
-            <button className={`${styles.reaction_btn} ${styles.push_right}`}>
-                <img className={styles.icon} src={comments} alt="comments icon" />
-                <span>{props.comments}</span>
-            </button>
+            <ReactionBtn
+                btnType="decor"
+                icon="comments"
+                text={props.comments}
+                styling={styles.push_right}
+                reaction={null}
+            />
         );
     }
 
@@ -127,20 +110,28 @@ const Post = (props) => {
                 lastName={props.lastName}
                 date={props.date}
                 category={props.category}
-                onDelete={DeleteHandler}
+                onDelete={DeletePostHandler}
             />
             <section className={styles.block}>
                 <h3 className={styles.title}>{props.title}</h3>
                 <img className={styles.photo} src={props.image_url} alt="post" />
                 <footer className={styles.reactions}>
-                    <button className={styles.reaction_btn} onClick={props.onLike}>
-                        {likeIcon}
-                        <span>{props.likes}</span>
-                    </button>
-                    <button className={styles.reaction_btn} onClick={props.onDislike}>
-                        {dislikeIcon}
-                        <span>{props.dislikes}</span>
-                    </button>
+                    <ReactionBtn
+                        btnType="functional"
+                        onClick={likePostHandler}
+                        reaction={props.userReaction === "like" ? "like" : null}
+                        icon="like"
+                        text={props.likes}
+                        styling=""
+                    />
+                    <ReactionBtn
+                        btnType="functional"
+                        onClick={dislikePostHandler}
+                        reaction={props.userReaction === "dislike" ? "dislike" : null}
+                        icon="dislike"
+                        text={props.dislikes}
+                        styling=""
+                    />
                     {commentBlock}
                 </footer>
             </section>

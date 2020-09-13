@@ -25,7 +25,7 @@ const CommentPost = () => {
     const postId = useParams().id;
 
     // Backend Request Hook
-    const { isLoading, /*error,*/ sendRequest /*clearError*/ } = useHttpRequest();
+    const { isLoading, error, sendRequest, clearError } = useHttpRequest();
 
     //Posts Hook
     const [post, setPost] = useState();
@@ -33,8 +33,8 @@ const CommentPost = () => {
     //Comments Hook
     const [comments, setComments] = useState();
 
-    // Form Hook
-    const [formState, inputHandler] = useForm(
+    // Form useState
+    const [formState, inputHandler, setFormState] = useForm(
         {
             comment: {
                 value: "",
@@ -56,7 +56,7 @@ const CommentPost = () => {
             } catch (err) {}
         };
         fetchPost();
-    }, [setComments, auth.token, postId, sendRequest]);
+    }, [sendRequest, setPost, auth.token, postId, setComments]);
 
     // POST comment Handler
     const postCommentHandler = async (event) => {
@@ -67,7 +67,7 @@ const CommentPost = () => {
         }
 
         try {
-            const commentData = await sendRequest(
+            const newCommentData = await sendRequest(
                 `${process.env.REACT_APP_API_URL}/posts/comment`,
                 "POST",
                 JSON.stringify({
@@ -79,28 +79,10 @@ const CommentPost = () => {
                     Authorization: "Bearer " + auth.token,
                 }
             );
-
-            // setTimeout(() => {
-            // }, 1000);
-
-            setComments((prevComments) => [...prevComments, commentData[0]]);
+            setComments((prevComments) => [...prevComments, newCommentData[0]]);
+            inputHandler("comment", "", false);
         } catch (err) {}
     };
-
-    // Clear Handler
-    // useEffect(() => {
-    //     console.log("useEffect clearHandle");
-
-    //     clearHandler("hola");
-    // }, [comments]);
-
-    // const clearHandler = () => {
-    //     console.log("textarea =>", document.getElementById("comment-form"));
-    //     const objeto = document.getElementById("comment-form");
-    //     //objeto.value = "hola";
-    //     objeto.reset();
-    //     inputHandler("comment", "", false);
-    // };
 
     // Delete POST Handler
     const deletePostHandler = (deletedPostId) => {
@@ -129,8 +111,8 @@ const CommentPost = () => {
             </div>
         );
     }
-    // console.log("Form state value =>", formState.inputs.comment.value);
-    // console.log("inputs =>", formState);
+
+    console.log("inputs afuera", formState.inputs);
     return (
         <div className="container">
             {!isLoading && post && comments && (
@@ -156,23 +138,21 @@ const CommentPost = () => {
                         onDelete={deletePostHandler}
                     />
                     <section>
-                        {!isLoading &&
-                            comments &&
-                            comments.map((comment, index) => {
-                                return (
-                                    <Comment
-                                        key={index}
-                                        id={comment.id}
-                                        user_id={comment.user_id}
-                                        photo_url={comment.photo_url}
-                                        firstName={comment.firstName}
-                                        lastName={comment.lastName}
-                                        date={comment.comment_date}
-                                        message={comment.message}
-                                        onDeleteComment={deleteCommentHandler}
-                                    />
-                                );
-                            })}
+                        {comments.map((comment, index) => {
+                            return (
+                                <Comment
+                                    key={index}
+                                    id={comment.id}
+                                    user_id={comment.user_id}
+                                    photo_url={comment.photo_url}
+                                    firstName={comment.firstName}
+                                    lastName={comment.lastName}
+                                    date={comment.comment_date}
+                                    message={comment.message}
+                                    onDeleteComment={deleteCommentHandler}
+                                />
+                            );
+                        })}
                     </section>
                     <div className={styles.comment_wrap}>
                         <form className={styles.comment_form} id="comment-form" onSubmit={postCommentHandler}>
@@ -189,9 +169,8 @@ const CommentPost = () => {
                                 validators={[MinLength(2), MaxLength(65)]}
                                 errorText="Veillez ecrire un commentaire"
                                 onInput={inputHandler}
-                                // onClear={clearHandler}
-                                initialValue={formState.inputs.comment.value}
-                                initialValid={formState.inputs.comment.isValid}
+                                initialValue=""
+                                initialValid={false}
                             />
                         </form>
                         <button form="comment-form" className={styles.btn} type="submit">

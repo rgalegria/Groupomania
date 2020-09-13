@@ -10,17 +10,17 @@ const Counter = (props) => {
     return (
         <div className={styles.block}>
             <div className={styles.counter}>
-                <h5 className={styles.title}>Posts publiés</h5>
+                <h5 className={styles.title}>Publications</h5>
                 <span className={styles.count}>{props.postsCount}</span>
-                <p className={styles.text}>pas vous</p>
+                <p className={styles.text}>par vous</p>
             </div>
 
             <img className={styles.logotype} src={logotype} alt="Logo de Groupomania" />
 
             <div className={styles.counter}>
-                <h5 className={styles.title}>Posts publiés</h5>
+                <h5 className={styles.title}>Aimés par</h5>
                 <span className={styles.count}>{props.likesCount}</span>
-                <p className={styles.text}>pas vos collègues</p>
+                <p className={styles.text}>vos collègues</p>
             </div>
         </div>
     );

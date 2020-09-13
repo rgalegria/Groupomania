@@ -39,22 +39,26 @@ const Menu = () => {
     //Fetch Most recent posts
     useEffect(() => {
         let mounted = true;
-        const fetchPosts = async () => {
-            try {
-                const userData = await sendRequest(
-                    `${process.env.REACT_APP_API_URL}/profile/${auth.userId}`,
-                    "GET",
-                    null,
-                    {
-                        Authorization: "Bearer " + auth.token,
+
+        if (auth.token && auth.userId) {
+            const fetchPosts = async () => {
+                try {
+                    const userData = await sendRequest(
+                        `${process.env.REACT_APP_API_URL}/profile/${auth.userId}`,
+                        "GET",
+                        null,
+                        {
+                            Authorization: "Bearer " + auth.token,
+                        }
+                    );
+                    if (mounted) {
+                        setProfileData(userData);
                     }
-                );
-                if (mounted) {
-                    setProfileData(userData);
-                }
-            } catch (err) {}
-        };
-        fetchPosts();
+                } catch (err) {}
+            };
+            fetchPosts();
+        }
+
         return () => (mounted = false);
     }, [sendRequest, auth.token, auth.userId, setProfileData]);
 

@@ -36,7 +36,7 @@ const options = {
 };
 
 // RegEX Text
-const regExText = /^[A-ZÀÂÆÇÉÈÊËÏÎÔŒÙÛÜŸ \'\- ]+$/i;
+const regExText = /^[A-ZÀÂÆÇÉÈÊËÏÎÔŒÙÛÜŸ '\-]+$/i;
 
 // UserID decoder
 const decodeUid = (authorization) => {
@@ -72,6 +72,7 @@ exports.getUserProfile = (req, res, next) => {
 exports.updateUserProfile = (req, res, next) => {
     const user = decodeUid(req.headers.authorization);
     const { firstName, lastName, email, department, role, linkedin_url } = req.body;
+    console.log("body =>", req.body);
 
     let imageUrl;
 
@@ -90,9 +91,23 @@ exports.updateUserProfile = (req, res, next) => {
     let isFirstName = validator.matches(firstName, regExText);
     let isLastName = validator.matches(lastName, regExText);
     let isEmail = validator.isEmail(email);
-    let isDepartment = validator.matches(department, regExText);
-    let isRole = validator.matches(role, regExText);
-    let isLinkedinUrl = validator.isURL(linkedin_url, [["http", "https"]]);
+
+    let isDepartment = true;
+    let isRole = true;
+    let isLinkedinUrl = true;
+
+    if (req.body.department) {
+        isDepartment = validator.matches(String(department), regExText);
+        console.log("department validator =>", isDepartment);
+    }
+    if (req.body.role) {
+        isRole = validator.matches(String(role), regExText);
+        console.log("department validator =>", isRole);
+    }
+    if (req.body.linkedin_url) {
+        isLinkedinUrl = validator.isURL(String(linkedin_url), [["http", "https"]]);
+        console.log("department validator =>", isLinkedinUrl);
+    }
 
     if (isFirstName && isLastName && isEmail && isDepartment && isRole && isLinkedinUrl) {
         const string =
@@ -111,13 +126,13 @@ exports.updateUserProfile = (req, res, next) => {
         // Error Handling
 
         let errorMessages = [];
-
-        let anws = !isFirstName ? errorMessages.push(" Prénom") : "";
-        anws = !isLastName ? errorMessages.push(" Nom") : "";
-        anws = !isEmail ? errorMessages.push(" E-mail") : "";
-        anws = !isDepartment ? errorMessages.push(" Departement") : "";
-        anws = !isRole ? errorMessages.push(" Poste") : "";
-        anws = !isLinkedinUrl ? errorMessages.push(" LinkedIn") : "";
+        let answ;
+        answ = !isFirstName ? errorMessages.push(" Prénom") : "";
+        answ = !isLastName ? errorMessages.push(" Nom") : "";
+        answ = !isEmail ? errorMessages.push(" E-mail") : "";
+        answ = !isDepartment ? errorMessages.push(" Departement") : "";
+        answ = !isRole ? errorMessages.push(" Poste") : "";
+        answ = !isLinkedinUrl ? errorMessages.push(" LinkedIn") : "";
 
         errorMessages = errorMessages.join();
 

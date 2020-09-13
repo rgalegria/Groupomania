@@ -20,8 +20,6 @@ import Spinner from "../../components/LoadingSpinner/LoadingSpinner";
 import styles from "./UpdateProfile.module.css";
 
 const UpdateProfile = () => {
-    // console.log("EDIT MODIFY");
-
     // Authentication context
     const auth = useContext(AuthContext);
 
@@ -38,7 +36,7 @@ const UpdateProfile = () => {
     const [showInfo, setShowInfo] = useState(false);
 
     // Form useState
-    const [formState, inputHandler, setFormData] = useForm(
+    const [formState, inputHandler, setFormState] = useForm(
         {
             image: {
                 value: null,
@@ -52,15 +50,15 @@ const UpdateProfile = () => {
                 value: "",
                 isValid: false,
             },
+            email: {
+                value: "",
+                isValid: false,
+            },
             department: {
                 value: "",
                 isValid: false,
             },
             role: {
-                value: "",
-                isValid: false,
-            },
-            email: {
                 value: "",
                 isValid: false,
             },
@@ -88,7 +86,7 @@ const UpdateProfile = () => {
                     }
                 );
                 setUserDataState(userData);
-                setFormData(
+                setFormState(
                     {
                         image: {
                             value: userData.photo_url,
@@ -124,7 +122,7 @@ const UpdateProfile = () => {
             } catch (err) {}
         };
         fetchUser();
-    }, [sendRequest, auth.userId, auth.token, setFormData]);
+    }, [sendRequest, auth.userId, auth.token, setFormState]);
 
     const updateProfileHandler = async (event) => {
         event.preventDefault();
@@ -256,38 +254,6 @@ const UpdateProfile = () => {
                                     initialValid={true}
                                 />
                                 <InputField
-                                    id="department"
-                                    label="Departement :"
-                                    name="department"
-                                    type="text"
-                                    placeholder="Votre departement"
-                                    maxLength="65"
-                                    element="input"
-                                    hasLabel="yes"
-                                    textIsWhite="no"
-                                    validators={[MinLength(2), MaxLength(65), isText()]}
-                                    errorText="Veillez remplir le departement auquel vous appartenez"
-                                    onInput={inputHandler}
-                                    initialValue={userDataState.department}
-                                    initialValid={true}
-                                />
-                                <InputField
-                                    id="role"
-                                    label="Description poste :"
-                                    name="role"
-                                    type="text"
-                                    placeholder="Description du poste"
-                                    maxLength="65"
-                                    element="textarea"
-                                    hasLabel="yes"
-                                    textIsWhite="no"
-                                    validators={[MinLength(2), MaxLength(65), isText()]}
-                                    errorText="Veillez remplir la description de votre poste"
-                                    onInput={inputHandler}
-                                    initialValue={userDataState.role}
-                                    initialValid={true}
-                                />
-                                <InputField
                                     id="email"
                                     label="E-mail :"
                                     name="email"
@@ -304,6 +270,39 @@ const UpdateProfile = () => {
                                     initialValue={userDataState.email}
                                     initialValid={true}
                                 />
+                                <InputField
+                                    id="department"
+                                    label="Departement :"
+                                    name="department"
+                                    type="text"
+                                    placeholder="Votre departement"
+                                    maxLength="65"
+                                    element="input"
+                                    hasLabel="yes"
+                                    textIsWhite="no"
+                                    validators={[MaxLength(65), isText()]}
+                                    errorText="Uniquement des charactères"
+                                    onInput={inputHandler}
+                                    initialValue={userDataState.department}
+                                    initialValid={true}
+                                />
+                                <InputField
+                                    id="role"
+                                    label="Description poste :"
+                                    name="role"
+                                    type="text"
+                                    placeholder="Description du poste"
+                                    maxLength="65"
+                                    element="textarea"
+                                    hasLabel="yes"
+                                    textIsWhite="no"
+                                    validators={[MaxLength(65), isText()]}
+                                    errorText="Uniquement des charactères"
+                                    onInput={inputHandler}
+                                    initialValue={userDataState.role}
+                                    initialValid={true}
+                                />
+
                                 <InputField
                                     id="linkedin_url"
                                     label="Linkedin (facultatif) :"

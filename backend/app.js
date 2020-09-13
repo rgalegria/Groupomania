@@ -74,14 +74,10 @@ app.use((req, res, next) => {
 // Error Handling App
 app.use((error, req, res, next) => {
     if (res.headersSent) {
-        // console.log("has a req. header?", res.headersSent);
-        console.log("error =>", error);
         return next(error);
     }
     res.status(error.code || 500);
     res.json({ message: error.message || "Un problème est survenu sur le serveur, veillez réessayer ultérieurement" });
-    // console.log("has a req. header?", res.headersSent);
-    console.log("error =>", error);
 });
 
 // App Execution

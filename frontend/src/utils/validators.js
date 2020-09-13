@@ -53,7 +53,7 @@ export const validate = (value, validators) => {
         }
 
         if (validator.type === TEXT) {
-            isValid = isValid && /^[A-ZÀÂÆÇÉÈÊËÏÎÔŒÙÛÜŸ ]+$/i.test(value);
+            isValid = isValid && /^[A-ZÀÂÆÇÉÈÊËÏÎÔŒÙÛÜŸ '\-]+$/i.test(value);
         }
 
         if (validator.type === EMAIL) {

@@ -78,7 +78,6 @@ exports.postComment = (req, res, next) => {
             // Requête
             const returnComment = db.query(sql, (error, response) => {
                 if (!error) {
-                    console.log("comment =>", response);
                     res.status(201).json(response);
                 } else {
                     return next(new HttpError("Erreur de requête, le commentaire n'a pas été créé", 500));

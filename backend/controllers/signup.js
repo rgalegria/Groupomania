@@ -88,6 +88,6 @@ exports.signup = (req, res, next) => {
         anws = !isPassword ? errorMessages.push(" Mot de passe") : "";
         errorMessages = errorMessages.join();
 
-        return next(new HttpError("Veillez vérifier les champs suivants :" + errorMessages, 400));
+        return next(new HttpError("Veuillez vérifier les champs suivants :" + errorMessages, 400));
     }
 };

@@ -42,7 +42,7 @@ const SelectField = (props) => {
                 onChange={pickedHandler}
             >
                 <option className={styles.option} value=" ">
-                    Veillez choisir une catégorie
+                    Veuillez choisir une catégorie
                 </option>
                 {props.options.map((option, index) => {
                     return (

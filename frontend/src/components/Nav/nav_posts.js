@@ -12,7 +12,7 @@ const NavPost = () => {
     return (
         <>
             <NavBtn id="menu" name="menu" icon={menu} link="/menu" iconColor="icon_white" />
-            <NavBtn id="post" name="post" icon={post} link="/posts/new" iconColor="icon_white" />
+            <NavBtn id="post" name="publier" icon={post} link="/posts/new" iconColor="icon_white" />
             <NavBtn id="categories" name="catégories" icon={categories} link="/posts" iconColor="icon_white" />
         </>
     );

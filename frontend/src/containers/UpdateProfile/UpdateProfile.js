@@ -270,7 +270,7 @@ const UpdateProfile = () => {
                             center
                             id="image"
                             onInput={inputHandler}
-                            errorText="Choisisez une image"
+                            errorText="Choisissez une image"
                             photo_url={userDataState.photo_url}
                         />
                         <h4 className={styles.title}>Vos informations personnelles</h4>
@@ -288,7 +288,7 @@ const UpdateProfile = () => {
                                 hasLabel="yes"
                                 textIsWhite="no"
                                 validators={[MinLength(2), MaxLength(45), isText()]}
-                                errorText="Veillez rentrer votre prénom"
+                                errorText="Veuillez rentrer votre prénom"
                                 onInput={inputHandler}
                                 initialValue={userDataState.firstName}
                                 initialValid={true}
@@ -305,7 +305,7 @@ const UpdateProfile = () => {
                                 hasLabel="yes"
                                 textIsWhite="no"
                                 validators={[MinLength(2), MaxLength(45), isText()]}
-                                errorText="Veillez rentrer votre nom de famille"
+                                errorText="Veuillez rentrer votre nom de famille"
                                 onInput={inputHandler}
                                 initialValue={userDataState.lastName}
                                 initialValid={true}
@@ -329,23 +329,23 @@ const UpdateProfile = () => {
                             />
                             <InputField
                                 id="department"
-                                label="Departement :"
+                                label="Département :"
                                 name="department"
                                 type="text"
-                                placeholder="Votre departement"
+                                placeholder="Votre département"
                                 maxLength="65"
                                 element="input"
                                 hasLabel="yes"
                                 textIsWhite="no"
                                 validators={[MaxLength(65), isText()]}
-                                errorText="Uniquement des charactères"
+                                errorText="Uniquement des lettres"
                                 onInput={inputHandler}
                                 initialValue={userDataState.department}
                                 initialValid={true}
                             />
                             <InputField
                                 id="role"
-                                label="Description poste :"
+                                label="Description du poste :"
                                 name="role"
                                 type="text"
                                 placeholder="Description du poste"
@@ -354,7 +354,7 @@ const UpdateProfile = () => {
                                 hasLabel="yes"
                                 textIsWhite="no"
                                 validators={[MaxLength(65), isText()]}
-                                errorText="Uniquement des charactères"
+                                errorText="Uniquement des lettres"
                                 onInput={inputHandler}
                                 initialValue={userDataState.role}
                                 initialValid={true}
@@ -364,7 +364,7 @@ const UpdateProfile = () => {
                                 label="Linkedin (facultatif) :"
                                 name="linkedin"
                                 type="text"
-                                placeholder="Votre addresse Linkedin"
+                                placeholder="Votre adresse Linkedin"
                                 element="input"
                                 hasLabel="yes"
                                 textIsWhite="no"
@@ -377,11 +377,11 @@ const UpdateProfile = () => {
                         <UIBtn
                             id="update-profile-btn"
                             form="update-form"
-                            name="Mettre à jour profil"
+                            name="Mettre à jour mon profil"
                             type="submit"
                             btnType="valid"
                         />
-                        <h4 className={styles.title}>Changer mot de passe</h4>
+                        <h4 className={styles.title}>Changer mon mot de passe</h4>
                         <form id="update-password-form" className={styles.update_list} onSubmit={updatePasswordHandler}>
                             <InputField
                                 id="password"
@@ -396,7 +396,7 @@ const UpdateProfile = () => {
                                 hasLabel="yes"
                                 textIsWhite="no"
                                 validators={[MinLength(8), MaxLength(50)]}
-                                errorText="Minimum une mayuscule, un chiffre et 8 charactères"
+                                errorText="Minimum une majuscule, un chiffre et 8 lettres"
                                 onInput={inputHandler}
                                 initialValue={formState.inputs.password.value}
                                 initialValid={formState.inputs.password.isValid}
@@ -405,7 +405,7 @@ const UpdateProfile = () => {
                         <UIBtn
                             id="update-password-btn"
                             form="update-password-form"
-                            name="Changer mot de passe"
+                            name="Changer mon mot de passe"
                             type="submit"
                             btnType="valid"
                         />
@@ -420,10 +420,10 @@ const UpdateProfile = () => {
                         />
                         <div style={{ display: showInfo === true ? "block" : "none" }}>
                             <p className={styles.role}>
-                                Vous êtes sur le bord de supprimer votre compte. Toutes les informations liés à ce
+                                Vous êtes sur le point de supprimer votre compte. Toutes les informations liées à ce
                                 compte seront supprimées.
                             </p>
-                            <h5 className={styles.title}>Êtes-vous sur de supprimer votre compte?</h5>
+                            <h5 className={styles.title}>Êtes-vous sûr(e) de vouloir supprimer votre compte ?</h5>
                             <div className={styles.btn_block}>
                                 <UIBtn
                                     id="accept-btn"

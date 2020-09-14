@@ -18,7 +18,7 @@ const Counter = (props) => {
             <img className={styles.logotype} src={logotype} alt="Logo de Groupomania" />
 
             <div className={styles.counter}>
-                <h5 className={styles.title}>Aimés par</h5>
+                <h5 className={styles.title}>Aimées par</h5>
                 <span className={styles.count}>{props.likesCount}</span>
                 <p className={styles.text}>vos collègues</p>
             </div>

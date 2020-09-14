@@ -16,13 +16,13 @@ Attends ==>
 
 */
 
-const navBtn = (props) => {
+const NavBtn = (props) => {
     return (
         <Link to={props.link} className={props.btnStyle || styles.btn}>
-            <img className={`${styles.icon} ${props.iconColor} `} src={props.icon} alt="A REVISAR" />
+            <img className={`${styles.icon} ${props.iconColor}`} src={props.icon} alt="" />
             <span className={props.textStyle || styles.text}>{props.name}</span>
         </Link>
     );
 };
 
-export default navBtn;
+export default NavBtn;

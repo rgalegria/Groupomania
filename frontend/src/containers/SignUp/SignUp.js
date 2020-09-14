@@ -98,7 +98,7 @@ const SignUp = () => {
                         hasLabel="no"
                         textIsWhite="yes"
                         validators={[MinLength(2), isText()]}
-                        errorText="Veillez rentrer uniquement des charactères"
+                        errorText="Veuillez rentrer uniquement des lettres"
                         onInput={inputHandler}
                         initialValue={formState.inputs.firstName.value}
                         initialValid={formState.inputs.firstName.isValid}
@@ -115,7 +115,7 @@ const SignUp = () => {
                         hasLabel="no"
                         textIsWhite="yes"
                         validators={[MinLength(2), isText()]}
-                        errorText="Veillez rentrer uniquement des charactères"
+                        errorText="Veuillez rentrer uniquement des lettres"
                         onInput={inputHandler}
                         initialValue={formState.inputs.lastName.value}
                         initialValid={formState.inputs.lastName.isValid}
@@ -141,7 +141,7 @@ const SignUp = () => {
                         id="password"
                         name="password"
                         type="password"
-                        placeholder="password"
+                        placeholder="mot de passe"
                         autocomplete="current-password"
                         icon={password}
                         alt="password icon"
@@ -149,7 +149,7 @@ const SignUp = () => {
                         hasLabel="no"
                         textIsWhite="yes"
                         validators={[MinLength(8)]}
-                        errorText="Minimum une mayuscule, un chiffre et 8 charactères"
+                        errorText="Minimum une majuscule, un chiffre et 8 lettres"
                         onInput={inputHandler}
                         initialValue={formState.inputs.password.value}
                         initialValid={formState.inputs.password.isValid}

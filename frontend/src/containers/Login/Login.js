@@ -72,7 +72,11 @@ const Login = () => {
     return (
         <>
             <div className="background_image">
-                <img src={logo} className="logo" alt="Logo de Groupomania, entreprise de grand distribution européen" />
+                <img
+                    src={logo}
+                    className="logo"
+                    alt="Logo de Groupomania, entreprise de grande distribution européenne"
+                />
                 <form id="login-form" className="input_list" onSubmit={loginHandler}>
                     <InputField
                         id="email"
@@ -96,7 +100,7 @@ const Login = () => {
                         name="password"
                         type="password"
                         onInput={inputHandler}
-                        placeholder="password"
+                        placeholder="mot de passe"
                         autocomplete="current-password"
                         icon={password}
                         alt="password icon"
@@ -111,7 +115,7 @@ const Login = () => {
                 </form>
                 <p className="error_message">{error}</p>
                 <Link className="forgot_pass_link" to={"/login"}>
-                    mot de pass oublié ?
+                    mot de passe oublié ?
                 </Link>
             </div>
             <div className="background_blur"></div>

@@ -135,7 +135,7 @@ const Menu = () => {
                                 <img className={`${styles.icon} icon_white`} src={agenda} alt="" />
                             </Link>
                             <button className={`${styles.btn} ${styles.logout_margin}`} onClick={logoutHandler}>
-                                <span className={styles.text}>Se deconnecter</span>
+                                <span className={styles.text}>Se déconnecter</span>
                                 <img className={`${styles.icon} icon_white`} src={logout} alt="" />
                             </button>
                         </nav>

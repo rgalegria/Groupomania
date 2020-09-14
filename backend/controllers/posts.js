@@ -30,7 +30,7 @@ exports.createPost = (req, res, next) => {
 
     // Vérification s'il y a une image dans le body
     if (req.body.image === "null") {
-        return next(new HttpError("Veillez choisir une image", 400));
+        return next(new HttpError("Veuillez choisir une image", 400));
     }
 
     // Requête
@@ -40,9 +40,9 @@ exports.createPost = (req, res, next) => {
 
     const createPost = db.query(sql, (error, post) => {
         if (!error) {
-            res.status(201).json({ message: "Publication sauvagardé" });
+            res.status(201).json({ message: "Publication sauvegardée" });
         } else {
-            return next(new HttpError("Erreur de requête, la publication n'a pas été créé", 500));
+            return next(new HttpError("Erreur de requête, la publication n'a pas été créée", 500));
         }
     });
 };
@@ -99,7 +99,7 @@ exports.getCategories = (req, res, next) => {
         if (!error) {
             res.status(200).json(results);
         } else {
-            return next(new HttpError("Erreur de requête, les catégories n'ont pas pu être récuperées", 500));
+            return next(new HttpError("Erreur de requête, les catégories n'ont pas pu être récupérées", 500));
         }
     });
 };
@@ -187,7 +187,7 @@ exports.getAllPosts = (req, res, next) => {
             res.status(200).json(result);
         })
         .catch((error) => {
-            return next(new HttpError("Erreur de requête, les publications n'ont pas pu être récuperées", 500));
+            return next(new HttpError("Erreur de requête, les publications n'ont pas pu être récupérées", 500));
         });
 };
 
@@ -273,7 +273,7 @@ exports.getMostLikedPosts = (req, res, next) => {
             res.status(200).json(result);
         })
         .catch((error) => {
-            return next(new HttpError("Erreur de requête, les publications n'ont pas pu être récuperées", 500));
+            return next(new HttpError("Erreur de requête, les publications n'ont pas pu être récupérées", 500));
         });
 };
 
@@ -316,17 +316,17 @@ exports.getOnePost = (req, res, next) => {
                         WHERE Posts_id = ?`;
     db.query(`${postSql}; ${commentsSql}`, [user.id, postId, postId], (error, result, fields) => {
         if (!error) {
-            // "results" c'est un array avec un element de post et un element avec les commentaires
+            // "results" c'est un tableau avec un élément de post et un èlèment avec les commentaires
             let results = [
                 {
                     // copier le résultat de la première requête (le post)
                     ...result[0][0],
 
-                    // Ajoutes le compte des commmentaires
+                    // Ajoute le compte des commmentaires
                     commentsCounter: result[1].length,
                 },
                 {
-                    // Ajoutes les commmentaires de la deuxième requête (les commentaires)
+                    // Ajoute les commmentaires de la deuxième requête (les commentaires)
                     comments: [...result[1]],
                 },
             ];

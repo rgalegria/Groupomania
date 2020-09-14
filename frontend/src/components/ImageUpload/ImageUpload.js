@@ -65,7 +65,7 @@ const ImageUpload = (props) => {
                             <img
                                 className={styles.preview_post}
                                 src={previewUrl}
-                                alt="Previsualisation de la publication"
+                                alt="Prévisualisation de la publication"
                             />
                             <div className={styles.red_banner_post}>
                                 <span className={styles.banner_text_post}>changer l'image</span>
@@ -74,7 +74,7 @@ const ImageUpload = (props) => {
                     ) : (
                         <div className={styles.icon_block}>
                             <img className={styles.icon} src={Image} alt="" />
-                            <span className={styles.text}>Veillez choisir une image en cliquant ici</span>
+                            <span className={styles.text}>Veuillez choisir une image en cliquant ici</span>
                         </div>
                     )}
                 </label>
@@ -95,7 +95,7 @@ const ImageUpload = (props) => {
             <label htmlFor="upload-button" className={styles.photo_container}>
                 {previewUrl ? (
                     <>
-                        <img className={styles.preview_img} src={previewUrl} alt="Previsualisation du profil" />
+                        <img className={styles.preview_img} src={previewUrl} alt="Prévisualisation du profil" />
 
                         <div className={styles.red_banner}>
                             <span className={styles.banner_text}>changer</span>

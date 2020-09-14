@@ -98,15 +98,12 @@ exports.updateUserProfile = (req, res, next) => {
 
     if (req.body.department) {
         isDepartment = validator.matches(String(department), regExText);
-        console.log("department validator =>", isDepartment);
     }
     if (req.body.role) {
         isRole = validator.matches(String(role), regExText);
-        console.log("department validator =>", isRole);
     }
     if (req.body.linkedin_url) {
         isLinkedinUrl = validator.isURL(String(linkedin_url), [["http", "https"]]);
-        console.log("department validator =>", isLinkedinUrl);
     }
 
     if (isFirstName && isLastName && isEmail && isDepartment && isRole && isLinkedinUrl) {
@@ -120,7 +117,7 @@ exports.updateUserProfile = (req, res, next) => {
             if (!error) {
                 res.status(200).json({ message: "User Updated successfully!" });
             } else {
-                return next(new HttpError("Erreur de requête, la mise-à-jour du profil n'a pas été faite", 500));
+                return next(new HttpError("Erreur de requête, la mise à jour du profil n'a pas été faite", 500));
             }
         });
     } else if (!isFirstName || !isLastName || !isEmail || !isDepartment || !isRole || !isLinkedinUrl) {
@@ -137,7 +134,7 @@ exports.updateUserProfile = (req, res, next) => {
 
         errorMessages = errorMessages.join();
 
-        return next(new HttpError("Veillez vérifier les champs suivants :" + errorMessages, 400));
+        return next(new HttpError("Veuillez vérifier les champs suivants :" + errorMessages, 400));
     }
 };
 
@@ -161,7 +158,7 @@ exports.updatePassword = (req, res, next) => {
                     res.status(201).json({ message: "Password Updated successfully!" });
                 } else {
                     return next(
-                        new HttpError("Erreur de requête, la mise-à-jour du mot de passe n'a pas été faite", 500)
+                        new HttpError("Erreur de requête, la mise àjour du mot de passe n'a pas été faite", 500)
                     );
                 }
             });

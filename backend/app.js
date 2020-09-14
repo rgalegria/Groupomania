@@ -67,7 +67,7 @@ app.use("/posts", postRoutes);
 
 // Error Handling 404
 app.use((req, res, next) => {
-    const error = new HttpError("Route non trouvé", 404);
+    const error = new HttpError("Route non trouvée", 404);
     throw error;
 });
 
@@ -77,7 +77,7 @@ app.use((error, req, res, next) => {
         return next(error);
     }
     res.status(error.code || 500);
-    res.json({ message: error.message || "Un problème est survenu sur le serveur, veillez réessayer ultérieurement" });
+    res.json({ message: error.message || "Un problème est survenu sur le serveur, veuillez réessayer ultérieurement" });
 });
 
 // App Execution

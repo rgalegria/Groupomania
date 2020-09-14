@@ -37,12 +37,12 @@ const UserHeader = (props) => {
     }
 
     if (diffTime >= 216000000) {
-        const formatDate = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + " d";
+        const formatDate = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + " j";
         newPostDate = formatDate;
     }
 
     if (diffTime >= 189216000000) {
-        const formatDate = Math.floor(diffTime / (1000 * 60 * 60 * 24 * 365)) + " y";
+        const formatDate = Math.floor(diffTime / (1000 * 60 * 60 * 24 * 365)) + " a";
         newPostDate = formatDate;
     }
 

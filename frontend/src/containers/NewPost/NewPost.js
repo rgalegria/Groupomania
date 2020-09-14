@@ -160,7 +160,7 @@ const NewPost = (props) => {
                                 hasLabel="no"
                                 textIsWhite="no"
                                 validators={[MinLength(2), MaxLength(100)]}
-                                errorText="Veillez écrire un commentaire pour votre post"
+                                errorText="Veuillez écrire un commentaire pour votre publication"
                                 onInput={inputHandler}
                                 initialValue={formState.inputs.title.value}
                                 initialValid={formState.inputs.title.isValid}
@@ -169,15 +169,15 @@ const NewPost = (props) => {
                                 center
                                 id="image"
                                 onInput={inputHandler}
-                                errorText="Choisisez une image ou gif"
+                                errorText="Choisissez une image ou un gif"
                             />
                             <SelectField
                                 id="category"
-                                label="Categories :"
-                                name="categories"
+                                label="Catégories :"
+                                name="catégories"
                                 onInput={inputHandler}
                                 options={categories}
-                                errorText="Choisisez une catégorie"
+                                errorText="Choisissez une catégorie"
                             />
                             {sendBtn}
                         </form>

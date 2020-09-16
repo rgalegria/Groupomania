@@ -1,6 +1,6 @@
 .label {
     font-size: 1.3rem;
-    color: #828282;
+    color: #6b6b6b;
 }
 
 .dropdown {
@@ -8,8 +8,7 @@
     flex-direction: column;
     font-family: Montserrat;
     font-size: 1.5rem;
-    /* margin-top: 1.6rem; */
-    /* margin-bottom: 1.6rem; */
+
     margin: 1.6rem 0;
 }
 

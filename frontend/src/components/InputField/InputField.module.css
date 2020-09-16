@@ -16,7 +16,7 @@
 
 .label {
     font-size: 1.3rem;
-    color: #828282;
+    color: #6b6b6b;
 }
 
 .input_error {
@@ -65,18 +65,18 @@
 
 .box::placeholder {
     /* Chrome, Firefox, Opera, Safari 10.1+ */
-    color: #828282;
+    color: #6b6b6b;
     opacity: 1; /* Firefox */
 }
 
 .box:-ms-input-placeholder {
     /* Internet Explorer 10-11 */
-    color: #828282;
+    color: #6b6b6b;
 }
 
 .box::-ms-input-placeholder {
     /* Microsoft Edge */
-    color: #828282;
+    color: #6b6b6b;
 }
 
 .white_box {

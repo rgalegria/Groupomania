@@ -72,7 +72,6 @@ exports.getUserProfile = (req, res, next) => {
 exports.updateUserProfile = (req, res, next) => {
     const user = decodeUid(req.headers.authorization);
     const { firstName, lastName, email, department, role, linkedin_url } = req.body;
-    console.log("body =>", req.body);
 
     let imageUrl;
 

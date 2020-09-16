@@ -25,7 +25,7 @@ Le backend a été crée avec **Node.js**, **Express.js** et **MySQL** comme bas
     <br />
 -   Dans le terminal de VSCODE, situez-vous dans le dossier `/backend`.
     <br />
--   Écrivez dans la linge de commande `node config_db.js` pour configurer la base de données.
+-   Écrivez dans la ligne de commande `node config_db.js` pour configurer la base de données.
 
 ### Development server
 
@@ -41,7 +41,7 @@ Dans le dossier `/frontend` démarrez `npm install` pour installer toutes les d�
 
 ### Development server
 
-Démarrer `npms start` pour avoir accès au serveur de développement. L'application va se recharger automatiquement si vous modifiez un fichier source.
+Démarrer `npm start` pour avoir accès au serveur de développement. L'application va se recharger automatiquement si vous modifiez un fichier source.
 
 ## Droits Admin
 

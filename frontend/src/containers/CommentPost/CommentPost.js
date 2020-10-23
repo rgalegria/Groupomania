@@ -138,8 +138,6 @@ const CommentPost = () => {
                             comments={post.commentsCounter}
                             userReaction={post.userReaction}
                             post_link={`/posts/${post.post_id}`}
-                            // onLike={likePostHandler}
-                            // onDislike={dislikePostHandler}
                             onDelete={deletePostHandler}
                         />
                         <section>
@@ -172,7 +170,7 @@ const CommentPost = () => {
                                     hasLabel="yes"
                                     textIsWhite="no"
                                     validators={[MinLength(2), MaxLength(65)]}
-                                    errorText="Veillez ecrire un commentaire"
+                                    errorText="Veillez écrire un commentaire"
                                     onInput={inputHandler}
                                     initialValue=""
                                     initialValid={false}

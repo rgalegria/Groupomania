@@ -50,7 +50,7 @@ const Posts = () => {
         fetchPosts();
     }, [sendRequest, auth.token]);
 
-    //Fetch Most recent posts
+    // Fetch Most recent posts
     const fetchMostRecent = async () => {
         setActiveBtn({
             mostRecents: "active",
@@ -64,7 +64,7 @@ const Posts = () => {
         } catch (err) {}
     };
 
-    //Fetch Most liked posts
+    // Fetch Most liked posts
     const fetchMostLiked = async () => {
         setActiveBtn({
             mostRecents: "",
@@ -84,7 +84,6 @@ const Posts = () => {
     };
 
     // Affichage menu post en desktop
-
     let newPost;
 
     if (width >= 1024) {

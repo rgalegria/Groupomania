@@ -35,8 +35,6 @@ const PostList = (props) => {
                         comments={post.comments}
                         userReaction={post.userReaction}
                         post_link={`/posts/${post.post_id}`}
-                        onLike={props.onLikePost}
-                        onDislike={props.onDislikePost}
                         onDelete={props.onDeletePost}
                     />
                 );

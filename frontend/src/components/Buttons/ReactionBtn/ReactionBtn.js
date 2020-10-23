@@ -11,7 +11,7 @@ import comments from "../../../images/comments-icon.svg";
 import styles from "./ReactionBtn.module.css";
 
 /*
-Attends ==>
+Attend ==>
 
 <ReactionBtn 
     btnType="functional, link, decor" 
@@ -65,7 +65,11 @@ const ReactionBtn = (props) => {
     switch (props.btnType) {
         case "functional":
             btn = (
-                <button className={`${styles.reaction_btn} ${props.styling}`} onClick={props.onClick}>
+                <button
+                    name={props.name}
+                    className={`${styles.reaction_btn} ${props.styling}`}
+                    onClick={props.onReaction}
+                >
                     <img className={`${styles.icon} ${reactionColor}`} src={icon} alt="" />
                     <span>{props.text}</span>
                 </button>

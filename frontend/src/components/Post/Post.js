@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { withRouter, useHistory } from "react-router-dom";
 import { useHttpRequest } from "../../hooks/httpRequest-hook";
 import { AuthContext } from "../../context/auth-context";
@@ -28,10 +28,97 @@ const Post = (props) => {
     const postId = props.location.pathname.split("/")[2];
 
     // User Likes
-    // const [likes, setLikes] = useState();
+    const [likesCounter, setLikesCounter] = useState(props.likes);
+
+    // User Dislikes
+    const [dislikesCounter, setDislikesCounter] = useState(props.dislikes);
 
     // User's reaction to post
-    // const [userReaction, setUserReaction] = useState();
+    const [userReaction, setUserReaction] = useState(props.userReaction);
+
+    // Reaction status
+    const [hasReacted, setHasReacted] = useState(props.userReaction === null ? false : true);
+
+    // Reaction Handler
+    const userReactionHandler = (event) => {
+        event.preventDefault();
+        let reaction;
+
+        switch (userReaction) {
+            case null:
+                if (event.currentTarget.name === "like") {
+                    setLikesCounter(likesCounter + 1);
+                    reaction = event.currentTarget.name;
+                } else {
+                    setDislikesCounter(dislikesCounter + 1);
+                    reaction = event.currentTarget.name;
+                }
+                setUserReaction(event.currentTarget.name);
+                setHasReacted(true);
+
+                break;
+
+            case "null":
+                if (event.currentTarget.name === "like") {
+                    setLikesCounter(likesCounter + 1);
+                    reaction = event.currentTarget.name;
+                } else {
+                    setDislikesCounter(dislikesCounter + 1);
+                    reaction = event.currentTarget.name;
+                }
+                setUserReaction(event.currentTarget.name);
+
+                break;
+
+            case "like":
+                if (event.currentTarget.name === "like") {
+                    setLikesCounter(likesCounter - 1);
+                    setUserReaction("null");
+                    reaction = "null";
+                } else {
+                    setLikesCounter(likesCounter - 1);
+                    setDislikesCounter(dislikesCounter + 1);
+                    setUserReaction(event.currentTarget.name);
+                    reaction = event.currentTarget.name;
+                }
+
+                break;
+
+            case "dislike":
+                if (event.currentTarget.name === "dislike") {
+                    setDislikesCounter(dislikesCounter - 1);
+                    setUserReaction("null");
+                    reaction = "null";
+                } else {
+                    setLikesCounter(likesCounter + 1);
+                    setDislikesCounter(dislikesCounter - 1);
+                    setUserReaction(event.currentTarget.name);
+                    reaction = event.currentTarget.name;
+                }
+
+                break;
+
+            default:
+                console.log("an error was produced in userReactionHandler function on post component");
+                break;
+        }
+
+        fetch(`${process.env.REACT_APP_API_URL}/posts/reaction`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Authorization: "Bearer " + auth.token },
+            body: JSON.stringify({
+                post_id: props.id,
+                reaction: reaction,
+                reacted: hasReacted,
+            }),
+        })
+            .then((response) => {
+                if (response.ok) {
+                    return;
+                }
+            })
+            .catch((err) => console.log(err));
+    };
 
     // Delete Post
     const DeletePostHandler = async () => {
@@ -53,22 +140,7 @@ const Post = (props) => {
         } catch (err) {}
     };
 
-    //Like Handler
-    const likePostHandler = async (event) => {
-        event.preventDefault();
-        console.log("like click!");
-        // hacer verificacion si dio like antes
-        // hacer verificacion si dio dislike antes
-        // setLikes( count + 1, );
-    };
-
-    // Dislike Handler
-    const dislikePostHandler = async (event) => {
-        event.preventDefault();
-        console.log("dislike click!");
-    };
-
-    // Type de visualisation en Posts et Comment Post
+    // Type de visualisation sur Posts et Comment Post
     let commentBlock;
 
     if (props.location.pathname === "/posts") {
@@ -119,18 +191,20 @@ const Post = (props) => {
                 <footer className={styles.reactions}>
                     <ReactionBtn
                         btnType="functional"
-                        onClick={likePostHandler}
-                        reaction={props.userReaction === "like" ? "like" : null}
+                        name="like"
+                        onReaction={userReactionHandler}
+                        reaction={userReaction === "like" ? "like" : null}
                         icon="like"
-                        text={props.likes}
+                        text={likesCounter}
                         styling=""
                     />
                     <ReactionBtn
                         btnType="functional"
-                        onClick={dislikePostHandler}
-                        reaction={props.userReaction === "dislike" ? "dislike" : null}
+                        name="dislike"
+                        onReaction={userReactionHandler}
+                        reaction={userReaction === "dislike" ? "dislike" : null}
                         icon="dislike"
-                        text={props.dislikes}
+                        text={dislikesCounter}
                         styling=""
                     />
                     {commentBlock}

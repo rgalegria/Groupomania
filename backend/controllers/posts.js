@@ -339,67 +339,75 @@ exports.getOnePost = (req, res, next) => {
 
 // POST Reactions to posts Controller
 //==========================================================================================================
-// exports.postReaction = (req, res, next) => {
-//     const user = decodeUid(req.headers.authorization);
-//     const { reaction, post_id, reactionStatus } = req.body;
+exports.postReaction = (req, res, next) => {
+    const user = decodeUid(req.headers.authorization);
+    const { reaction, post_id, reacted } = req.body;
 
-//     //agregar una variable que recibe el estado actual desde el frontend ej.
-//     //reactionSatus = true (nuevo) /  false (actualizar)
+    console.log("frontend info =>", req.body);
 
-//     switch (reaction) {
-//         case 1: // Like Post
-//             try {
-//                 if (reactionStatus) {
-//                     const string = "INSERT INTO reactions (Posts_id, Users_id, reaction) VALUES (?, ?, 'like')";
-//                 } else {
-//                     const string = "UPDATE reactions reaction = 'like' WHERE Posts_id = ? AND Users_id = ?";
-//                 }
-//                 const inserts = [post_id, user.id];
-//                 const sql = mysql.format(string, inserts);
+    switch (reaction) {
+        case "like": // Like Post
+            try {
+                let string;
+                if (!reacted) {
+                    string = "INSERT INTO reactions (Posts_id, Users_id, reaction) VALUES (?, ?, 'like')";
+                } else {
+                    string = "UPDATE reactions SET reaction = 'like' WHERE Posts_id = ? AND Users_id = ?";
+                }
+                const inserts = [post_id, user.id];
+                const sql = mysql.format(string, inserts);
 
-//                 const likePost = db.query(sql, (error, result) => {
-//                     if (error) throw error;
-//                     res.status(200).json({ message: "like post successfully!" });
-//                 });
-//             } catch (err) {
-//                 return new Error(err);
-//             }
+                const likePost = db.query(sql, (error, result) => {
+                    if (error) throw error;
+                    res.status(200).json({ message: "like post successfully!" });
+                });
+            } catch (err) {
+                return next(
+                    new HttpError("Erreur de requête, votre reaction à la publication n'a pas pu être enregistré", 500)
+                );
+            }
 
-//             break;
-//         case -1: // Dislike Post
-//             try {
-//                 if (reactionStatus) {
-//                     const string = "INSERT INTO reactions (Posts_id, Users_id, reaction) VALUES (?, ?, 'dislike')";
-//                 } else {
-//                     const string = "UPDATE reactions reaction = 'dislike' WHERE Posts_id = ? AND Users_id = ?";
-//                 }
-//                 const inserts = [post_id, user.id];
-//                 const sql = mysql.format(string, inserts);
+            break;
+        case "dislike": // Dislike Post
+            try {
+                let string;
+                if (!reacted) {
+                    string = "INSERT INTO reactions (Posts_id, Users_id, reaction) VALUES (?, ?, 'dislike')";
+                } else {
+                    string = "UPDATE reactions SET reaction = 'dislike' WHERE Posts_id = ? AND Users_id = ?";
+                }
+                const inserts = [post_id, user.id];
+                const sql = mysql.format(string, inserts);
 
-//                 const dislikePost = db.query(sql, (error, result) => {
-//                     if (error) throw error;
-//                     res.status(200).json({ message: "dislike post successfully!" });
-//                 });
-//             } catch (err) {
-//                 return new Error(err);
-//             }
-//             break;
-//         case 0: // Like ou Dislike Post
-//             try {
-//                 const string = "DELETE FROM reactions WHERE Posts_id = ? and Users_id = ?";
-//                 const inserts = [post_id, user.id];
-//                 const sql = mysql.format(string, inserts);
+                const dislikePost = db.query(sql, (error, result) => {
+                    if (error) throw error;
+                    res.status(200).json({ message: "dislike post successfully!" });
+                });
+            } catch (err) {
+                return next(
+                    new HttpError("Erreur de requête, votre reaction à la publication n'a pas pu être enregistré", 500)
+                );
+            }
+            break;
+        case "null": // Like ou Dislike Post
+            try {
+                const string = "UPDATE reactions SET reaction = 'null' WHERE Posts_id = ? AND Users_id = ?";
+                // const string = "DELETE FROM reactions WHERE Posts_id = ? and Users_id = ?";
+                const inserts = [post_id, user.id];
+                const sql = mysql.format(string, inserts);
 
-//                 const deleteLike = db.query(sql, (error, result) => {
-//                     if (error) throw error;
-//                     res.status(200).json({ message: "post reaction deleted successfully!" });
-//                 });
-//             } catch (err) {
-//                 return new Error(err);
-//             }
-//             break;
-//     }
-// };
+                const updateReaction = db.query(sql, (error, result) => {
+                    if (error) throw error;
+                    res.status(200).json({ message: "post reaction nulled successfully!" });
+                });
+            } catch (err) {
+                return next(
+                    new HttpError("Erreur de requête, votre reaction à la publication n'a pas pu être enregistré", 500)
+                );
+            }
+            break;
+    }
+};
 
 // DELETE Posts Controller
 //==========================================================================================================
